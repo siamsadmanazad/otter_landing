@@ -5,6 +5,8 @@ import { GrainOverlay } from "./components/atmosphere/GrainOverlay";
 import { AuroraBackground } from "./components/atmosphere/AuroraBackground";
 import { CloudLayer } from "./components/atmosphere/CloudLayer";
 import { SmoothScroll } from "./components/SmoothScroll";
+import { GsapProvider } from "./components/motion/GsapProvider";
+import { Navbar } from "./components/chrome/Navbar";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -34,7 +36,10 @@ export default function RootLayout({
         <CloudLayer />
         <GrainOverlay />
         <SmoothScroll>
-          <div className="relative z-10">{children}</div>
+          <GsapProvider>
+            <Navbar />
+            <div className="relative z-10">{children}</div>
+          </GsapProvider>
         </SmoothScroll>
       </body>
     </html>

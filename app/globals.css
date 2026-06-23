@@ -16,14 +16,19 @@
   --signal-1: #0099db;
   --signal-2: #34f5e4;
 
-  /* Atmospheric aurora hues. */
+  /* Atmospheric aurora hues — cinematic twilight range. */
   --aurora-teal: #0db9c8;
   --aurora-violet: #6d5cf6;
   --aurora-deep: #123a6b;
+  --aurora-purple: #4a2d8f; /* deep purple */
+  --aurora-lavender: #b9a7ff; /* soft lavender */
+  --aurora-mist: #5a78b8; /* misty blue */
 
   /* Warm subject glow / treasure (the cinematic counterpoint). */
   --treasure: #ffb347;
   --ember: #ff7a45;
+  --sunset: #ff6b6b; /* sunset orange-red */
+  --peach: #ffb59e; /* peach highlight */
 
   --ink: #f5f7fc; /* primary text */
   --ink-soft: #b2bacb; /* secondary text */
@@ -40,8 +45,13 @@
   --color-signal-2: var(--signal-2);
   --color-aurora-teal: var(--aurora-teal);
   --color-aurora-violet: var(--aurora-violet);
+  --color-aurora-purple: var(--aurora-purple);
+  --color-aurora-lavender: var(--aurora-lavender);
+  --color-aurora-mist: var(--aurora-mist);
   --color-treasure: var(--treasure);
   --color-ember: var(--ember);
+  --color-sunset: var(--sunset);
+  --color-peach: var(--peach);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
