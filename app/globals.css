@@ -113,29 +113,6 @@ html.lenis body {
   }
 }
 
-/* Slow aurora drift (used by AuroraBackground). */
-@keyframes aurora-drift {
-  0% {
-    transform: translate3d(-6%, -4%, 0) scale(1.1);
-  }
-  50% {
-    transform: translate3d(6%, 4%, 0) scale(1.25);
-  }
-  100% {
-    transform: translate3d(-6%, -4%, 0) scale(1.1);
-  }
-}
-
-/* Horizontal cloud/fog drift (used by CloudLayer). Distance set per-layer. */
-@keyframes cloud-drift {
-  from {
-    transform: translate3d(var(--cloud-from, -10%), 0, 0);
-  }
-  to {
-    transform: translate3d(var(--cloud-to, 10%), 0, 0);
-  }
-}
-
 .text-treasure {
   background: linear-gradient(120deg, var(--treasure), var(--ember));
   -webkit-background-clip: text;

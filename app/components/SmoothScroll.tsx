@@ -28,11 +28,19 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     };
     raf = requestAnimationFrame(loop);
 
+    // Don't run the scroll rAF in a hidden tab (no scrolling happens there).
+    const onVisibility = () => {
+      cancelAnimationFrame(raf);
+      if (!document.hidden) raf = requestAnimationFrame(loop);
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     // Expose for later modules (GSAP ScrollTrigger sync).
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
     return () => {
       cancelAnimationFrame(raf);
+      document.removeEventListener("visibilitychange", onVisibility);
       lenis.destroy();
       delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };

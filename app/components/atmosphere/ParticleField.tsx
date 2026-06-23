@@ -70,7 +70,15 @@ export function ParticleField({ count = 48 }: { count?: number }) {
     seed();
 
     let raf = 0;
-    const draw = () => {
+    // Cap to ~30fps — ambient dust doesn't need the display's full refresh rate
+    // (120Hz on ProMotion), which halves+ the per-second canvas redraw cost.
+    const frameMs = 1000 / 30;
+    let last = 0;
+    const draw = (t: number) => {
+      raf = requestAnimationFrame(draw);
+      if (t - last < frameMs) return;
+      last = t;
+
       // Ease parallax.
       curMx += (mx - curMx) * 0.06;
       curMy += (my - curMy) * 0.06;
@@ -96,7 +104,6 @@ export function ParticleField({ count = 48 }: { count?: number }) {
           : `rgba(70, 240, 228, ${alpha})`;
         ctx.fill();
       }
-      raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
 
@@ -109,12 +116,23 @@ export function ParticleField({ count = 48 }: { count?: number }) {
       seed();
       scrollY = window.scrollY;
     };
+    // Stop drawing entirely while the tab is hidden — no point burning the GPU
+    // on dust nobody can see; resume on return.
+    const onVisibility = () => {
+      cancelAnimationFrame(raf);
+      if (!document.hidden) {
+        last = 0;
+        raf = requestAnimationFrame(draw);
+      }
+    };
     if (!coarse) window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("mousemove", onMove);
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [count]);
 
