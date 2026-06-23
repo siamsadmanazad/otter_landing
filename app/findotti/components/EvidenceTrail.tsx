@@ -61,7 +61,9 @@ export function EvidenceTrail() {
   const pathLength = useTransform(scrollYProgress, [0, 1], [reduce ? 1 : 0, 1]);
   // The comet head rides the same route.
   const cometDist = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const cometOpacity = useTransform(scrollYProgress, [0, 0.04, 0.96, 1], [0, 1, 1, 0]);
+  // Fade the head in/out in step with the line's masked ends so it never
+  // appears as a bright dot over a faded stretch of trail.
+  const cometOpacity = useTransform(scrollYProgress, [0, 0.1, 0.84, 1], [0, 1, 1, 0]);
 
   return (
     <div className="mx-auto w-full max-w-2xl">
@@ -113,26 +115,41 @@ export function EvidenceTrail() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+              {/* Vertical alpha fade so the line emerges from nothing at the top
+                  and dissolves into nothing at the bottom — no hard caps. */}
+              <linearGradient id="evFadeGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#000" />
+                <stop offset="11%" stopColor="#fff" />
+                <stop offset="88%" stopColor="#fff" />
+                <stop offset="100%" stopColor="#000" />
+              </linearGradient>
+              <mask id="evFade">
+                <rect x="0" y="0" width={GUTTER} height={TOTAL_H} fill="url(#evFadeGrad)" />
+              </mask>
             </defs>
 
-            {/* Dim base route — the full path, always faintly present. */}
-            <path
-              d={PATH_D}
-              fill="none"
-              stroke="#1b3552"
-              strokeWidth={2}
-              strokeLinecap="round"
-            />
-            {/* Bright self-drawing route (scroll-bound). */}
-            <motion.path
-              d={PATH_D}
-              fill="none"
-              stroke="url(#evTrailGrad)"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              filter="url(#evGlow)"
-              style={{ pathLength }}
-            />
+            {/* The route strokes fade at both ends via the mask; the waypoint
+                nodes stay fully lit (they sit in the solid middle band). */}
+            <g mask="url(#evFade)">
+              {/* Dim base route — the full path, always faintly present. */}
+              <path
+                d={PATH_D}
+                fill="none"
+                stroke="#1b3552"
+                strokeWidth={2}
+                strokeLinecap="round"
+              />
+              {/* Bright self-drawing route (scroll-bound). */}
+              <motion.path
+                d={PATH_D}
+                fill="none"
+                stroke="url(#evTrailGrad)"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                filter="url(#evGlow)"
+                style={{ pathLength }}
+              />
+            </g>
 
             {/* Waypoint nodes — ignite as the draw passes each one. */}
             {CLUES.map((_, i) => (

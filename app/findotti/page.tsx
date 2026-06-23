@@ -84,8 +84,9 @@ export default function FindOttiPage() {
       <section className="relative flex flex-col items-center px-6 pb-36 pt-4 text-center">
         <SceneBackdrop tone="twilight" />
         <div className="relative z-10 flex w-full flex-col items-center">
-          {/* The trail continues down into the console (visual continuity). */}
-          <div aria-hidden className="mb-2 h-16 w-px" style={{ background: "linear-gradient(to bottom, rgba(52,245,228,0.5), rgba(0,153,219,0))" }} />
+          {/* The trail re-coalesces into the console: emerges from nothing and
+              brightens down into the console's top edge (no hard start). */}
+          <div aria-hidden className="mb-1 h-20 w-px" style={{ background: "linear-gradient(to bottom, transparent, rgba(52,245,228,0.6))" }} />
 
           <RevealOnScroll className="w-full max-w-lg">
             <div

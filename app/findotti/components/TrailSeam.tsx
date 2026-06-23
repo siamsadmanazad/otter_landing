@@ -20,29 +20,33 @@ export function TrailSeam() {
             "linear-gradient(to bottom, rgba(5,7,13,0) 0%, rgba(5,7,13,0.55) 45%, var(--noir-950) 100%)",
         }}
       />
-      {/* Origin node + descending beam, aligned to the trail's left-rail entry
-          (matches EvidenceTrail's centred max-w-2xl container + 36px spine). */}
+      {/* A soft descending light, aligned to the trail's left-rail entry (matches
+          EvidenceTrail's centred max-w-2xl container + 36px spine). It fades in
+          from the valley above and dissolves toward the heading below — no hard
+          endpoints — so the trail reads as flowing out of the hero scene. */}
       <div className="absolute inset-0 px-6">
         <div className="relative mx-auto h-full w-full max-w-2xl">
+          {/* The beam: transparent at both ends, brightest in the middle. */}
           <motion.div
-            initial={{ opacity: 0, scaleY: 0 }}
+            initial={{ opacity: 0, scaleY: 0.4 }}
             whileInView={{ opacity: 1, scaleY: 1 }}
             viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute top-2 h-full w-px origin-top"
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute inset-y-0 w-px origin-center"
             style={{
               left: 36,
               background:
-                "linear-gradient(to bottom, rgba(52,245,228,0.9), rgba(0,153,219,0.35) 55%, transparent)",
+                "linear-gradient(to bottom, transparent, rgba(52,245,228,0.85) 42%, rgba(0,153,219,0.4) 70%, transparent)",
             }}
           />
+          {/* A soft luminous bloom at the brightest point — no hard dot. */}
           <motion.span
-            initial={{ opacity: 0, scale: 0.4 }}
+            initial={{ opacity: 0, scale: 0.5 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="absolute top-2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-signal-2"
-            style={{ left: 36, boxShadow: "0 0 12px 4px rgba(52,245,228,0.8), 0 0 26px 10px rgba(0,153,219,0.45)" }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+            className="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-signal-2/90"
+            style={{ left: 36, top: "46%", boxShadow: "0 0 10px 4px rgba(52,245,228,0.55), 0 0 24px 12px rgba(0,153,219,0.28)" }}
           />
           <motion.p
             initial={{ opacity: 0, y: 8 }}
