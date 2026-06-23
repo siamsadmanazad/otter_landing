@@ -6,14 +6,14 @@ import { SceneLayer } from "../components/scene/SceneLayer";
 import { SceneBackdrop } from "../components/scene/SceneBackdrop";
 import { HeroBackdrop } from "../components/scene/HeroBackdrop";
 import { LightRays } from "../components/scene/ProceduralTerrain";
-import { ExplorerTrail } from "../components/atmosphere/ExplorerTrail";
 import { OttiHero } from "../components/otti/OttiHero";
 import { FloatingCharms } from "../components/otti/FloatingCharms";
 import { ClueReveal } from "../components/motion/ClueReveal";
 import { PrimaryCta } from "../components/PrimaryCta";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { Countdown } from "./components/Countdown";
-import { ClueList } from "./components/ClueList";
+import { EvidenceTrail } from "./components/EvidenceTrail";
+import { TrailSeam } from "./components/TrailSeam";
 
 /**
  * /findotti — Act 1: the clue. Now staged as a cinematic scene: layered parallax
@@ -70,34 +70,44 @@ export default function FindOttiPage() {
         <FloatingCharms />
       </CinematicScene>
 
-      {/* ── Scene 2: Clues (dusk continues; trail threads through) ───────── */}
-      <section className="relative px-6 py-28">
-        <SceneBackdrop tone="dusk" />
-        <ExplorerTrail />
-        <div className="relative z-10">
-          <ClueList />
+      {/* ── Scene 2: The Evidence Trail (dusk; the neon route threads the clues) */}
+      <section className="relative px-6 pb-28">
+        <SceneBackdrop tone="dusk" blendTop={false} />
+        {/* Transition: the hero valley melts down; the trail emerges from it. */}
+        <TrailSeam />
+        <div className="relative z-10 pt-4">
+          <EvidenceTrail />
         </div>
       </section>
 
-      {/* ── Scene 3: Countdown + CTA (dusk deepens toward Act 2) ──────────── */}
-      <section className="relative flex flex-col items-center px-6 pb-36 pt-10 text-center">
+      {/* ── Scene 3: The trail's terminus — countdown console + CTA ───────── */}
+      <section className="relative flex flex-col items-center px-6 pb-36 pt-4 text-center">
         <SceneBackdrop tone="twilight" />
-        <div className="relative z-10 flex flex-col items-center">
-          <RevealOnScroll>
-            <p className="font-mono text-xs uppercase tracking-[0.4em] text-ink-faint">
-              something is coming
-            </p>
+        <div className="relative z-10 flex w-full flex-col items-center">
+          {/* The trail continues down into the console (visual continuity). */}
+          <div aria-hidden className="mb-2 h-16 w-px" style={{ background: "linear-gradient(to bottom, rgba(52,245,228,0.5), rgba(0,153,219,0))" }} />
+
+          <RevealOnScroll className="w-full max-w-lg">
+            <div
+              className="relative w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-noir-900/55 px-6 py-9 backdrop-blur-xl sm:px-10"
+              style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
+            >
+              {/* Top hairline glow — the console's signal edge. */}
+              <span aria-hidden className="absolute inset-x-10 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(52,245,228,0.7), transparent)" }} />
+              <p className="font-mono text-xs uppercase tracking-[0.4em] text-signal-2/80">
+                something is coming
+              </p>
+              <div className="mt-7 flex justify-center">
+                <Countdown />
+              </div>
+              <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
+                08.05.2026
+              </p>
+            </div>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.15} className="mt-8">
-            <Countdown />
-          </RevealOnScroll>
-          <RevealOnScroll delay={0.3} className="mt-16">
+
+          <RevealOnScroll delay={0.2} className="mt-12">
             <PrimaryCta preLabel="Become a Founding Explorer" preHref="/founders" />
-          </RevealOnScroll>
-          <RevealOnScroll delay={0.45}>
-            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
-              08.05.2026
-            </p>
           </RevealOnScroll>
         </div>
       </section>

@@ -41,19 +41,19 @@ export function Countdown() {
       ];
 
   return (
-    <div className="flex items-stretch gap-3 font-mono sm:gap-4">
+    <div className="flex items-stretch gap-2.5 font-mono sm:gap-3">
       {cells.map(([label, val], i) => (
-        <div key={label} className="flex items-center gap-3 sm:gap-4">
+        <div key={label} className="flex items-center gap-2.5 sm:gap-3">
           <div className="flex flex-col items-center">
-            <span className="min-w-[2ch] text-3xl font-bold tabular-nums text-ink sm:text-5xl">
+            <span className="grid min-w-[2.6ch] place-items-center rounded-xl border border-white/[0.08] bg-noir-800/60 px-2 py-2.5 text-3xl font-bold tabular-nums text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:min-w-[2.4ch] sm:px-3 sm:py-3 sm:text-5xl">
               {String(val).padStart(2, "0")}
             </span>
-            <span className="mt-1 text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+            <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-ink-faint">
               {label}
             </span>
           </div>
           {i < cells.length - 1 && (
-            <span className="text-2xl text-signal-2/50 sm:text-4xl" aria-hidden>
+            <span className="-mt-6 text-2xl text-signal-2/40 sm:text-3xl" aria-hidden>
               :
             </span>
           )}
