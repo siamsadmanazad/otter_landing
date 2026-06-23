@@ -15,7 +15,7 @@ export const ASSETS = {
 
   // ACT 2 — deep twilight (slots awaiting art)
   foundersBg: "/scene/scene_founders.png" as string | undefined,
-  ottiInvite: undefined as string | undefined, // → "/otti/otti_invite.png"
+  ottiInvite: "/otti/otti_invite.png" as string | undefined,
 
   // ACT 3 — starlit night (slots awaiting art)
   summitBg: undefined as string | undefined, // → "/scene/scene_summit.png"
