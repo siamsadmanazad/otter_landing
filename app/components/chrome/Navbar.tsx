@@ -27,26 +27,30 @@ export function Navbar() {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
       className="fixed inset-x-0 top-0 z-40"
     >
-      <div
-        className={`mx-auto flex max-w-6xl items-center justify-between px-5 py-3 transition-all duration-500 sm:px-8 ${
-          scrolled
-            ? "mt-2 rounded-full border border-white/10 bg-noir-900/50 backdrop-blur-xl sm:mx-6"
-            : "border border-transparent"
-        }`}
-      >
-        <Link href="/findotti" className="flex items-center gap-2">
-          <Image src="/otti/otter_3d.png" alt="Otti" width={28} height={28} className="drop-shadow" />
-          <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-ink-soft">
-            otti
-          </span>
-        </Link>
-
-        <Link
-          href="/founders"
-          className="rounded-full border border-signal-2/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-signal-2 transition-colors hover:bg-signal-2/10"
+      {/* Stable centered wrapper — geometry never changes on scroll. */}
+      <div className="mx-auto max-w-6xl px-4 pt-2 sm:px-6">
+        {/* Inner pill — only the glass styling fades in on scroll (no layout shift). */}
+        <div
+          className={`flex items-center justify-between rounded-full border px-5 py-3 transition-colors duration-500 ${
+            scrolled
+              ? "border-white/10 bg-noir-900/50 backdrop-blur-xl"
+              : "border-transparent"
+          }`}
         >
-          Join
-        </Link>
+          <Link href="/findotti" className="flex items-center gap-2">
+            <Image src="/otti/otter_3d.png" alt="Otti" width={28} height={28} className="drop-shadow" />
+            <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-ink-soft">
+              otti
+            </span>
+          </Link>
+
+          <Link
+            href="/founders"
+            className="rounded-full border border-signal-2/40 px-4 py-1.5 font-mono text-[11px] uppercase tracking-[0.2em] text-signal-2 transition-colors hover:bg-signal-2/10"
+          >
+            Join
+          </Link>
+        </div>
       </div>
     </motion.header>
   );
