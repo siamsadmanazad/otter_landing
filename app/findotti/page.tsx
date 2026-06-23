@@ -15,6 +15,7 @@ import { EvidenceTrail } from "./components/EvidenceTrail";
 import { TrailGenesis } from "./components/TrailGenesis";
 import { TrailResolve } from "./components/TrailResolve";
 import { FoliageFrame } from "./components/FoliageFrame";
+import { TrailInterlude } from "./components/TrailInterlude";
 
 /**
  * /findotti — Act 1: the clue. Now staged as a cinematic scene: layered parallax
@@ -71,7 +72,7 @@ export default function FindOttiPage() {
       </CinematicScene>
 
       {/* ── Scene 2: The Evidence Trail (dusk; the neon route threads the clues) */}
-      <section className="relative px-6 pb-28">
+      <section className="relative px-6 pb-4">
         {/* Genesis: embers coalesce into the neon line, overlapping the hero's
             bottom (negative margin) so the trail is born out of the valley. */}
         <div className="relative z-10 -mt-[26vh]">
@@ -86,6 +87,9 @@ export default function FindOttiPage() {
             <EvidenceTrail />
           </div>
         </div>
+        {/* Interlude: the trail goes quiet — Otti's tracks lead on into a dense
+            night thicket, bridging the clues to the countdown. */}
+        <TrailInterlude />
       </section>
 
       {/* ── Scene 3: The trail's terminus — the light blooms into the console ── */}

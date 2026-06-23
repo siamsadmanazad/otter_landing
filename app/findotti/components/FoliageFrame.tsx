@@ -25,7 +25,7 @@ function leafPath(len: number, w: number): string {
   return `M0 0 C ${w} ${-len * 0.28} ${w} ${-len * 0.72} 0 ${-len} C ${-w} ${-len * 0.72} ${-w} ${-len * 0.28} 0 0 Z`;
 }
 
-function LeafCluster() {
+export function LeafCluster() {
   // Drawn in a 320×360 box, base at the bottom-centre (160, 360).
   return (
     <svg viewBox="0 0 320 360" className="h-full w-full overflow-visible" preserveAspectRatio="xMidYMax meet">
