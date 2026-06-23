@@ -1,4 +1,3 @@
-import { ScrollProgress } from "../components/motion/ScrollProgress";
 import { ParticleField } from "../components/atmosphere/ParticleField";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { CinematicScene } from "../components/scene/CinematicScene";
@@ -24,7 +23,6 @@ import { TrailResolve } from "./components/TrailResolve";
 export default function FindOttiPage() {
   return (
     <main className="relative">
-      <ScrollProgress />
       <ParticleField />
       <ChapterIndicator index={1} total={3} label="the clue" />
 
