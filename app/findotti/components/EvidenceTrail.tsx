@@ -67,8 +67,20 @@ export function EvidenceTrail() {
 
   return (
     <div className="mx-auto w-full max-w-2xl">
-      {/* Section heading */}
-      <div className="mb-12 text-center">
+      {/* Section heading — the route passes it on the left rail (a dim connector
+          bridges the genesis line above into the spine below, so the light never
+          visually breaks across the heading). */}
+      <div className="relative pb-12 text-center">
+        <span
+          aria-hidden
+          className="absolute w-px"
+          style={{
+            left: CX,
+            top: 0,
+            bottom: 0,
+            background: "linear-gradient(to bottom, rgba(52,245,228,0.45), rgba(27,53,82,0.55) 60%, rgba(27,53,82,0.85))",
+          }}
+        />
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -118,8 +130,11 @@ export function EvidenceTrail() {
               {/* Vertical alpha fade so the line emerges from nothing at the top
                   and dissolves into nothing at the bottom — no hard caps. */}
               <linearGradient id="evFadeGrad" x1="0" y1="0" x2="0" y2="1">
+                {/* Short top fade so the genesis line hands straight into the
+                    spine; longer bottom fade as the trail dissolves toward the
+                    resolve/console below. */}
                 <stop offset="0%" stopColor="#000" />
-                <stop offset="11%" stopColor="#fff" />
+                <stop offset="3%" stopColor="#fff" />
                 <stop offset="88%" stopColor="#fff" />
                 <stop offset="100%" stopColor="#000" />
               </linearGradient>
