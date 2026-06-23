@@ -48,17 +48,72 @@ A glowing dotted map-line (SVG path) that **draws itself as you scroll**, thread
 
 ---
 
+## 1B. Cinematic Parallax craft (merged 2026-06-23, OStad + Tripy)
+
+> Adopts OStad's cinematic-parallax guideline as the **craft layer** over our campaign narrative.
+> The "Missing Otti" workflow is the **WHAT** (story); this is the **HOW** (execution).
+
+### Prime principle
+Build a **scrollable animated world**, not a SaaS page. **Atmosphere first, copy second** — the
+visuals/motion/spacing create the emotion before a word is read. Each act is a **cinematic scene**, not a section.
+
+### Three reconciliations (campaign rules win)
+1. **Act 1 stays pure.** The reference's "product preview" + "feature chapters" would break the mystery
+   rule on `/findotti` (no features, no app preview, no app name). Those map to **later pages**:
+   `/founders` = the scarcity scene, `/welcome` = the gamified dashboard + leaderboard = the
+   "social-proof / community" scene. A full feature-chapter marketing page is a **post-launch** option.
+2. **Asset reality → slot system.** The illustrated multi-layer look needs art we don't have yet. Build
+   the **layer system now** (procedural atmosphere + Otti) with every layer as a **drop-in slot**
+   (`<SceneLayer>` accepts an image/Lottie/procedural child) so supplied art snaps in with no refactor.
+3. **Motion stack split (locked):** **GSAP + ScrollTrigger** for cinematic scroll (pinned scene
+   transitions, scrubbed parallax, crossfades) · **Framer Motion** for micro-interactions only (hover,
+   button, small reveals) · **Lenis** drives the scroll and feeds GSAP's ticker.
+
+### Layered scene architecture (every cinematic scene)
+Depth stack, each on its own parallax plane (back→front, slowest→fastest):
+`sky/gradient → clouds/atmosphere → far range (mountains/city/map) → midground → water/road/valley →
+foreground (plants/rocks) → character/Otti (parallax + idle) → UI overlay → text overlay → navbar`.
+Mobile: **drop the middle layers**, keep sky + far + foreground + Otti + text; reduce pinning.
+
+### Palette extension — "Twilight Expedition" (cinematic)
+Keep brand **teal = Otti's signal**. Extend the atmosphere to: **deep purple, midnight blue, lavender,
+sunset orange, peach/pink, misty blue**, warm **cream** text. Avoid pure black / pure white. Warm
+cinematic lighting; cool field + warm subject.
+
+### Motion rules (elegant, not flashy)
+Slow fades · soft parallax · blur-to-clear text reveals · gentle floating/idle (clouds drift, light rays,
+particles, Otti idle) · pinned scene transitions that **crossfade** (old scene never hard-cuts). **No**
+bounce, spin, or fast motion. Animate **transform + opacity only**. Everything has a `prefers-reduced-motion` path.
+
+### Cinematic UI accents (decorative, optional)
+Scroll-progress bar · **"Chapter 01 / 03"** label · a play-style control (opens a teaser, never autoplays
+sound) · a journey timeline. Keep them subtle and part of the scene.
+
+### Navbar
+Transparent at top → subtle **glass blur on scroll**. Tiny logo left · minimal/centered links · one small
+CTA right. On mobile: compact, CTA-first. Feels like part of the scene, never a dashboard.
+
+### Performance & a11y (hard rules — carry into every step)
+WebP/AVIF, compressed layer slices · preload only the hero · **lazy-load below-the-fold scenes + GSAP/
+particles/Lottie** · animate transform/opacity only (never width/height/top/left) · blur-up placeholders ·
+target **60fps on mid-range Android** (test there, not just Mac) · strong contrast + overlays behind text
+on busy art · keyboard focus · reduced-motion fallback · no scroll-trap · no autoplay sound.
+
+---
+
 ## 2. Tech stack & libraries (what each is for)
-- **Next.js 15 + TS + Tailwind** — framework, instant Vercel deploy, API routes for referral logic.
-- **Framer Motion** — component reveals, orchestration/stagger, `AnimatePresence` page transitions, scroll-linked values (`useScroll`/`useTransform`), animated counters.
-- **GSAP + ScrollTrigger** — cinematic scrubbed timelines, pinned beats, the Explorer's-Trail path draw.
-- **Lenis** — smooth inertia scroll (the biggest single "premium feel" win). Sync with ScrollTrigger.
-- **lottie-react** — Otti character animations.
+- **Next.js 15 + TS + Tailwind** — framework, instant Vercel deploy, API/proxy routes.
+- **GSAP + ScrollTrigger** — **the cinematic engine**: pinned scene transitions, scrubbed parallax,
+  crossfades, the Explorer's-Trail path draw. Synced to Lenis' ticker.
+- **Lenis** — smooth inertia scroll (the biggest "premium feel" win); drives GSAP.
+- **Framer Motion (`motion`)** — micro-interactions only: hover, magnetic button, small reveals,
+  `AnimatePresence` page transitions, animated counters.
+- **lottie-react** — Otti character animations (drop-in to `<SceneLayer>`/`<OttiHero>`).
 - **split-type** — per-letter "decoding" headline reveals.
-- **canvas-confetti** — founder celebration burst. **tsParticles** — ambient mystery dust/fireflies.
-- **@supabase/supabase-js** — signups, referral tracking, **realtime** live counters/leaderboard.
-- **Resend** — "You Found Otti" email automation.
-- **shadcn/ui** — accessible dark-themed form primitives.
+- **canvas-confetti** — founder celebration burst. Ambient dust = our lightweight `<ParticleField>` canvas
+  (chosen over tsParticles for mobile perf).
+- **@supabase/supabase-js** — via the growth Edge Functions (signups, referral, realtime counters).
+- **Resend** — "You Found Otti" email. **shadcn/ui** — accessible dark form primitives.
 - Load GSAP/particles/Lottie **lazily below the fold**; keep the hero LCP fast.
 
 ---
@@ -145,19 +200,41 @@ When someone creates a **real app account**, the app backend calls `convert-lead
 | `<PageTransition>` | route changes | `AnimatePresence` curtain/fade between acts |
 | `<RewardTier>` | invite-unlock cards | locked→unlocked flip + shimmer at threshold |
 | `<ScrollProgress>` | reading indicator | thin top bar bound to scroll |
+| 🧩 `<SceneLayer>` | one parallax plane in a scene | GSAP ScrollTrigger y/scale per depth; accepts image/Lottie/procedural child (drop-in art slot) |
+| `<CinematicScene>` | a pinned chapter wrapper | GSAP pin + scrubbed timeline; crossfades to next scene |
+| `<Navbar>` | minimal cinematic nav | transparent → glass-blur on scroll (Framer) |
+| `<ChapterIndicator>` | "Chapter 01 / 03" + timeline | scroll-progress bound label |
+| `<CloudLayer>` | drifting fog/cloud depth | CSS drift + cursor parallax |
+| `<GsapProvider>` | Lenis↔GSAP ticker sync | registers ScrollTrigger, lazy below-fold |
 
 ---
 
 ## 6. Build phases (each = one commit + push)
 > **Two repos** advance in parallel: **FE** = `otter_landing` (Next.js) · **GB** = `tripotter-growth-backend` (migrations + Edge Functions). Each step says which repo.
 
-### L0 — Repo + scaffold + theme tokens
-- **Prompt:** "Scaffold a Next.js 15 + TS + Tailwind app for the TripOtter pre-launch landing. Add the Expedition Noir design tokens (palette, the 3 font families via next/font, spacing/radii), a root layout with `<GrainOverlay>` + `<AuroraBackground>`, Lenis smooth scroll, and `prefers-reduced-motion` handling. Redirect `/` → `/findotti`. No content yet — just the themed shell that boots on Vercel."
-- **Verify:** boots, dark themed, smooth scroll works, reduced-motion disables it. **Commit:** `L0 scaffold + theme`.
+### L0 — Repo + scaffold + theme tokens ✅ DONE
+- **Prompt:** "Scaffold a Next.js + TS + Tailwind app for the TripOtter pre-launch landing. Add the Expedition Noir design tokens (palette, fonts, spacing/radii), a root layout with `<GrainOverlay>` + `<AuroraBackground>`, Lenis smooth scroll, and `prefers-reduced-motion` handling. Redirect `/` → `/findotti`."
+- **Verify:** boots, dark themed, smooth scroll, reduced-motion disables it. **Commit:** `L0 scaffold + theme`. ✅
 
-### L1 — `/findotti` (Act 1: the clue) — mystery only
-- **Prompt:** "Build `/findotti`: full-bleed noir hero with `<OttiHero>` (Lottie placeholder ok), `<ClueReveal>` headline 'YOU FOUND A CLUE.' and the mono subline ('Otti isn't lost. He's searching…'), the 'What do we know about Otti?' clue list (stagger-reveal on scroll), a mono **countdown to 08.05.2026**, and a single `<MagneticButton>` → `/founders`. Thread `<ExplorerTrail>` down the page + `<ParticleField>` ambient. NO rankings, NO features, NO app name. Mobile-first."
-- **Motion:** decoding headline; clue items materialize on scroll; trail draws; countdown digits tick. **Commit:** `L1 findotti`.
+### L1 — `/findotti` (Act 1: the clue) — mystery only ✅ DONE (+ cinematic rework)
+- **Prompt:** "Build `/findotti`: hero with `<OttiHero>` (Lottie placeholder), `<ClueReveal>` decoding headline, mono subline, the 'What do we know about Otti?' clue list (stagger on scroll), a mono **countdown to 08.05.2026**, single `<MagneticButton>` → `/founders`. `<ExplorerTrail>` + `<ParticleField>`. NO rankings/features/app name."
+- **Done:** + Twilight Expedition palette, `<CloudLayer>`, depth-tier particles, cursor + scroll parallax. **Commits:** `L1 findotti`, cinematic rework. ✅
+
+### L1.5 — Cinematic scene system (FE) ← NEXT
+> Realize §1B: establish the reusable layered-scene + GSAP/ScrollTrigger engine that every act reuses,
+> and re-stage `/findotti` as the first true cinematic scene. Adopts the GSAP-for-scroll / Framer-for-micro split.
+- **Goal:** a drop-in parallax scene system + cinematic chrome (navbar, chapter indicator) + buttery pinned scroll.
+- **Prompt:** "Add a `<GsapProvider>` that registers ScrollTrigger and drives it from the existing Lenis
+  instance (`__lenis`), lazy-loaded. Build `<SceneLayer>` (one parallax plane: `depth` prop → GSAP-scrubbed
+  y/scale; child can be a procedural node now, an image/Lottie later — a drop-in art slot) and
+  `<CinematicScene>` (pins a chapter + scrubbed timeline that crossfades into the next). Add a minimal
+  `<Navbar>` (transparent → glass-blur on scroll, tiny Otti mark + the CTA) and a `<ChapterIndicator>`
+  ('Chapter 01 / 03'). Re-stage `/findotti` using the layer stack (sky/clouds/far/foreground/Otti/text) with
+  one pinned crossfade from hero→clues. Mobile drops middle layers + heavy pinning. Animate transform/opacity
+  only; full reduced-motion path; lazy-load GSAP below the fold."
+- **Verify:** 60fps-feel scroll; layers move at distinct depths; hero pins + crossfades into clues; navbar
+  blurs on scroll; reduced-motion = static readable page; `pnpm build` green; test a mid-range viewport.
+- **Commit:** `L1.5 cinematic scene system`.
 
 ### L2 — Growth backend: `growth` schema + Edge Functions (GB repo)
 - **Prompt:** "Scaffold `tripotter-growth-backend`: Supabase migrations creating a **private `growth` schema** with campaigns/leads/referral_events/lead_events/email_logs/lead_conversions + the `v_leaderboard_public` view + points-scoring RPCs + RLS (no broad anon policies), and Edge Functions `signup`, `leaderboard`, `verify-lead`, `me`. Server-side validation, email normalization, dup/self-referral guards, collision-resistant referral codes, and a `shared/` lib (supabaseAdmin, validators, referral, response). Secret key only in functions. `.env.example` with SUPABASE_URL/ANON/SECRET, RESEND_API_KEY, ADMIN_EXPORT_SECRET. Seed the `founders-waitlist` campaign. Flag hosted apply as user-gated."
