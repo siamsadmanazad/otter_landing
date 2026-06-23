@@ -1,0 +1,37 @@
+"use client";
+
+import { motion } from "motion/react";
+
+const BENEFITS = [
+  "Permanent Founder Badge",
+  "Lifetime Early Supporter",
+  "Exclusive Community Access",
+  "Priority New Features",
+  "Special Founder Events",
+];
+
+/**
+ * BenefitsList — the five founder perks, revealed as a staggered "charter being
+ * granted": each line materializes (blur→sharp + rise) with a warm-gold check.
+ */
+export function BenefitsList() {
+  return (
+    <ul className="mx-auto grid w-full max-w-md gap-3">
+      {BENEFITS.map((b, i) => (
+        <motion.li
+          key={b}
+          initial={{ opacity: 0, x: -14, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
+          className="flex items-center gap-4 rounded-2xl border border-treasure/15 bg-noir-800/40 px-5 py-3.5 backdrop-blur-sm"
+        >
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-treasure/15 text-xs text-treasure">
+            ✓
+          </span>
+          <span className="text-sm text-ink-soft sm:text-base">{b}</span>
+        </motion.li>
+      ))}
+    </ul>
+  );
+}
