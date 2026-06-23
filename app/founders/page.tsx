@@ -22,13 +22,14 @@ export default function FoundersPage() {
       <ChapterIndicator index={2} total={3} label="the invitation" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-dvh flex-col items-center px-6 pb-24 pt-[12vh] text-center">
-        {/* Inviting Otti — grounded focal anchor, standing on his rock. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[2%] z-0 flex justify-center">
+      <section className="relative flex min-h-[100svh] flex-col items-center px-6 pb-10 pt-[10vh] text-center">
+        {/* Inviting Otti — grounded focal anchor at the base of the scene,
+            behind the copy so his size never displaces the CTA. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center">
           <OttiStage
             src={ASSETS.ottiInvite}
             alt="Otti inviting you to join"
-            heightClass="h-[34vh] max-h-[400px] min-h-[230px]"
+            heightClass="h-[40vh] max-h-[440px] min-h-[230px]"
             width={1060}
             height={1484}
             priority
@@ -38,13 +39,15 @@ export default function FoundersPage() {
         {/* Headline scrim — keeps the upper copy crisp over the scene. */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[62%]"
+          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[58%]"
           style={{
             background:
-              "linear-gradient(to bottom, rgba(5,7,13,0.68), rgba(5,7,13,0.30) 45%, transparent)",
+              "linear-gradient(to bottom, rgba(5,7,13,0.70), rgba(5,7,13,0.32) 45%, transparent)",
           }}
         />
 
+        {/* Copy cluster: eyebrow → headline → live counter → CTA. Extends down
+            toward Otti so there's no dead band between the text and the mascot. */}
         <div className="relative z-10 flex w-full max-w-2xl flex-col items-center [text-shadow:0_2px_28px_rgba(0,0,0,0.75)]">
           <RevealOnScroll immediate>
             <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-treasure sm:text-xs sm:tracking-[0.4em]">
@@ -60,14 +63,27 @@ export default function FoundersPage() {
               <span className="block">Founding Explorers</span>
             </h1>
           </RevealOnScroll>
-          <RevealOnScroll immediate delay={0.25} className="mt-9 w-full">
+          <RevealOnScroll immediate delay={0.25} className="mt-7 w-full">
             <LiveTrio />
+          </RevealOnScroll>
+
+          {/* Primary CTA — the hero's call to action, anchors to the form. */}
+          <RevealOnScroll immediate delay={0.35} className="mt-5 [text-shadow:none]">
+            <a
+              href="#join"
+              className="bg-signal glow-signal group inline-flex items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-noir-950 transition-transform active:scale-95"
+            >
+              Claim your founder number
+              <span aria-hidden className="transition-transform group-hover:translate-x-1">
+                →
+              </span>
+            </a>
           </RevealOnScroll>
         </div>
 
-        <RevealOnScroll immediate delay={0.4} className="relative z-10 mt-auto">
-          <p className="pt-10 font-mono text-[10px] uppercase tracking-[0.32em] text-ink-soft/80 [text-shadow:0_1px_12px_rgba(0,0,0,0.85)]">
-            scroll to claim your place
+        <RevealOnScroll immediate delay={0.5} className="relative z-10 mt-auto pt-10">
+          <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-ink-soft/70 [text-shadow:0_1px_12px_rgba(0,0,0,0.85)]">
+            scroll to explore the charter
           </p>
         </RevealOnScroll>
       </section>
@@ -75,6 +91,9 @@ export default function FoundersPage() {
       {/* ── Benefits ─────────────────────────────────────────────────────── */}
       <section className="relative px-6 py-20">
         <RevealOnScroll className="mb-10 text-center">
+          <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.28em] text-treasure sm:text-xs sm:tracking-[0.4em]">
+            // the founder&apos;s charter
+          </p>
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             What founders carry forever
           </h2>
@@ -82,20 +101,8 @@ export default function FoundersPage() {
         <BenefitsList />
       </section>
 
-      {/* ── Urgency ──────────────────────────────────────────────────────── */}
-      <section className="relative px-6 py-16 text-center">
-        <RevealOnScroll>
-          <p className="font-mono text-sm uppercase tracking-[0.3em] text-ink-soft">
-            Only 1000 spots.
-          </p>
-          <p className="mt-2 font-mono text-sm uppercase tracking-[0.3em] text-treasure">
-            Never available again.
-          </p>
-        </RevealOnScroll>
-      </section>
-
       {/* ── Signup form ──────────────────────────────────────────────────── */}
-      <section className="relative px-6 pb-36 pt-6">
+      <section id="join" className="relative scroll-mt-24 px-6 pb-36 pt-6">
         <RevealOnScroll className="mb-10 text-center">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
             Claim your founder number
