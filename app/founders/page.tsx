@@ -29,6 +29,8 @@ export default function FoundersPage() {
             src={ASSETS.ottiInvite}
             alt="Otti inviting you to join"
             heightClass="h-[34vh] max-h-[400px] min-h-[230px]"
+            width={1060}
+            height={1484}
             priority
           />
         </div>
