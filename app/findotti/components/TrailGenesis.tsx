@@ -39,9 +39,11 @@ export function TrailGenesis() {
   const orbBlurFilter = useTransform(orbBlur, (b) => `blur(${b}px)`);
   const orbScaleY = useTransform(scrollYProgress, [0.52, 0.74], [1, 3.4]);
 
-  // Line: a crisp neon segment grows downward out of the orb to hand to the trail.
-  const lineScaleY = useTransform(scrollYProgress, [0.62, 1], [reduce ? 1 : 0, 1]);
-  const lineOpacity = useTransform(scrollYProgress, [0.6, 0.72], [reduce ? 1 : 0, 1]);
+  // Line: a crisp neon segment grows downward out of the orb to hand to the
+  // trail — finishes its full descent BEFORE the evidence spine begins drawing
+  // (the spine's scroll range starts later) so the two journeys are sequential.
+  const lineScaleY = useTransform(scrollYProgress, [0.6, 0.88], [reduce ? 1 : 0, 1]);
+  const lineOpacity = useTransform(scrollYProgress, [0.58, 0.7], [reduce ? 1 : 0, 1]);
   // Core node at the convergence point — the seam where orb becomes line.
   const coreOpacity = useTransform(scrollYProgress, [0.48, 0.58, 0.94, 1], [0, 1, 1, 0]);
 
@@ -55,6 +57,10 @@ export function TrailGenesis() {
             "linear-gradient(to bottom, rgba(5,7,13,0) 0%, rgba(5,7,13,0.45) 30%, rgba(5,7,13,0.85) 60%, var(--noir-950) 100%)",
         }}
       />
+
+      {/* Moonlit pond filling the void — the trail descends to the water (Otti's
+          river continuing from the hero). Static caustics/sheen; ripples below. */}
+      <WaterPool />
 
       <div className="absolute inset-0 px-6">
         <div className="relative mx-auto h-full w-full max-w-2xl">
@@ -100,6 +106,25 @@ export function TrailGenesis() {
             />
           )}
 
+          {/* Neon reflection bloom on the water surface where the line enters. */}
+          <motion.span
+            className="absolute -translate-x-1/2 -translate-y-1/2 rounded-[50%]"
+            style={{
+              left: RAIL_X,
+              top: CONVERGE_TOP,
+              width: 92,
+              height: 26,
+              opacity: coreOpacity,
+              filter: "blur(5px)",
+              background: "radial-gradient(closest-side, rgba(52,245,228,0.34), transparent)",
+            }}
+          />
+
+          {/* Ripple rings spreading where the orb lands on the water. */}
+          <RippleRing progress={scrollYProgress} at={0.48} reduce={!!reduce} />
+          <RippleRing progress={scrollYProgress} at={0.6} reduce={!!reduce} />
+          <RippleRing progress={scrollYProgress} at={0.72} reduce={!!reduce} />
+
           {/* Bright core node at the seam (orb → line). */}
           <motion.span
             className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#eafffd]"
@@ -124,6 +149,48 @@ export function TrailGenesis() {
         </div>
       </div>
     </div>
+  );
+}
+
+/** A moonlit pond filling the void — static caustics, sheen and depth tint. */
+function WaterPool() {
+  return (
+    <div aria-hidden className="absolute inset-x-0 overflow-hidden" style={{ top: CONVERGE_TOP, bottom: 0 }}>
+      {/* underwater depth tint */}
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(8,18,26,0) 0%, rgba(7,16,24,0.5) 55%, rgba(5,12,20,0.8) 100%)" }} />
+      {/* waterline sheen at the surface */}
+      <div className="absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent 6%, rgba(130,210,218,0.32) 50%, transparent 94%)" }} />
+      <div className="absolute inset-x-0 top-0 h-8" style={{ background: "linear-gradient(to bottom, rgba(120,200,210,0.06), transparent)" }} />
+      {/* caustic light pools */}
+      <div className="absolute left-[16%] top-[18%] h-24 w-72 rounded-full opacity-[0.10] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      <div className="absolute right-[12%] top-[42%] h-28 w-80 rounded-full opacity-[0.09] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
+      <div className="absolute left-[42%] bottom-[14%] h-20 w-64 rounded-full opacity-[0.08] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      {/* still-water highlights */}
+      <div className="absolute inset-x-[12%] top-[34%] h-px opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(130,200,210,0.5) 50%, transparent)" }} />
+      <div className="absolute inset-x-[26%] top-[62%] h-px opacity-20" style={{ background: "linear-gradient(90deg, transparent, rgba(130,200,210,0.4) 50%, transparent)" }} />
+    </div>
+  );
+}
+
+/** An elliptical ripple spreading from the orb's landing point (scroll-driven). */
+function RippleRing({ progress, at, reduce }: { progress: MotionValue<number>; at: number; reduce: boolean }) {
+  const scale = useTransform(progress, [at, at + 0.42], [0.22, 1.15]);
+  const opacity = useTransform(progress, [at, at + 0.07, at + 0.42], [0, reduce ? 0 : 0.45, 0]);
+  return (
+    <motion.span
+      className="absolute rounded-[50%] border"
+      style={{
+        left: RAIL_X,
+        top: CONVERGE_TOP,
+        width: 200,
+        height: 54,
+        marginLeft: -100,
+        marginTop: -27,
+        borderColor: "rgba(52,245,228,0.5)",
+        scale,
+        opacity,
+      }}
+    />
   );
 }
 

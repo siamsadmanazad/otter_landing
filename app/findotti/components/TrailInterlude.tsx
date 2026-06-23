@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
-import { LeafCluster } from "./FoliageFrame";
+import { FoliageThicket } from "./FoliageFrame";
 
 /**
  * TrailInterlude — the held breath between the clues ("what we know") and the
@@ -30,21 +30,8 @@ export function TrailInterlude() {
 
   return (
     <div ref={ref} className="relative mx-auto h-[56vh] min-h-[420px] w-full max-w-3xl overflow-hidden">
-      {/* Dense night thicket the tracks vanish into — layered leaf clusters. */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
-        {/* far, blurred, dark back row */}
-        <div className="absolute -bottom-4 left-[6%] h-[34vh] w-[26vw] max-w-[340px] opacity-45 blur-[3px]"><LeafCluster /></div>
-        <div className="absolute -bottom-4 left-[30%] h-[40vh] w-[28vw] max-w-[360px] opacity-40 blur-[4px]"><LeafCluster /></div>
-        <div className="absolute -bottom-4 right-[8%] h-[34vh] w-[26vw] max-w-[340px] -scale-x-100 opacity-45 blur-[3px]"><LeafCluster /></div>
-        {/* near, crisper front row — denser, taller, overlapping toward centre */}
-        <div className="absolute -bottom-8 -left-10 h-[44vh] w-[30vw] max-w-[400px] opacity-90"><LeafCluster /></div>
-        <div className="absolute -bottom-10 left-[22%] h-[50vh] w-[30vw] max-w-[400px] opacity-85"><LeafCluster /></div>
-        <div className="absolute -bottom-10 right-[20%] h-[50vh] w-[30vw] max-w-[400px] -scale-x-100 opacity-85"><LeafCluster /></div>
-        <div className="absolute -bottom-8 -right-10 h-[44vh] w-[30vw] max-w-[400px] -scale-x-100 opacity-90"><LeafCluster /></div>
-        {/* a couple of centre blades crossing the path */}
-        <div className="absolute bottom-0 left-[44%] h-[36vh] w-[16vw] max-w-[200px] rotate-[8deg] opacity-70"><LeafCluster /></div>
-        <div className="absolute bottom-0 left-[48%] h-[30vh] w-[14vw] max-w-[180px] -rotate-[10deg] opacity-60"><LeafCluster /></div>
-      </div>
+      {/* Dense night thicket the tracks vanish into — varied leaves, full width. */}
+      <FoliageThicket />
 
       {/* Ground shadow + faint teal pool so the thicket has a floor. */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-2/5" style={{ background: "linear-gradient(to top, var(--noir-950) 10%, transparent)" }} />
@@ -102,15 +89,17 @@ function Paw({
 }
 
 function PawShape() {
+  // Toes point DOWN — the direction Otti is walking (down the page, into the
+  // thicket) — so the prints read as tracks heading away from you.
   return (
     <svg width="26" height="26" viewBox="-16 -16 32 32" fill="#7df3ea">
-      {/* pad */}
-      <ellipse cx="0" cy="5.5" rx="8.5" ry="6.6" />
-      {/* toes */}
-      <circle cx="-8.4" cy="-2" r="2.7" />
-      <circle cx="-3" cy="-7.2" r="2.9" />
-      <circle cx="3" cy="-7.2" r="2.9" />
-      <circle cx="8.4" cy="-2" r="2.7" />
+      {/* pad (behind, up) */}
+      <ellipse cx="0" cy="-5.5" rx="8.5" ry="6.6" />
+      {/* toes (forward, down) */}
+      <circle cx="-8.4" cy="2" r="2.7" />
+      <circle cx="-3" cy="7.2" r="2.9" />
+      <circle cx="3" cy="7.2" r="2.9" />
+      <circle cx="8.4" cy="2" r="2.7" />
     </svg>
   );
 }

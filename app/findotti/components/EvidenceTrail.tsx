@@ -54,7 +54,9 @@ export function EvidenceTrail() {
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start 78%", "end 62%"],
+    // Start later (spine top near mid-viewport) so the genesis line finishes its
+    // descent first — the two journeys read sequentially, not at the same time.
+    offset: ["start 48%", "end 60%"],
   });
 
   // The bright stroke draws from 0 → full as the section passes through.
