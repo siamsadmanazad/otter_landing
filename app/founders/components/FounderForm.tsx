@@ -14,9 +14,16 @@ type Errors = Partial<Record<keyof JoinPayload, string>>;
  * focus-glow fields, accessible labels + inline validation. On submit: proxy →
  * (L2) signup Edge Function, then a curtain wipe into /welcome with the code.
  */
+function readRefCookie(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const m = document.cookie.match(/(?:^|;\s*)otti_ref=([^;]+)/);
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
+
 export function FounderForm() {
   const router = useRouter();
-  const ref = useSearchParams().get("ref") ?? undefined;
+  // Prefer the URL ?ref (fresh click); fall back to the cookie (returning visitor).
+  const ref = useSearchParams().get("ref") ?? readRefCookie();
 
   const [v, setV] = useState<JoinPayload>({
     fullName: "",
