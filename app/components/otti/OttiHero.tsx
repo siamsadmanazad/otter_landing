@@ -5,63 +5,66 @@ import { motion, useReducedMotion, useTransform } from "motion/react";
 import { useMouseParallax } from "../motion/useMouseParallax";
 
 /**
- * OttiHero — the cute Otti mascot, front and centre. A glossy otter on a soft
- * glass-glow pedestal, gently floating, with sonar ping rings (he's the signal
- * being detected) and a warm ember halo. Cursor parallax adds life. The otter
- * art is a commercially-safe open-source placeholder (public/otti) — swap for
- * the bespoke Otti Lottie/art into the same slot later.
+ * OttiHero — the full-body Otti mascot holding the glowing compass. The compass's
+ * cyan light is the "signal": sonar ping rings emanate from it (ties to "//
+ * signal detected"). Warm + cyan glow bloom behind him, a soft ground shadow, a
+ * gentle idle float, and cursor parallax. Bespoke painterly art in public/otti.
  */
 export function OttiHero() {
   const reduce = useReducedMotion();
   const { x, y } = useMouseParallax();
-  const tx = useTransform(x, (v) => v * 20);
-  const ty = useTransform(y, (v) => v * 16);
+  const tx = useTransform(x, (v) => v * 22);
+  const ty = useTransform(y, (v) => v * 14);
 
   return (
     <motion.div
       style={{ x: tx, y: ty }}
-      className="relative mx-auto flex h-60 w-60 items-center justify-center sm:h-80 sm:w-80"
+      className="relative mx-auto flex h-[42vh] max-h-[460px] min-h-[300px] w-full items-end justify-center"
     >
-      {/* Sonar ping rings. */}
+      {/* Glow bloom behind Otti (warm subject + cyan signal). */}
+      <span
+        aria-hidden
+        className="absolute bottom-[12%] h-[60%] w-[55%] rounded-full opacity-70 blur-[70px]"
+        style={{
+          background:
+            "radial-gradient(circle at 45% 55%, rgba(255,140,70,0.45), rgba(13,185,200,0.30) 50%, transparent 72%)",
+        }}
+      />
+
+      {/* Sonar rings emanating from the compass (upper-left of his chest). */}
       {!reduce &&
         [0, 1, 2].map((i) => (
           <motion.span
             key={i}
-            className="absolute rounded-full border border-signal-2/35"
-            initial={{ width: 90, height: 90, opacity: 0.6 }}
-            animate={{ width: 320, height: 320, opacity: 0 }}
+            className="absolute bottom-[42%] left-1/2 rounded-full border border-signal-2/35"
+            style={{ translateX: "-115%" }}
+            initial={{ width: 40, height: 40, opacity: 0.55 }}
+            animate={{ width: 220, height: 220, opacity: 0 }}
             transition={{ duration: 3.4, repeat: Infinity, delay: i * 1.13, ease: "easeOut" }}
           />
         ))}
 
-      {/* Static guide ring. */}
-      <span className="absolute h-48 w-48 rounded-full border border-signal-1/12 sm:h-60 sm:w-60" />
-
-      {/* Warm ember + teal glow behind Otti. */}
-      <span
-        aria-hidden
-        className="absolute h-44 w-44 rounded-full opacity-60 blur-3xl sm:h-52 sm:w-52"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 60%, rgba(255,140,70,0.5), rgba(13,185,200,0.25) 55%, transparent 72%)",
-        }}
-      />
-
-      {/* Glass pedestal + the otter, floating. */}
+      {/* Otti, floating gently. */}
       <motion.div
-        className="relative grid h-40 w-40 place-items-center rounded-[2rem] border border-white/10 bg-white/[0.04] backdrop-blur-sm sm:h-48 sm:w-48"
-        animate={reduce ? {} : { y: [0, -12, 0] }}
-        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+        className="relative z-10"
+        animate={reduce ? {} : { y: [0, -14, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
         <Image
-          src="/otti/otter_3d.png"
-          alt="Otti the otter"
-          width={150}
-          height={150}
+          src="/otti/otti_hero.png"
+          alt="Otti the otter, holding a glowing compass"
+          width={847}
+          height={1213}
           priority
-          className="drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] sm:scale-110"
+          className="h-[42vh] max-h-[460px] min-h-[300px] w-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.55)]"
         />
       </motion.div>
+
+      {/* Soft ground shadow / contact glow under his feet. */}
+      <span
+        aria-hidden
+        className="absolute bottom-[6%] h-6 w-[42%] rounded-[50%] bg-black/45 blur-xl"
+      />
     </motion.div>
   );
 }
