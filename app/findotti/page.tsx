@@ -3,14 +3,11 @@ import { ParticleField } from "../components/atmosphere/ParticleField";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { CinematicScene } from "../components/scene/CinematicScene";
 import { SceneLayer } from "../components/scene/SceneLayer";
-import {
-  FarRange,
-  MidRidge,
-  ForegroundRidge,
-  LightRays,
-} from "../components/scene/ProceduralTerrain";
+import { ScenePhoto } from "../components/scene/ScenePhoto";
+import { ForegroundRidge, LightRays } from "../components/scene/ProceduralTerrain";
 import { ExplorerTrail } from "../components/atmosphere/ExplorerTrail";
 import { OttiHero } from "../components/otti/OttiHero";
+import { FloatingCharms } from "../components/otti/FloatingCharms";
 import { ClueReveal } from "../components/motion/ClueReveal";
 import { MagneticButton } from "../components/motion/MagneticButton";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
@@ -61,14 +58,15 @@ export default function FindOttiPage() {
           </div>
         }
       >
-        {/* Parallax depth stack (back → front). Art slots: swap children later. */}
+        {/* Parallax depth stack (back → front): real photographic world. */}
+        <SceneLayer depth={0.08}>
+          <ScenePhoto src="/scene/hero_sky.jpg" priority position="center 30%" />
+        </SceneLayer>
+        <SceneLayer depth={0.3} hideOnMobile>
+          <ScenePhoto src="/scene/mountains.jpg" position="center 70%" grade="soft" />
+        </SceneLayer>
         <LightRays />
-        <SceneLayer depth={0.15} hideOnMobile>
-          <FarRange />
-        </SceneLayer>
-        <SceneLayer depth={0.4} hideOnMobile>
-          <MidRidge />
-        </SceneLayer>
+        <FloatingCharms />
         <SceneLayer depth={0.85}>
           <ForegroundRidge />
         </SceneLayer>

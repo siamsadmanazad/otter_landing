@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 
@@ -34,9 +35,7 @@ export function Navbar() {
         }`}
       >
         <Link href="/findotti" className="flex items-center gap-2">
-          <span className="grid h-7 w-7 place-items-center rounded-full bg-signal text-sm">
-            🦦
-          </span>
+          <Image src="/otti/otter_3d.png" alt="Otti" width={28} height={28} className="drop-shadow" />
           <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-ink-soft">
             otti
           </span>
