@@ -106,17 +106,30 @@ export function TrailGenesis() {
             />
           )}
 
-          {/* Neon reflection bloom on the water surface where the line enters. */}
+          {/* Neon reflection on the water where the line enters: a soft surface
+              bloom + a shimmering mirrored streak running down into the pond. */}
           <motion.span
             className="absolute -translate-x-1/2 -translate-y-1/2 rounded-[50%]"
             style={{
               left: RAIL_X,
               top: CONVERGE_TOP,
-              width: 92,
-              height: 26,
+              width: 120,
+              height: 30,
               opacity: coreOpacity,
               filter: "blur(5px)",
-              background: "radial-gradient(closest-side, rgba(52,245,228,0.34), transparent)",
+              background: "radial-gradient(closest-side, rgba(52,245,228,0.5), transparent)",
+            }}
+          />
+          <motion.span
+            className="absolute -translate-x-1/2 origin-top"
+            style={{
+              left: RAIL_X,
+              top: CONVERGE_TOP,
+              width: 7,
+              height: 120,
+              opacity: coreOpacity,
+              filter: "blur(2.5px)",
+              background: "linear-gradient(to bottom, rgba(52,245,228,0.55), rgba(0,153,219,0.12) 60%, transparent)",
             }}
           />
 
@@ -152,22 +165,40 @@ export function TrailGenesis() {
   );
 }
 
-/** A moonlit pond filling the void — static caustics, sheen and depth tint. */
+/** A moonlit pond filling the void — caustics, sheen, depth tint, and a slow
+ *  idle shimmer so it clearly reads as water even when the page is still. */
 function WaterPool() {
+  const reduce = useReducedMotion();
   return (
     <div aria-hidden className="absolute inset-x-0 overflow-hidden" style={{ top: CONVERGE_TOP, bottom: 0 }}>
-      {/* underwater depth tint */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(8,18,26,0) 0%, rgba(7,16,24,0.5) 55%, rgba(5,12,20,0.8) 100%)" }} />
-      {/* waterline sheen at the surface */}
-      <div className="absolute inset-x-0 top-0 h-px" style={{ background: "linear-gradient(90deg, transparent 6%, rgba(130,210,218,0.32) 50%, transparent 94%)" }} />
-      <div className="absolute inset-x-0 top-0 h-8" style={{ background: "linear-gradient(to bottom, rgba(120,200,210,0.06), transparent)" }} />
-      {/* caustic light pools */}
-      <div className="absolute left-[16%] top-[18%] h-24 w-72 rounded-full opacity-[0.10] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
-      <div className="absolute right-[12%] top-[42%] h-28 w-80 rounded-full opacity-[0.09] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
-      <div className="absolute left-[42%] bottom-[14%] h-20 w-64 rounded-full opacity-[0.08] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
-      {/* still-water highlights */}
-      <div className="absolute inset-x-[12%] top-[34%] h-px opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(130,200,210,0.5) 50%, transparent)" }} />
-      <div className="absolute inset-x-[26%] top-[62%] h-px opacity-20" style={{ background: "linear-gradient(90deg, transparent, rgba(130,200,210,0.4) 50%, transparent)" }} />
+      {/* underwater depth tint — stronger so the surface is unmistakable */}
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,24,34,0.15) 0%, rgba(8,20,30,0.62) 55%, rgba(5,13,22,0.92) 100%)" }} />
+
+      {/* bright waterline at the surface */}
+      <div className="absolute inset-x-0 top-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent 4%, rgba(150,235,240,0.7) 50%, transparent 96%)" }} />
+      <div className="absolute inset-x-0 top-0 h-12" style={{ background: "linear-gradient(to bottom, rgba(120,210,218,0.12), transparent)" }} />
+
+      {/* caustic light pools (brighter) */}
+      <div className="absolute left-[16%] top-[18%] h-24 w-72 rounded-full opacity-[0.16] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      <div className="absolute right-[12%] top-[42%] h-28 w-80 rounded-full opacity-[0.14] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
+      <div className="absolute left-[42%] bottom-[14%] h-20 w-64 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+
+      {/* horizontal ripple highlights — the always-present surface texture */}
+      <div className="absolute inset-x-[10%] top-[24%] h-px opacity-40" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.6) 50%, transparent)" }} />
+      <div className="absolute inset-x-[18%] top-[40%] h-px opacity-30" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.5) 50%, transparent)" }} />
+      <div className="absolute inset-x-[24%] top-[58%] h-px opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.45) 50%, transparent)" }} />
+      <div className="absolute inset-x-[30%] top-[76%] h-px opacity-20" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.4) 50%, transparent)" }} />
+
+      {/* slow idle shimmer sweep so it visibly *is* water without scrolling.
+          (one small element; transform-only; paused under reduced motion) */}
+      {!reduce && (
+        <motion.div
+          className="absolute inset-x-0 top-0 h-full"
+          style={{ background: "linear-gradient(100deg, transparent 30%, rgba(120,210,220,0.05) 48%, rgba(150,235,240,0.09) 50%, rgba(120,210,220,0.05) 52%, transparent 70%)" }}
+          animate={{ x: ["-12%", "12%", "-12%"] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+        />
+      )}
     </div>
   );
 }

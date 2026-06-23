@@ -12,8 +12,9 @@ type LeafSpec = { angle: number; len: number; w: number; kind: Kind; shade: stri
 
 function leafPath(kind: Kind, L: number, w: number): string {
   if (kind === "broad") {
-    const W = w * 1.55;
-    return `M0 0 C ${W} ${-L * 0.16} ${W * 0.88} ${-L * 0.82} 0 ${-L} C ${-W * 0.88} ${-L * 0.82} ${-W} ${-L * 0.16} 0 0 Z`;
+    // Rounded, ovate bush leaf with a soft blunt tip (not a sharp point).
+    const W = w * 1.7;
+    return `M0 0 C ${W} ${-L * 0.12} ${W} ${-L * 0.72} ${W * 0.34} ${-L * 0.94} C ${W * 0.14} ${-L} ${-W * 0.14} ${-L} ${-W * 0.34} ${-L * 0.94} C ${-W} ${-L * 0.72} ${-W} ${-L * 0.12} 0 0 Z`;
   }
   if (kind === "blade") {
     const W = w * 0.55;
@@ -33,21 +34,20 @@ const VARIANTS: LeafSpec[][] = [
     { angle: 40, len: 220, w: 46, kind: "broad", shade: "#08111a" },
     { angle: 60, len: 160, w: 34, kind: "pointed", shade: "#070c12" },
   ],
-  [ // ferny / bladey
-    { angle: -58, len: 230, w: 26, kind: "blade", shade: "#070e15" },
-    { angle: -36, len: 300, w: 30, kind: "blade", shade: "#0a131d" },
-    { angle: -16, len: 340, w: 24, kind: "blade", shade: "#0b1521" },
-    { angle: 4, len: 320, w: 30, kind: "blade", shade: "#0a131d" },
-    { angle: 24, len: 280, w: 26, kind: "blade", shade: "#08111a" },
-    { angle: 46, len: 220, w: 22, kind: "blade", shade: "#070d14" },
-    { angle: 66, len: 170, w: 18, kind: "blade", shade: "#060b11" },
+  [ // broad-dominant with a few blades for texture
+    { angle: -58, len: 200, w: 50, kind: "broad", shade: "#070e15" },
+    { angle: -34, len: 260, w: 30, kind: "blade", shade: "#0a131d" },
+    { angle: -14, len: 300, w: 58, kind: "broad", shade: "#0b1521" },
+    { angle: 8, len: 270, w: 54, kind: "broad", shade: "#0a131d" },
+    { angle: 30, len: 240, w: 28, kind: "blade", shade: "#08111a" },
+    { angle: 52, len: 200, w: 50, kind: "broad", shade: "#070d14" },
   ],
-  [ // tall mixed
-    { angle: -48, len: 210, w: 40, kind: "pointed", shade: "#070d14" },
-    { angle: -24, len: 300, w: 38, kind: "blade", shade: "#0a131d" },
-    { angle: -4, len: 350, w: 50, kind: "broad", shade: "#0b1521" },
-    { angle: 18, len: 300, w: 36, kind: "blade", shade: "#0a131d" },
-    { angle: 42, len: 230, w: 44, kind: "broad", shade: "#08111a" },
+  [ // tall mixed (broad-leaning)
+    { angle: -48, len: 210, w: 48, kind: "broad", shade: "#070d14" },
+    { angle: -24, len: 300, w: 36, kind: "pointed", shade: "#0a131d" },
+    { angle: -4, len: 350, w: 56, kind: "broad", shade: "#0b1521" },
+    { angle: 18, len: 300, w: 50, kind: "broad", shade: "#0a131d" },
+    { angle: 42, len: 230, w: 30, kind: "blade", shade: "#08111a" },
   ],
   [ // low wide bush
     { angle: -66, len: 150, w: 48, kind: "broad", shade: "#070c12" },
