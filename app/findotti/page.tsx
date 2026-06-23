@@ -3,8 +3,8 @@ import { ParticleField } from "../components/atmosphere/ParticleField";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { CinematicScene } from "../components/scene/CinematicScene";
 import { SceneLayer } from "../components/scene/SceneLayer";
-import { ScenePhoto } from "../components/scene/ScenePhoto";
-import { ForegroundRidge, LightRays } from "../components/scene/ProceduralTerrain";
+import { HeroBackdrop } from "../components/scene/HeroBackdrop";
+import { LightRays } from "../components/scene/ProceduralTerrain";
 import { ExplorerTrail } from "../components/atmosphere/ExplorerTrail";
 import { OttiHero } from "../components/otti/OttiHero";
 import { FloatingCharms } from "../components/otti/FloatingCharms";
@@ -29,47 +29,43 @@ export default function FindOttiPage() {
       {/* ── Scene 1: Hero (pinned, crossfades out) ───────────────────────── */}
       <CinematicScene
         pin
-        className="px-6"
         pinContent={
-          <div className="flex flex-col items-center text-center">
-            <p className="mb-8 font-mono text-xs uppercase tracking-[0.4em] text-signal-2/80">
-              // signal detected
-            </p>
-            <OttiHero />
-            <ClueReveal
-              text={"YOU FOUND\nA CLUE."}
-              className="mt-10 text-balance text-5xl font-extrabold leading-[0.95] tracking-tight sm:text-7xl [&>span:last-child]:text-signal"
-            />
-            <RevealOnScroll delay={0.9}>
-              <p className="mx-auto mt-8 max-w-md font-mono text-sm leading-relaxed text-ink-soft">
-                Otti isn&apos;t lost. He&apos;s searching — for hidden places,
-                stories, and people who love adventures.
+          <div className="relative flex min-h-dvh w-full flex-col items-center px-6">
+            {/* Headline up in the open sky. */}
+            <div className="flex flex-col items-center pt-[16vh] text-center sm:pt-[14vh]">
+              <p className="mb-6 font-mono text-xs uppercase tracking-[0.4em] text-signal-2/90">
+                // signal detected
               </p>
-            </RevealOnScroll>
+              <ClueReveal
+                text={"YOU FOUND\nA CLUE."}
+                className="text-balance text-5xl font-extrabold leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)] sm:text-7xl [&>span:last-child]:text-signal"
+              />
+              <RevealOnScroll delay={0.9}>
+                <p className="mx-auto mt-7 max-w-md font-mono text-sm leading-relaxed text-ink-soft drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                  Otti isn&apos;t lost. He&apos;s searching — for hidden places,
+                  stories, and people who love adventures.
+                </p>
+              </RevealOnScroll>
+            </div>
+
+            <div className="flex-1" />
+
+            {/* Otti standing on the rock at the bottom of the valley. */}
+            <OttiHero />
             <RevealOnScroll delay={1.2}>
-              <p className="mt-14 font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
+              <p className="pb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
                 scroll to follow the trail
               </p>
-              <span
-                aria-hidden
-                className="mx-auto mt-3 block h-8 w-[1px] animate-pulse bg-gradient-to-b from-signal-2/60 to-transparent"
-              />
             </RevealOnScroll>
           </div>
         }
       >
-        {/* Parallax depth stack (back → front): real photographic world. */}
+        {/* Bespoke painterly valley backdrop + atmosphere (parallax). */}
         <SceneLayer depth={0.08}>
-          <ScenePhoto src="/scene/hero_sky.jpg" priority position="center 30%" />
-        </SceneLayer>
-        <SceneLayer depth={0.3} hideOnMobile>
-          <ScenePhoto src="/scene/mountains.jpg" position="center 70%" grade="soft" />
+          <HeroBackdrop />
         </SceneLayer>
         <LightRays />
         <FloatingCharms />
-        <SceneLayer depth={0.85}>
-          <ForegroundRidge />
-        </SceneLayer>
       </CinematicScene>
 
       {/* ── Scene 2: Clues (trail threads through) ───────────────────────── */}

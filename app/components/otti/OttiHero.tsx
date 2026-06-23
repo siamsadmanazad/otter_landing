@@ -19,15 +19,16 @@ export function OttiHero() {
   return (
     <motion.div
       style={{ x: tx, y: ty }}
-      className="relative mx-auto flex h-[42vh] max-h-[460px] min-h-[300px] w-full items-end justify-center"
+      className="relative mx-auto flex h-[34vh] max-h-[380px] min-h-[240px] w-full items-end justify-center"
     >
-      {/* Glow bloom behind Otti (warm subject + cyan signal). */}
+      {/* Soft glow bloom behind Otti (warm subject + cyan signal) — subtle, the
+          painterly scene already carries the light. */}
       <span
         aria-hidden
-        className="absolute bottom-[12%] h-[60%] w-[55%] rounded-full opacity-70 blur-[70px]"
+        className="absolute bottom-[14%] h-[55%] w-[48%] rounded-full opacity-55 blur-[70px]"
         style={{
           background:
-            "radial-gradient(circle at 45% 55%, rgba(255,140,70,0.45), rgba(13,185,200,0.30) 50%, transparent 72%)",
+            "radial-gradient(circle at 45% 55%, rgba(255,140,70,0.40), rgba(13,185,200,0.28) 50%, transparent 72%)",
         }}
       />
 
@@ -56,7 +57,7 @@ export function OttiHero() {
           width={847}
           height={1213}
           priority
-          className="h-[42vh] max-h-[460px] min-h-[300px] w-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.55)]"
+          className="h-[34vh] max-h-[380px] min-h-[240px] w-auto drop-shadow-[0_24px_40px_rgba(0,0,0,0.55)]"
         />
       </motion.div>
 
