@@ -6,8 +6,10 @@ import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { MagneticButton } from "../components/motion/MagneticButton";
 import { CountUp } from "../components/motion/CountUp";
-import { WarmWash } from "../founders/components/WarmWash";
+import { SceneBackdrop } from "../components/scene/SceneBackdrop";
+import { OttiStage } from "../components/otti/OttiStage";
 import { FounderStamp } from "./components/FounderStamp";
+import { ASSETS } from "@/lib/assets";
 import { ReferralShare } from "./components/ReferralShare";
 import { RewardTiers } from "./components/RewardTiers";
 import { Leaderboard } from "../components/leaderboard/Leaderboard";
@@ -26,12 +28,18 @@ export function WelcomeDashboard() {
 
   return (
     <main className="relative">
-      <WarmWash />
+      {/* Act 3 lives in a continuous STARLIT NIGHT world (image slot ready). */}
+      <SceneBackdrop fixed tone="night" image={ASSETS.summitBg} priority />
       <ScrollProgress />
       <ChapterIndicator index={3} total={3} label="the reveal" />
 
       {/* ── Stamp + rank ─────────────────────────────────────────────────── */}
       <section className="relative flex min-h-dvh flex-col items-center justify-center px-6 py-24 text-center">
+        {/* Celebrating Otti slot (renders when otti_celebrate.png lands). */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[6%] z-0 flex justify-center opacity-90">
+          <OttiStage src={ASSETS.ottiCelebrate} alt="Otti celebrating" />
+        </div>
+        <div className="relative z-10 flex flex-col items-center">
         <FounderStamp position={position} />
 
         <div className="mt-12 flex items-center gap-8 font-mono">
@@ -55,6 +63,7 @@ export function WelcomeDashboard() {
             scroll — your climb begins
           </p>
         </RevealOnScroll>
+        </div>
       </section>
 
       {/* ── Referral + share ─────────────────────────────────────────────── */}

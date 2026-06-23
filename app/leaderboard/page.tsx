@@ -1,7 +1,7 @@
 import { ScrollProgress } from "../components/motion/ScrollProgress";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { MagneticButton } from "../components/motion/MagneticButton";
-import { WarmWash } from "../founders/components/WarmWash";
+import { SceneBackdrop } from "../components/scene/SceneBackdrop";
 import { Leaderboard } from "../components/leaderboard/Leaderboard";
 import { UniversityRace } from "../components/leaderboard/UniversityRace";
 
@@ -12,7 +12,7 @@ import { UniversityRace } from "../components/leaderboard/UniversityRace";
 export default function LeaderboardPage() {
   return (
     <main className="relative">
-      <WarmWash />
+      <SceneBackdrop fixed tone="night" />
       <ScrollProgress />
 
       <section className="relative px-6 pb-10 pt-32 text-center">
