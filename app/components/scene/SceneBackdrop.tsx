@@ -61,11 +61,22 @@ export function SceneBackdrop({
             className="object-cover opacity-90"
             style={{ objectPosition: imagePosition }}
           />
+          {/* Cinematic legibility grade — darkens the edges + lower frame and
+              adds a soft vignette so foreground text always reads over the busy
+              painterly scene (without dulling the sky's focal beauty up top). */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "radial-gradient(70% 50% at 50% 78%, rgba(13,185,200,0.12), transparent 60%)",
+                "linear-gradient(to top, rgba(5,7,13,0.92) 0%, rgba(5,7,13,0.62) 20%, rgba(5,7,13,0.14) 44%, transparent 64%), radial-gradient(135% 85% at 50% 32%, transparent 52%, rgba(5,7,13,0.58) 100%)",
+            }}
+          />
+          {/* Subtle teal pool low — ties to the aurora/compass glow. */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(70% 45% at 50% 82%, rgba(13,185,200,0.10), transparent 62%)",
             }}
           />
         </div>

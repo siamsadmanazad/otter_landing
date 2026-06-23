@@ -22,35 +22,52 @@ export default function FoundersPage() {
       <ChapterIndicator index={2} total={3} label="the invitation" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-dvh flex-col items-center justify-center px-6 py-28 text-center">
-        {/* Inviting Otti slot (renders when otti_invite.png lands). */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[8%] z-0 flex justify-center opacity-90">
-          <OttiStage src={ASSETS.ottiInvite} alt="Otti inviting you to join" />
+      <section className="relative flex min-h-dvh flex-col items-center px-6 pb-24 pt-[12vh] text-center">
+        {/* Inviting Otti — grounded focal anchor, standing on his rock. */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[2%] z-0 flex justify-center">
+          <OttiStage
+            src={ASSETS.ottiInvite}
+            alt="Otti inviting you to join"
+            heightClass="h-[34vh] max-h-[400px] min-h-[230px]"
+            priority
+          />
         </div>
-        <div className="relative z-10 flex flex-col items-center">
-          <RevealOnScroll>
-            <p className="mb-6 font-mono text-xs uppercase tracking-[0.4em] text-treasure/80">
+
+        {/* Headline scrim — keeps the upper copy crisp over the scene. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[62%]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(5,7,13,0.68), rgba(5,7,13,0.30) 45%, transparent)",
+          }}
+        />
+
+        <div className="relative z-10 flex w-full max-w-2xl flex-col items-center [text-shadow:0_2px_28px_rgba(0,0,0,0.75)]">
+          <RevealOnScroll immediate>
+            <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-treasure sm:text-xs sm:tracking-[0.4em]">
               // the expedition is forming
             </p>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.1}>
-            <h1 className="text-balance text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl">
-              Become one of the first
-              <br />
-              <span className="text-treasure text-6xl sm:text-8xl">1000</span>
-              <br />
-              Founding Explorers
+          <RevealOnScroll immediate delay={0.1} className="w-full">
+            <h1 className="w-full text-pretty text-2xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl">
+              <span className="block">Become one of the first</span>
+              <span className="my-1 block text-6xl leading-none text-treasure drop-shadow-[0_6px_30px_rgba(255,122,69,0.5)] sm:text-8xl">
+                1000
+              </span>
+              <span className="block">Founding Explorers</span>
             </h1>
           </RevealOnScroll>
-          <RevealOnScroll delay={0.25} className="mt-12 w-full">
+          <RevealOnScroll immediate delay={0.25} className="mt-9 w-full">
             <LiveTrio />
           </RevealOnScroll>
-          <RevealOnScroll delay={0.4}>
-            <p className="mt-14 font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
-              scroll to claim your place
-            </p>
-          </RevealOnScroll>
         </div>
+
+        <RevealOnScroll immediate delay={0.4} className="relative z-10 mt-auto">
+          <p className="pt-10 font-mono text-[10px] uppercase tracking-[0.32em] text-ink-soft/80 [text-shadow:0_1px_12px_rgba(0,0,0,0.85)]">
+            scroll to claim your place
+          </p>
+        </RevealOnScroll>
       </section>
 
       {/* ── Benefits ─────────────────────────────────────────────────────── */}

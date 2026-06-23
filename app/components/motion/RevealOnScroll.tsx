@@ -13,19 +13,35 @@ export function RevealOnScroll({
   y = 14,
   className = "",
   once = true,
+  immediate = false,
 }: {
   children: React.ReactNode;
   delay?: number;
   y?: number;
   className?: string;
   once?: boolean;
+  /** Above-the-fold (hero) content: animate in on mount instead of on scroll,
+   *  so it never depends on the IntersectionObserver firing (no blank flash). */
+  immediate?: boolean;
 }) {
+  const reveal = { opacity: 1, y: 0, filter: "blur(0px)" };
+  const initial = { opacity: 0, y, filter: "blur(6px)" };
+  const transition = { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const, delay };
+
+  if (immediate) {
+    return (
+      <motion.div initial={initial} animate={reveal} transition={transition} className={className}>
+        {children}
+      </motion.div>
+    );
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y, filter: "blur(6px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={initial}
+      whileInView={reveal}
       viewport={{ once, margin: "-10%" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
+      transition={transition}
       className={className}
     >
       {children}
