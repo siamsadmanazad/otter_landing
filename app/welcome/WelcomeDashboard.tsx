@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { ScrollProgress } from "../components/motion/ScrollProgress";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
-import { MagneticButton } from "../components/motion/MagneticButton";
+import { PrimaryCta } from "../components/PrimaryCta";
 import { CountUp } from "../components/motion/CountUp";
 import { SceneBackdrop } from "../components/scene/SceneBackdrop";
 import { OttiStage } from "../components/otti/OttiStage";
@@ -98,7 +98,11 @@ export function WelcomeDashboard() {
           <p className="mt-4 font-mono text-sm text-ink-soft">The journey begins 08.05.2026.</p>
         </RevealOnScroll>
         <RevealOnScroll delay={0.2} className="mt-10">
-          <MagneticButton href="/leaderboard">See the full leaderboard</MagneticButton>
+          <PrimaryCta
+            preLabel="See the full leaderboard"
+            preHref="/leaderboard"
+            postLabel="Claim your Founder Badge"
+          />
         </RevealOnScroll>
       </section>
     </main>

@@ -10,7 +10,7 @@ import { ExplorerTrail } from "../components/atmosphere/ExplorerTrail";
 import { OttiHero } from "../components/otti/OttiHero";
 import { FloatingCharms } from "../components/otti/FloatingCharms";
 import { ClueReveal } from "../components/motion/ClueReveal";
-import { MagneticButton } from "../components/motion/MagneticButton";
+import { PrimaryCta } from "../components/PrimaryCta";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { Countdown } from "./components/Countdown";
 import { ClueList } from "./components/ClueList";
@@ -92,9 +92,7 @@ export default function FindOttiPage() {
             <Countdown />
           </RevealOnScroll>
           <RevealOnScroll delay={0.3} className="mt-16">
-            <MagneticButton href="/founders">
-              Become a Founding Explorer
-            </MagneticButton>
+            <PrimaryCta preLabel="Become a Founding Explorer" preHref="/founders" />
           </RevealOnScroll>
           <RevealOnScroll delay={0.45}>
             <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
