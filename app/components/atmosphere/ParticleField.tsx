@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 
 /**
- * ParticleField — ambient drifting dust/fireflies on a lightweight canvas.
- * Custom (not tsParticles) for mobile performance + full control. Particles
- * drift slowly upward and twinkle in the teal/cyan signal palette. Skipped
- * entirely under reduced motion. Fixed, behind content, above the aurora.
+ * ParticleField — ambient drifting dust/fireflies on a lightweight canvas with
+ * DEPTH: each particle has a z-tier (0..1) that scales its size, brightness,
+ * drift speed, and how far it shifts with the cursor + scroll (parallax).
+ * Custom (not tsParticles) for mobile perf. Skipped under reduced motion.
  */
-export function ParticleField({ count = 36 }: { count?: number }) {
+export function ParticleField({ count = 48 }: { count?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -21,11 +21,27 @@ export function ParticleField({ count = 36 }: { count?: number }) {
     let w = 0;
     let h = 0;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    // Fewer particles on small screens.
-    const n = window.innerWidth < 640 ? Math.round(count * 0.6) : count;
+    const n = window.innerWidth < 640 ? Math.round(count * 0.55) : count;
+    const coarse = window.matchMedia("(pointer: coarse)").matches;
 
-    type P = { x: number; y: number; r: number; vy: number; a: number; tw: number };
+    type P = {
+      x: number;
+      y: number;
+      r: number;
+      vy: number;
+      a: number;
+      tw: number;
+      z: number; // depth 0 (far) .. 1 (near)
+      warm: boolean;
+    };
     let parts: P[] = [];
+
+    // Parallax targets (eased toward).
+    let mx = 0;
+    let my = 0;
+    let curMx = 0;
+    let curMy = 0;
+    let scrollY = window.scrollY;
 
     const resize = () => {
       w = canvas.clientWidth;
@@ -35,14 +51,19 @@ export function ParticleField({ count = 36 }: { count?: number }) {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     const seed = () => {
-      parts = Array.from({ length: n }, () => ({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 1.6 + 0.4,
-        vy: Math.random() * 0.18 + 0.04,
-        a: Math.random() * 0.5 + 0.1,
-        tw: Math.random() * Math.PI * 2,
-      }));
+      parts = Array.from({ length: n }, () => {
+        const z = Math.random();
+        return {
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: (0.4 + z * 1.8) * (0.8 + Math.random() * 0.5),
+          vy: (0.03 + z * 0.22) * (0.6 + Math.random()),
+          a: 0.12 + z * 0.5,
+          tw: Math.random() * Math.PI * 2,
+          z,
+          warm: Math.random() < 0.18, // a few warm ember motes
+        };
+      });
     };
 
     resize();
@@ -50,31 +71,49 @@ export function ParticleField({ count = 36 }: { count?: number }) {
 
     let raf = 0;
     const draw = () => {
+      // Ease parallax.
+      curMx += (mx - curMx) * 0.06;
+      curMy += (my - curMy) * 0.06;
+      const sy = window.scrollY;
+
       ctx.clearRect(0, 0, w, h);
       for (const p of parts) {
         p.y -= p.vy;
         p.tw += 0.02;
-        if (p.y < -4) {
-          p.y = h + 4;
+        if (p.y < -6) {
+          p.y = h + 6;
           p.x = Math.random() * w;
         }
-        const alpha = p.a * (0.6 + 0.4 * Math.sin(p.tw));
+        // Depth parallax: nearer particles shift more with cursor + scroll.
+        const px = p.x + curMx * (8 + p.z * 34);
+        const py =
+          p.y + curMy * (5 + p.z * 22) - (sy - scrollY) * (p.z * 0.04);
+        const alpha = p.a * (0.55 + 0.45 * Math.sin(p.tw));
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 240, 228, ${alpha})`;
+        ctx.arc(px, py, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.warm
+          ? `rgba(255, 150, 90, ${alpha})`
+          : `rgba(70, 240, 228, ${alpha})`;
         ctx.fill();
       }
       raf = requestAnimationFrame(draw);
     };
     raf = requestAnimationFrame(draw);
 
+    const onMove = (e: MouseEvent) => {
+      mx = (e.clientX / window.innerWidth) * 2 - 1;
+      my = (e.clientY / window.innerHeight) * 2 - 1;
+    };
     const onResize = () => {
       resize();
       seed();
+      scrollY = window.scrollY;
     };
+    if (!coarse) window.addEventListener("mousemove", onMove, { passive: true });
     window.addEventListener("resize", onResize);
     return () => {
       cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", onMove);
       window.removeEventListener("resize", onResize);
     };
   }, [count]);

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { GrainOverlay } from "./components/atmosphere/GrainOverlay";
 import { AuroraBackground } from "./components/atmosphere/AuroraBackground";
+import { CloudLayer } from "./components/atmosphere/CloudLayer";
 import { SmoothScroll } from "./components/SmoothScroll";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
@@ -30,6 +31,7 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-noir-950 text-ink">
         <AuroraBackground />
+        <CloudLayer />
         <GrainOverlay />
         <SmoothScroll>
           <div className="relative z-10">{children}</div>

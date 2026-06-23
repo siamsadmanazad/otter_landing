@@ -1,22 +1,33 @@
 @import "tailwindcss";
 
 /*
-  Expedition Noir — TripOtter "Missing Otti" pre-launch design tokens.
-  Dark-first, cinematic. Teal→cyan = Otti's clue glow. Gold = founder/treasure.
+  Twilight Expedition — TripOtter "Missing Otti" cinematic palette.
+  Cool atmospheric field (midnight indigo + teal/violet aurora) with a warm
+  amber subject glow (Otti's signal). Classic cinematic teal-orange grade.
 */
 :root {
-  --noir-950: #08090c; /* base */
-  --noir-900: #0c0d12;
-  --noir-800: #121318; /* raised surface */
-  --noir-700: #1b1d24;
+  /* Base — midnight indigo, richer shadow depth than pure black. */
+  --noir-950: #05070d;
+  --noir-900: #090c16;
+  --noir-800: #0f1422; /* raised surface */
+  --noir-700: #18203a;
 
-  --signal-1: #0099db; /* brand teal */
-  --signal-2: #00f0e4; /* brand cyan */
-  --treasure: #f5b53f; /* gold */
+  /* Cool signal (brand teal→cyan). */
+  --signal-1: #0099db;
+  --signal-2: #34f5e4;
 
-  --ink: #f4f6fb; /* primary text */
-  --ink-soft: #aab1c0; /* secondary text */
-  --ink-faint: #6b7280;
+  /* Atmospheric aurora hues. */
+  --aurora-teal: #0db9c8;
+  --aurora-violet: #6d5cf6;
+  --aurora-deep: #123a6b;
+
+  /* Warm subject glow / treasure (the cinematic counterpoint). */
+  --treasure: #ffb347;
+  --ember: #ff7a45;
+
+  --ink: #f5f7fc; /* primary text */
+  --ink-soft: #b2bacb; /* secondary text */
+  --ink-faint: #717a90;
   --hairline: rgba(255, 255, 255, 0.08);
 }
 
@@ -27,7 +38,10 @@
   --color-noir-700: var(--noir-700);
   --color-signal-1: var(--signal-1);
   --color-signal-2: var(--signal-2);
+  --color-aurora-teal: var(--aurora-teal);
+  --color-aurora-violet: var(--aurora-violet);
   --color-treasure: var(--treasure);
+  --color-ember: var(--ember);
   --color-ink: var(--ink);
   --color-ink-soft: var(--ink-soft);
   --color-ink-faint: var(--ink-faint);
@@ -93,4 +107,21 @@ html.lenis body {
   100% {
     transform: translate3d(-6%, -4%, 0) scale(1.1);
   }
+}
+
+/* Horizontal cloud/fog drift (used by CloudLayer). Distance set per-layer. */
+@keyframes cloud-drift {
+  from {
+    transform: translate3d(var(--cloud-from, -10%), 0, 0);
+  }
+  to {
+    transform: translate3d(var(--cloud-to, 10%), 0, 0);
+  }
+}
+
+.text-treasure {
+  background: linear-gradient(120deg, var(--treasure), var(--ember));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

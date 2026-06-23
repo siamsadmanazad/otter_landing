@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useTransform } from "motion/react";
+import { useMouseParallax } from "../motion/useMouseParallax";
 
 /**
  * OttiHero — placeholder mascot for L1. Until the Otti Lottie/art is supplied,
@@ -10,8 +11,14 @@ import { motion, useReducedMotion } from "motion/react";
  */
 export function OttiHero() {
   const reduce = useReducedMotion();
+  const { x, y } = useMouseParallax();
+  const tx = useTransform(x, (v) => v * 18);
+  const ty = useTransform(y, (v) => v * 14);
   return (
-    <div className="relative mx-auto flex h-56 w-56 items-center justify-center sm:h-72 sm:w-72">
+    <motion.div
+      style={{ x: tx, y: ty }}
+      className="relative mx-auto flex h-56 w-56 items-center justify-center sm:h-72 sm:w-72"
+    >
       {/* Sonar ping rings. */}
       {!reduce &&
         [0, 1, 2].map((i) => (
@@ -32,6 +39,16 @@ export function OttiHero() {
       {/* Static faint guide ring (for reduced motion too). */}
       <span className="absolute h-44 w-44 rounded-full border border-signal-1/15 sm:h-56 sm:w-56" />
 
+      {/* Warm ember halo behind the blip — the cinematic warm subject glow. */}
+      <span
+        aria-hidden
+        className="absolute h-40 w-40 rounded-full opacity-50 blur-2xl sm:h-48 sm:w-48"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,140,70,0.45), transparent 65%)",
+        }}
+      />
+
       {/* The blip core — Otti's location. */}
       <motion.div
         className="relative grid h-28 w-28 place-items-center rounded-full bg-signal glow-signal sm:h-32 sm:w-32"
@@ -44,6 +61,6 @@ export function OttiHero() {
         </span>
         <span className="absolute inset-0 rounded-full bg-noir-950/10" />
       </motion.div>
-    </div>
+    </motion.div>
   );
 }

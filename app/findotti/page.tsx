@@ -5,6 +5,7 @@ import { OttiHero } from "../components/otti/OttiHero";
 import { ClueReveal } from "../components/motion/ClueReveal";
 import { MagneticButton } from "../components/motion/MagneticButton";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
+import { Parallax } from "../components/motion/Parallax";
 import { Countdown } from "./components/Countdown";
 import { ClueList } from "./components/ClueList";
 
@@ -26,12 +27,18 @@ export default function FindOttiPage() {
           </p>
         </RevealOnScroll>
 
-        <OttiHero />
+        {/* Otti sits on a nearer plane (moves more on scroll). */}
+        <Parallax speed={-60}>
+          <OttiHero />
+        </Parallax>
 
-        <ClueReveal
-          text={"YOU FOUND\nA CLUE."}
-          className="mt-10 text-balance text-5xl font-extrabold leading-[0.95] tracking-tight sm:text-7xl [&>span:last-child]:text-signal"
-        />
+        {/* Headline on a slightly-lagging plane for depth separation. */}
+        <Parallax speed={-24}>
+          <ClueReveal
+            text={"YOU FOUND\nA CLUE."}
+            className="mt-10 text-balance text-5xl font-extrabold leading-[0.95] tracking-tight sm:text-7xl [&>span:last-child]:text-signal"
+          />
+        </Parallax>
 
         <RevealOnScroll delay={0.9}>
           <p className="mx-auto mt-8 max-w-md font-mono text-sm leading-relaxed text-ink-soft">
