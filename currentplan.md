@@ -103,5 +103,16 @@
 OStad provides the growth repo + Supabase go-ahead.
 
 ## E. Progress log
-- 2026-06-24 — Plan created after audit. Continuous-world scaffolding + storyboard already landed
-  (SceneBackdrop/OttiStage/assets; findotti + founders worlds).
+- 2026-06-24 — Plan created after audit. Continuous-world scaffolding + storyboard landed.
+- 2026-06-24 — **All autonomous steps DONE & pushed:**
+  - ✅ **R1** referral front door `/r/[code]` (cookie + redirect; form reads ?ref/cookie).
+  - ✅ **R2** continuous worlds across all acts (dusk→twilight→night) + Otti slots (welcome/leaderboard
+    wired; mobile hero verified). *Art slots still await OStad's GPT generations.*
+  - ✅ **R7** dynamic OG share images (default + founder + university cards; wired into welcome/leaderboard).
+  - ✅ **R8** launch mode (date-driven CTA flip + env override) + a11y focus rings.
+- **REMAINING — all gated on OStad:**
+  - ⬜ **R3** growth backend — needs `tripotter-growth-backend` repo URL + hosted Supabase apply.
+  - ⬜ **R4** wire stubs → real (after R3) · **R5** email (needs RESEND_API_KEY) · **R6** conversion+export.
+  - ⬜ **R9** Vercel deploy — needs Vercel account + domain.
+  - ⬜ **Art:** `scene_founders.png`, `otti_invite.png`, `scene_summit.png`, `otti_celebrate.png`
+    → drop in `public/` + flip the line in `lib/assets.ts`.
