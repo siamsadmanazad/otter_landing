@@ -37,6 +37,24 @@ export async function getFounderStats(): Promise<FounderStats> {
   return res.json();
 }
 
+export type Explorer = {
+  rank: number;
+  name: string;
+  university: string;
+  invites: number;
+};
+export type University = { name: string; explorers: number };
+export type LeaderboardData = {
+  explorers: Explorer[];
+  universities: University[];
+};
+
+export async function getLeaderboard(): Promise<LeaderboardData> {
+  const res = await fetch("/api/founders/leaderboard", { cache: "no-store" });
+  if (!res.ok) throw new Error("leaderboard failed");
+  return res.json();
+}
+
 export async function joinFounders(payload: JoinPayload): Promise<JoinResult> {
   const res = await fetch("/api/founders/join", {
     method: "POST",
