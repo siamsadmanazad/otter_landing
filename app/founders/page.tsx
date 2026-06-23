@@ -22,20 +22,7 @@ export default function FoundersPage() {
       <ChapterIndicator index={2} total={3} label="the invitation" />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[100svh] flex-col items-center px-6 pb-10 pt-[10vh] text-center">
-        {/* Inviting Otti — grounded focal anchor at the base of the scene,
-            behind the copy so his size never displaces the CTA. */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 flex justify-center">
-          <OttiStage
-            src={ASSETS.ottiInvite}
-            alt="Otti inviting you to join"
-            heightClass="h-[40vh] max-h-[440px] min-h-[230px]"
-            width={1060}
-            height={1484}
-            priority
-          />
-        </div>
-
+      <section className="relative flex min-h-[100svh] flex-col items-center justify-center px-6 py-[12vh] text-center">
         {/* Headline scrim — keeps the upper copy crisp over the scene. */}
         <div
           aria-hidden
@@ -46,8 +33,8 @@ export default function FoundersPage() {
           }}
         />
 
-        {/* Copy cluster: eyebrow → headline → live counter → CTA. Extends down
-            toward Otti so there's no dead band between the text and the mascot. */}
+        {/* One centered column — eyebrow → headline → counter → CTA → Otti.
+            Otti is in normal flow below the CTA, so he can never overlap it. */}
         <div className="relative z-10 flex w-full max-w-2xl flex-col items-center [text-shadow:0_2px_28px_rgba(0,0,0,0.75)]">
           <RevealOnScroll immediate>
             <p className="mb-5 font-mono text-[10px] uppercase tracking-[0.28em] text-treasure sm:text-xs sm:tracking-[0.4em]">
@@ -79,9 +66,21 @@ export default function FoundersPage() {
               </span>
             </a>
           </RevealOnScroll>
+
+          {/* Inviting Otti — grounded directly below the CTA, in flow. */}
+          <RevealOnScroll immediate delay={0.45} className="pointer-events-none mt-8 [text-shadow:none]">
+            <OttiStage
+              src={ASSETS.ottiInvite}
+              alt="Otti inviting you to join"
+              heightClass="h-[26vh] max-h-[300px] min-h-[180px]"
+              width={1060}
+              height={1484}
+              priority
+            />
+          </RevealOnScroll>
         </div>
 
-        <RevealOnScroll immediate delay={0.5} className="relative z-10 mt-auto pt-10">
+        <RevealOnScroll immediate delay={0.55} className="relative z-10 mt-6">
           <p className="font-mono text-[10px] uppercase tracking-[0.32em] text-ink-soft/70 [text-shadow:0_1px_12px_rgba(0,0,0,0.85)]">
             scroll to explore the charter
           </p>
