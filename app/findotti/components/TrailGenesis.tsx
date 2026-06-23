@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
+import { LilyPad, Reeds } from "./NatureElements";
 
 /**
  * TrailGenesis — the birth of the trail. Replaces the old flat seam between the
@@ -165,39 +166,73 @@ export function TrailGenesis() {
   );
 }
 
-/** A moonlit pond filling the void — caustics, sheen, depth tint, and a slow
- *  idle shimmer so it clearly reads as water even when the page is still. */
+/** A premium moonlit pond filling the void — deep tint, a moon-reflection
+ *  column, drifting caustics, lily pads, edge reeds, surface ripples and a
+ *  vignette, with two slow idle shimmers so it clearly *is* water at rest. */
 function WaterPool() {
   const reduce = useReducedMotion();
   return (
     <div aria-hidden className="absolute inset-x-0 overflow-hidden" style={{ top: CONVERGE_TOP, bottom: 0 }}>
-      {/* underwater depth tint — stronger so the surface is unmistakable */}
-      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,24,34,0.15) 0%, rgba(8,20,30,0.62) 55%, rgba(5,13,22,0.92) 100%)" }} />
+      {/* deep underwater tint — surface unmistakable */}
+      <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(10,26,36,0.20) 0%, rgba(8,20,30,0.66) 50%, rgba(4,11,19,0.96) 100%)" }} />
+      {/* a cool radial deepening toward the centre = the pond's "bowl" */}
+      <div className="absolute inset-0" style={{ background: "radial-gradient(80% 90% at 50% 30%, rgba(16,40,52,0.35), transparent 70%)" }} />
 
-      {/* bright waterline at the surface */}
-      <div className="absolute inset-x-0 top-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent 4%, rgba(150,235,240,0.7) 50%, transparent 96%)" }} />
-      <div className="absolute inset-x-0 top-0 h-12" style={{ background: "linear-gradient(to bottom, rgba(120,210,218,0.12), transparent)" }} />
+      {/* bright waterline + surface sheen */}
+      <div className="absolute inset-x-0 top-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent 4%, rgba(150,235,240,0.75) 50%, transparent 96%)" }} />
+      <div className="absolute inset-x-0 top-0 h-14" style={{ background: "linear-gradient(to bottom, rgba(120,210,218,0.14), transparent)" }} />
 
-      {/* caustic light pools (brighter) */}
-      <div className="absolute left-[16%] top-[18%] h-24 w-72 rounded-full opacity-[0.16] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
-      <div className="absolute right-[12%] top-[42%] h-28 w-80 rounded-full opacity-[0.14] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
-      <div className="absolute left-[42%] bottom-[14%] h-20 w-64 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      {/* MOON REFLECTION — a soft vertical column of light shimmering on the
+          surface, broken into a few horizontal glints (the premium centrepiece) */}
+      <div className="absolute left-1/2 top-0 h-2/3 w-28 -translate-x-1/2" style={{ background: "linear-gradient(to bottom, rgba(150,235,240,0.16), rgba(52,245,228,0.05) 45%, transparent)", filter: "blur(6px)" }} />
+      {[8, 20, 34, 50].map((t, i) => (
+        <div key={i} className="absolute left-1/2 -translate-x-1/2" style={{ top: `${t}%`, width: `${120 - i * 18}px`, height: "2px", opacity: 0.5 - i * 0.08, background: "linear-gradient(90deg, transparent, rgba(180,245,248,0.8), transparent)", filter: "blur(0.5px)" }} />
+      ))}
 
-      {/* horizontal ripple highlights — the always-present surface texture */}
-      <div className="absolute inset-x-[10%] top-[24%] h-px opacity-40" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.6) 50%, transparent)" }} />
-      <div className="absolute inset-x-[18%] top-[40%] h-px opacity-30" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.5) 50%, transparent)" }} />
-      <div className="absolute inset-x-[24%] top-[58%] h-px opacity-25" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.45) 50%, transparent)" }} />
-      <div className="absolute inset-x-[30%] top-[76%] h-px opacity-20" style={{ background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.4) 50%, transparent)" }} />
+      {/* drifting caustic light pools (brighter, varied) */}
+      <div className="absolute left-[14%] top-[16%] h-24 w-72 rounded-full opacity-[0.16] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      <div className="absolute right-[10%] top-[40%] h-28 w-80 rounded-full opacity-[0.14] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
+      <div className="absolute left-[40%] bottom-[12%] h-20 w-64 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
 
-      {/* slow idle shimmer sweep so it visibly *is* water without scrolling.
-          (one small element; transform-only; paused under reduced motion) */}
+      {/* horizontal ripple highlights — always-present surface texture */}
+      {[
+        { x: "10%", t: "24%", o: 0.4 },
+        { x: "18%", t: "40%", o: 0.3 },
+        { x: "24%", t: "56%", o: 0.26 },
+        { x: "30%", t: "72%", o: 0.2 },
+        { x: "20%", t: "86%", o: 0.16 },
+      ].map((r, i) => (
+        <div key={i} className="absolute h-px" style={{ left: r.x, right: r.x, top: r.t, opacity: r.o, background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.6) 50%, transparent)" }} />
+      ))}
+
+      {/* lily pads floating on the surface (silhouettes with teal rim) */}
+      <LilyPad className="absolute left-[12%] top-[30%] h-7 w-16 opacity-70" />
+      <LilyPad className="absolute right-[16%] top-[52%] h-6 w-12 opacity-60" style={{ transform: "scaleX(-1)" }} />
+      <LilyPad className="absolute left-[24%] top-[66%] h-5 w-10 opacity-50" />
+
+      {/* edge reeds rising from the far/near banks */}
+      <div className="absolute -left-2 bottom-0 h-[42%] w-[10vw] max-w-[140px] opacity-75"><Reeds /></div>
+      <div className="absolute -right-3 bottom-0 h-[46%] w-[11vw] max-w-[150px] -scale-x-100 opacity-75"><Reeds /></div>
+
+      {/* edge vignette so the pond reads as deep, framed still water */}
+      <div className="absolute inset-0" style={{ background: "radial-gradient(120% 80% at 50% 40%, transparent 55%, rgba(3,8,14,0.7) 100%)" }} />
+
+      {/* two slow idle shimmers (transform-only; paused under reduced motion) */}
       {!reduce && (
-        <motion.div
-          className="absolute inset-x-0 top-0 h-full"
-          style={{ background: "linear-gradient(100deg, transparent 30%, rgba(120,210,220,0.05) 48%, rgba(150,235,240,0.09) 50%, rgba(120,210,220,0.05) 52%, transparent 70%)" }}
-          animate={{ x: ["-12%", "12%", "-12%"] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
-        />
+        <>
+          <motion.div
+            className="absolute inset-x-0 top-0 h-full"
+            style={{ background: "linear-gradient(100deg, transparent 32%, rgba(120,210,220,0.05) 48%, rgba(150,235,240,0.10) 50%, rgba(120,210,220,0.05) 52%, transparent 68%)" }}
+            animate={{ x: ["-12%", "12%", "-12%"] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute inset-x-0 top-0 h-full"
+            style={{ background: "linear-gradient(82deg, transparent 40%, rgba(120,210,220,0.04) 50%, transparent 60%)" }}
+            animate={{ x: ["10%", "-10%", "10%"] }}
+            transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </>
       )}
     </div>
   );
