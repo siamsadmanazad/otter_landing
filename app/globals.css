@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+  Expedition Noir — TripOtter "Missing Otti" pre-launch design tokens.
+  Dark-first, cinematic. Teal→cyan = Otti's clue glow. Gold = founder/treasure.
+*/
+:root {
+  --noir-950: #08090c; /* base */
+  --noir-900: #0c0d12;
+  --noir-800: #121318; /* raised surface */
+  --noir-700: #1b1d24;
+
+  --signal-1: #0099db; /* brand teal */
+  --signal-2: #00f0e4; /* brand cyan */
+  --treasure: #f5b53f; /* gold */
+
+  --ink: #f4f6fb; /* primary text */
+  --ink-soft: #aab1c0; /* secondary text */
+  --ink-faint: #6b7280;
+  --hairline: rgba(255, 255, 255, 0.08);
+}
+
+@theme inline {
+  --color-noir-950: var(--noir-950);
+  --color-noir-900: var(--noir-900);
+  --color-noir-800: var(--noir-800);
+  --color-noir-700: var(--noir-700);
+  --color-signal-1: var(--signal-1);
+  --color-signal-2: var(--signal-2);
+  --color-treasure: var(--treasure);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  background: var(--noir-950);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The teal signal gradient — reused for glows, the trail, and accents. */
+.text-signal {
+  background: linear-gradient(120deg, var(--signal-1), var(--signal-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-signal {
+  background: linear-gradient(120deg, var(--signal-1), var(--signal-2));
+}
+.glow-signal {
+  box-shadow: 0 0 40px -8px rgba(0, 240, 228, 0.45);
+}
+
+/* Lenis smooth-scroll baseline. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* Respect reduced motion everywhere — kills transitions/animations. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Slow aurora drift (used by AuroraBackground). */
+@keyframes aurora-drift {
+  0% {
+    transform: translate3d(-6%, -4%, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(6%, 4%, 0) scale(1.25);
+  }
+  100% {
+    transform: translate3d(-6%, -4%, 0) scale(1.1);
+  }
+}
