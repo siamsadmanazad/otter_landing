@@ -3,6 +3,7 @@ import { ParticleField } from "../components/atmosphere/ParticleField";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
 import { CinematicScene } from "../components/scene/CinematicScene";
 import { SceneLayer } from "../components/scene/SceneLayer";
+import { SceneBackdrop } from "../components/scene/SceneBackdrop";
 import { HeroBackdrop } from "../components/scene/HeroBackdrop";
 import { LightRays } from "../components/scene/ProceduralTerrain";
 import { ExplorerTrail } from "../components/atmosphere/ExplorerTrail";
@@ -69,32 +70,38 @@ export default function FindOttiPage() {
         <FloatingCharms />
       </CinematicScene>
 
-      {/* ── Scene 2: Clues (trail threads through) ───────────────────────── */}
+      {/* ── Scene 2: Clues (dusk continues; trail threads through) ───────── */}
       <section className="relative px-6 py-28">
+        <SceneBackdrop tone="dusk" />
         <ExplorerTrail />
-        <ClueList />
+        <div className="relative z-10">
+          <ClueList />
+        </div>
       </section>
 
-      {/* ── Scene 3: Countdown + CTA ─────────────────────────────────────── */}
+      {/* ── Scene 3: Countdown + CTA (dusk deepens toward Act 2) ──────────── */}
       <section className="relative flex flex-col items-center px-6 pb-36 pt-10 text-center">
-        <RevealOnScroll>
-          <p className="font-mono text-xs uppercase tracking-[0.4em] text-ink-faint">
-            something is coming
-          </p>
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.15} className="mt-8">
-          <Countdown />
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.3} className="mt-16">
-          <MagneticButton href="/founders">
-            Become a Founding Explorer
-          </MagneticButton>
-        </RevealOnScroll>
-        <RevealOnScroll delay={0.45}>
-          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
-            08.05.2026
-          </p>
-        </RevealOnScroll>
+        <SceneBackdrop tone="twilight" />
+        <div className="relative z-10 flex flex-col items-center">
+          <RevealOnScroll>
+            <p className="font-mono text-xs uppercase tracking-[0.4em] text-ink-faint">
+              something is coming
+            </p>
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.15} className="mt-8">
+            <Countdown />
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.3} className="mt-16">
+            <MagneticButton href="/founders">
+              Become a Founding Explorer
+            </MagneticButton>
+          </RevealOnScroll>
+          <RevealOnScroll delay={0.45}>
+            <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
+              08.05.2026
+            </p>
+          </RevealOnScroll>
+        </div>
       </section>
     </main>
   );

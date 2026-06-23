@@ -308,3 +308,52 @@ When someone creates a **real app account**, the app backend calls `convert-lead
 
 ## 10. Story arc (one-line reference)
 **Find a clue (mystery) → Join the expedition (scarcity) → Become Founder #N (identity) → Climb by inviting (game) → My university must win (tribe) → Otti found his people, download (launch).**
+
+---
+
+## 11. STORYBOARD — the continuous cinematic world (2026-06-23)
+
+> Principle: the landing is **one scrollable world**, not stacked sections. The
+> environment **progresses with the journey** and the **time of day advances** as
+> a storytelling device toward launch: **golden dusk → deep twilight → starlit
+> night**. Otti is the through-line — he appears in every act. No section is ever
+> bare/flat-dark: each carries a tone-graded world + atmosphere (fog, fireflies,
+> the Explorer's Trail) that bleeds softly into the next.
+
+### Visual continuity system
+- **`SceneBackdrop`** per section: an optional image slot + a rich tone gradient
+  (`dusk` / `twilight` / `night`) + soft top/bottom edge-blends so scenes melt into
+  one another (never a hard cut to black). Works *before* art lands (gradient only).
+- **`OttiStage`**: a reusable slot to place an Otti pose (image + glow + shadow);
+  renders nothing gracefully until the pose art exists.
+- Atmosphere (`ParticleField` fireflies, fog, trail) runs continuously over all tones.
+
+### ACT 1 — `/findotti` · "The Clue" · GOLDEN DUSK · emotion: curiosity → intrigue
+- **1.1 The Discovery (hero):** dusk valley, Otti on the rock with the glowing
+  compass. "YOU FOUND A CLUE." `[bg: hero_bg.png ✅ · otti: otti_hero.png ✅]`
+- **1.2 The Clues (trail):** descend the trail; fragments about Otti assemble like
+  evidence. "What do we know about Otti?" Dusk continues; fog + fireflies + trail.
+- **1.3 The Call (countdown):** "Something is coming. 08.05.2026." → CTA *Become a
+  Founding Explorer*. Dusk deepens toward twilight (hand-off to Act 2).
+
+### ACT 2 — `/founders` · "The Invitation" · DEEP TWILIGHT · emotion: belonging + urgency
+- **2.1 The Expedition Forms (hero):** a warm twilight camp/clearing where explorers
+  gather; **Inviting Otti** beckons. "Become one of the first 1000." + live counter.
+  `[bg slot: scene_founders.png ⬜ · otti slot: otti_invite.png ⬜]`
+- **2.2 What Founders Carry:** the charter/benefits, warm.
+- **2.3 Only 1000:** scarcity beat.
+- **2.4 Claim Your Place:** the signup form → curtain into Act 3.
+
+### ACT 3 — `/welcome` · "The Arrival" · STARLIT NIGHT · emotion: identity + game
+- **3.1 The Summit (hero):** the destination at night under stars + aurora;
+  **Celebrating Otti**; "Founder #NNNN" + confetti. `[bg slot: scene_summit.png ⬜ ·
+  otti slot: otti_celebrate.png ⬜]`
+- **3.2 The Climb:** referral — "move up the ranks".
+- **3.3 The Rewards:** unlock tiers.
+- **3.4 The Expedition Board:** explorers + university race (the tribal hook).
+- **3.5 Otti Found His People:** closing — launch promise, download.
+
+### Asset slots to generate (in order)
+`scene_founders.png` (twilight camp) → `otti_invite.png` → `scene_summit.png`
+(starlit summit) → `otti_celebrate.png` → *(opt)* foreground overlays. Each drops
+into its named slot with zero code change.
