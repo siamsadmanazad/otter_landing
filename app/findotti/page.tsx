@@ -14,6 +14,7 @@ import { Countdown } from "./components/Countdown";
 import { EvidenceTrail } from "./components/EvidenceTrail";
 import { TrailGenesis } from "./components/TrailGenesis";
 import { TrailResolve } from "./components/TrailResolve";
+import { FoliageFrame } from "./components/FoliageFrame";
 
 /**
  * /findotti — Act 1: the clue. Now staged as a cinematic scene: layered parallax
@@ -79,6 +80,8 @@ export default function FindOttiPage() {
         {/* The dossier backdrop sits behind the trail only (not the genesis melt). */}
         <div className="relative">
           <SceneBackdrop tone="dusk" blendTop={false} blendBottom={false} />
+          {/* Dark forest foliage framing the edges (the trail winds through it). */}
+          <FoliageFrame />
           <div className="relative z-10">
             <EvidenceTrail />
           </div>
@@ -88,6 +91,8 @@ export default function FindOttiPage() {
       {/* ── Scene 3: The trail's terminus — the light blooms into the console ── */}
       <section className="relative flex flex-col items-center px-6 pb-36 pt-2 text-center">
         <SceneBackdrop tone="twilight" />
+        {/* Foliage framing here too — the console sits in the same forest. */}
+        <FoliageFrame />
         <div className="relative z-10 flex w-full flex-col items-center">
           {/* Resolve: the line gathers to a point and the console frame draws in. */}
           <TrailResolve>
