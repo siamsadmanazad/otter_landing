@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { growthDb, growthConfigured, CAMPAIGN_SLUG } from "@/lib/supabase";
+import { growthDb, growthConfigured } from "@/lib/supabase";
 
 /**
  * POST /api/founders/join — create a founder lead in the growth schema.
@@ -39,8 +39,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const db = growthDb();
-    const { data, error } = await db.rpc("signup_lead", {
-      p_campaign_slug: CAMPAIGN_SLUG,
+    const { data, error } = await db.rpc("founders_signup", {
       p_full_name: body.fullName.trim(),
       p_email: body.email.trim(),
       p_university: body.university?.trim() ?? "",
@@ -64,7 +63,7 @@ export async function POST(request: NextRequest) {
       leadId: row.lead_id,
       referralCode: row.referral_code,
       referralUrl: `https://tripotter.com/r/${row.referral_code}`,
-      position: row.position,
+      position: row.lead_position,
       message: row.duplicate
         ? "Welcome back, explorer — you're already on the list."
         : "You are on the founding expedition.",

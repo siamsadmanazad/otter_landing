@@ -13,8 +13,9 @@ export function growthDb() {
   if (!url || !key) {
     throw new Error("Supabase env missing (NEXT_PUBLIC_SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)");
   }
+  // Default (public) schema: the growth data is reached via locked-down public
+  // wrapper RPCs (founders_signup/_count/_leaderboard), not direct table access.
   return createClient(url, key, {
-    db: { schema: "growth" },
     auth: { autoRefreshToken: false, persistSession: false },
   });
 }

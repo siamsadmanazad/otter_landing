@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { FOUNDER_CAP } from "@/lib/founders";
-import { growthDb, growthConfigured, CAMPAIGN_SLUG } from "@/lib/supabase";
+import { growthDb, growthConfigured } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
 /**
- * GET /api/founders/stats — real joined count for the live counter. Counts leads
- * in the active campaign. Falls back to a time-drift stub without DB env.
+ * GET /api/founders/stats — real joined count via the locked public.founders_count
+ * wrapper. Falls back to a time-drift stub without DB env.
  */
 export async function GET() {
   if (!growthConfigured()) {
@@ -15,20 +15,12 @@ export async function GET() {
   }
   try {
     const db = growthDb();
-    const { data: campaign } = await db
-      .from("campaigns")
-      .select("id")
-      .eq("slug", CAMPAIGN_SLUG)
-      .single();
-    let joined = 0;
-    if (campaign) {
-      const { count } = await db
-        .from("leads")
-        .select("id", { count: "exact", head: true })
-        .eq("campaign_id", campaign.id);
-      joined = count ?? 0;
+    const { data, error } = await db.rpc("founders_count");
+    if (error) {
+      console.error("founders_count error:", error.message);
+      return NextResponse.json({ joined: 0, total: FOUNDER_CAP });
     }
-    return NextResponse.json({ joined, total: FOUNDER_CAP });
+    return NextResponse.json({ joined: Number(data) || 0, total: FOUNDER_CAP });
   } catch (e) {
     console.error("GET /api/founders/stats error:", e);
     return NextResponse.json({ joined: 0, total: FOUNDER_CAP });

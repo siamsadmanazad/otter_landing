@@ -83,10 +83,10 @@ create or replace function growth.signup_lead(
   p_user_agent    text
 )
 returns table (
-  lead_id       uuid,
-  referral_code text,
-  position      integer,
-  duplicate     boolean
+  o_lead_id        uuid,
+  o_referral_code  text,
+  o_lead_position  integer,
+  o_duplicate      boolean
 )
 language plpgsql
 security definer
@@ -107,8 +107,8 @@ begin
   end if;
 
   -- Idempotent: same email in same campaign → return the existing record.
-  select * into v_existing from growth.leads
-   where campaign_id = v_campaign and email_normalized = v_email_n;
+  select * into v_existing from growth.leads l
+   where l.campaign_id = v_campaign and l.email_normalized = v_email_n;
   if found then
     return query select v_existing.id, v_existing.referral_code, v_existing.position, true;
     return;
@@ -116,19 +116,19 @@ begin
 
   -- Resolve referrer (must be a real, different lead in this campaign).
   if p_ref_code is not null and length(trim(p_ref_code)) > 0 then
-    select id into v_referrer from growth.leads
-     where campaign_id = v_campaign and referral_code = upper(trim(p_ref_code));
+    select l.id into v_referrer from growth.leads l
+     where l.campaign_id = v_campaign and l.referral_code = upper(trim(p_ref_code));
   end if;
 
   -- Next position in this campaign.
-  select coalesce(max(position), 0) + 1 into v_pos from growth.leads where campaign_id = v_campaign;
+  select coalesce(max(l.position), 0) + 1 into v_pos from growth.leads l where l.campaign_id = v_campaign;
 
   -- Collision-resistant referral code: TO-<NAME>-<RAND>.
   v_code := 'TO-' ||
             coalesce(nullif(upper(regexp_replace(p_full_name, '[^a-zA-Z0-9]', '', 'g')), ''), 'OTTI')
               || '-' || upper(substr(md5(gen_random_uuid()::text), 1, 5));
   loop
-    exit when not exists (select 1 from growth.leads where referral_code = v_code);
+    exit when not exists (select 1 from growth.leads l where l.referral_code = v_code);
     v_code := 'TO-OTTI-' || upper(substr(md5(gen_random_uuid()::text), 1, 5));
   end loop;
 
