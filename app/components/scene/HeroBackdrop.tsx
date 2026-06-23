@@ -16,7 +16,7 @@ export function HeroBackdrop() {
         priority
         sizes="100vw"
         className="object-cover"
-        style={{ objectPosition: "center bottom" }}
+        style={{ objectPosition: "center 42%" }}
       />
       {/* Top vignette — keeps the nav + headline readable over the sky. */}
       <div

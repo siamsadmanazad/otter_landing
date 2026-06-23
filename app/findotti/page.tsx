@@ -26,34 +26,35 @@ export default function FindOttiPage() {
       <ParticleField />
       <ChapterIndicator index={1} total={3} label="the clue" />
 
-      {/* ── Scene 1: Hero (pinned, crossfades out) ───────────────────────── */}
+      {/* ── Scene 1: Hero ────────────────────────────────────────────────── */}
       <CinematicScene
-        pin
         pinContent={
-          <div className="relative flex min-h-dvh w-full flex-col items-center px-6">
+          <div className="relative min-h-dvh w-full px-6">
             {/* Headline up in the open sky. */}
-            <div className="flex flex-col items-center pt-[16vh] text-center sm:pt-[14vh]">
+            <div className="flex flex-col items-center pt-[14vh] text-center">
               <p className="mb-6 font-mono text-xs uppercase tracking-[0.4em] text-signal-2/90">
                 // signal detected
               </p>
               <ClueReveal
                 text={"YOU FOUND\nA CLUE."}
-                className="text-balance text-5xl font-extrabold leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.6)] sm:text-7xl [&>span:last-child]:text-signal"
+                className="text-balance text-5xl font-extrabold leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.7)] sm:text-7xl [&>span:last-child]:text-signal"
               />
               <RevealOnScroll delay={0.9}>
-                <p className="mx-auto mt-7 max-w-md font-mono text-sm leading-relaxed text-ink-soft drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+                <p className="mx-auto mt-7 max-w-md font-mono text-sm leading-relaxed text-ink-soft drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                   Otti isn&apos;t lost. He&apos;s searching — for hidden places,
                   stories, and people who love adventures.
                 </p>
               </RevealOnScroll>
             </div>
 
-            <div className="flex-1" />
+            {/* Otti standing on the rock — absolutely placed so his feet land on
+                the painted stage regardless of the headline height. */}
+            <div className="absolute inset-x-0 bottom-[23%] flex justify-center">
+              <OttiHero />
+            </div>
 
-            {/* Otti standing on the rock at the bottom of the valley. */}
-            <OttiHero />
             <RevealOnScroll delay={1.2}>
-              <p className="pb-6 font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
+              <p className="absolute inset-x-0 bottom-6 text-center font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
                 scroll to follow the trail
               </p>
             </RevealOnScroll>

@@ -19,7 +19,7 @@ export function OttiHero() {
   return (
     <motion.div
       style={{ x: tx, y: ty }}
-      className="relative mx-auto flex h-[34vh] max-h-[380px] min-h-[240px] w-full items-end justify-center"
+      className="relative flex h-[34vh] max-h-[380px] min-h-[240px] items-end justify-center"
     >
       {/* Soft glow bloom behind Otti (warm subject + cyan signal) — subtle, the
           painterly scene already carries the light. */}
