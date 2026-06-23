@@ -1,4 +1,17 @@
+import type { Metadata } from "next";
 import { ScrollProgress } from "../components/motion/ScrollProgress";
+
+export const metadata: Metadata = {
+  title: "The expedition leaderboard — find Otti",
+  openGraph: {
+    title: "🔥 BRAC takes the lead — can NSU catch up?",
+    images: [{ url: "/api/og?type=university&name=BRAC&count=278", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/api/og?type=university&name=BRAC&count=278"],
+  },
+};
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { MagneticButton } from "../components/motion/MagneticButton";
 import { SceneBackdrop } from "../components/scene/SceneBackdrop";
