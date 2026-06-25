@@ -1,13 +1,14 @@
 "use client";
 
-import { motion, useScroll, useSpring } from "motion/react";
+import { motion, useSpring } from "motion/react";
+import { useScrollProgress } from "./useScrollProgress";
 
 /**
  * ScrollProgress — a thin signal-gradient bar pinned to the top, bound to page
  * scroll. The quiet "you're being guided" reading indicator.
  */
 export function ScrollProgress() {
-  const { scrollYProgress } = useScroll();
+  const scrollYProgress = useScrollProgress();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 120,
     damping: 30,

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useTransform } from "motion/react";
+import { useScrollProgress } from "../motion/useScrollProgress";
 
 /**
  * ChapterIndicator — a fixed, cinematic "CHAPTER 01 / 03" label with a thin
@@ -16,7 +17,7 @@ export function ChapterIndicator({
   total?: number;
   label?: string;
 }) {
-  const { scrollYProgress } = useScroll();
+  const scrollYProgress = useScrollProgress();
   const h = useTransform(scrollYProgress, [0, 1], ["8%", "100%"]);
 
   return (
