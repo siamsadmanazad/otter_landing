@@ -24,6 +24,12 @@ export function Leaderboard({ highlightName }: { highlightName?: string }) {
       <p className="mb-4 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
         // top explorers
       </p>
+      {rows.length === 0 && (
+        <p className="rounded-xl border border-white/8 bg-noir-800/40 px-4 py-6 text-center text-sm text-ink-soft">
+          The climb hasn&apos;t started yet —{" "}
+          <span className="text-treasure">be the first explorer.</span>
+        </p>
+      )}
       <ul className="space-y-2">
         {rows.map((e, i) => {
           const me = highlightName && e.name.toLowerCase() === highlightName.toLowerCase();

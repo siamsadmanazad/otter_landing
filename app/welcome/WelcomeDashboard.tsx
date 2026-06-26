@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ScrollProgress } from "../components/motion/ScrollProgress";
 import { ChapterIndicator } from "../components/chrome/ChapterIndicator";
@@ -14,7 +15,7 @@ import { ReferralShare } from "./components/ReferralShare";
 import { RewardTiers } from "./components/RewardTiers";
 import { Leaderboard } from "../components/leaderboard/Leaderboard";
 import { UniversityRace } from "../components/leaderboard/UniversityRace";
-import { FOUNDER_CAP } from "@/lib/founders";
+import { FOUNDER_CAP, getMe, type MeStats } from "@/lib/founders";
 
 /**
  * WelcomeDashboard — the full Act 3 experience. Warmest tone (gold celebration),
@@ -23,7 +24,21 @@ import { FOUNDER_CAP } from "@/lib/founders";
 export function WelcomeDashboard() {
   const params = useSearchParams();
   const code = params.get("code") ?? "TO-OTTI-XXXX";
-  const position = Number(params.get("pos")) || 287;
+  const urlPos = Number(params.get("pos")) || 287;
+
+  // Live per-lead stats (real rank + invites). URL ?pos is the instant fallback.
+  const [me, setMe] = useState<MeStats | null>(null);
+  useEffect(() => {
+    let on = true;
+    if (code && code !== "TO-OTTI-XXXX") getMe(code).then((m) => on && setMe(m));
+    return () => {
+      on = false;
+    };
+  }, [code]);
+
+  const position = me?.position ?? urlPos;
+  const rank = me?.rank ?? position;
+  const invites = me?.invites ?? 0;
   const remaining = Math.max(0, FOUNDER_CAP - position);
 
   return (
@@ -46,7 +61,7 @@ export function WelcomeDashboard() {
           <div>
             <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">rank</p>
             <p className="mt-1 text-2xl font-bold">
-              <CountUp value={position} /> <span className="text-ink-faint">/ {FOUNDER_CAP.toLocaleString()}</span>
+              <CountUp value={rank} /> <span className="text-ink-faint">/ {FOUNDER_CAP.toLocaleString()}</span>
             </p>
           </div>
           <div className="h-10 w-px bg-white/10" />
@@ -76,7 +91,7 @@ export function WelcomeDashboard() {
         <RevealOnScroll className="mb-8 text-center">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Unlock as you climb</h2>
         </RevealOnScroll>
-        <RewardTiers invites={0} />
+        <RewardTiers invites={invites} />
       </section>
 
       {/* ── Leaderboards ─────────────────────────────────────────────────── */}

@@ -83,6 +83,24 @@ export async function getLeaderboard(): Promise<LeaderboardData> {
   return res.json();
 }
 
+export type MeStats = {
+  referralCode: string;
+  position: number;
+  score: number;
+  rank: number;
+  invites: number;
+  verifiedInvites: number;
+  verified: boolean;
+};
+
+/** Live per-lead stats for the founder dashboard, looked up by the shareable code. */
+export async function getMe(code: string): Promise<MeStats | null> {
+  const res = await fetch(`/api/founders/me?code=${encodeURIComponent(code)}`, { cache: "no-store" });
+  if (!res.ok) return null;
+  const d = await res.json();
+  return d?.referralCode ? (d as MeStats) : null;
+}
+
 export async function joinFounders(payload: JoinPayload): Promise<JoinResult> {
   const res = await fetch("/api/founders/join", {
     method: "POST",

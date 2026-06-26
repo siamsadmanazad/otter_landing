@@ -21,46 +21,36 @@ const STUB = {
 };
 
 /**
- * GET /api/founders/leaderboard — top explorers + university race via the locked
- * public.founders_leaderboard wrapper (safe columns only — never email/socials).
- * Returns the demo stub when the board is empty or DB env is absent.
+ * GET /api/founders/leaderboard — top explorers (founders_leaderboard) + the real
+ * campus race (founders_university_race: total signups per uni). Safe columns only.
+ * In production it returns REAL data (empty arrays when the board is empty → the UI
+ * shows a "be the first" state). The demo stub is used only in keyless dev.
  */
 export async function GET() {
   if (!growthConfigured()) return NextResponse.json(STUB);
   try {
     const db = growthDb();
-    const { data: rows, error } = await db.rpc("founders_leaderboard", { p_limit: 50 });
-    if (error) {
-      console.error("founders_leaderboard error:", error.message);
-      return NextResponse.json(STUB);
+    const [board, race] = await Promise.all([
+      db.rpc("founders_leaderboard", { p_limit: 50 }),
+      db.rpc("founders_university_race", { p_limit: 8 }),
+    ]);
+    if (board.error || race.error) {
+      console.error("leaderboard error:", board.error?.message ?? race.error?.message);
+      return NextResponse.json({ explorers: [], universities: [] });
     }
-    if (!rows || rows.length === 0) return NextResponse.json(STUB);
-
-    const explorers = (rows as { rank: number; display_name: string; university: string | null; invites: number }[])
+    const explorers = ((board.data ?? []) as { rank: number; display_name: string; university: string | null; invites: number }[])
       .map((r) => ({
         rank: r.rank,
         name: r.display_name ?? "Explorer",
         university: r.university ?? "—",
         invites: r.invites ?? 0,
       }));
+    const universities = ((race.data ?? []) as { name: string; explorers: number }[])
+      .map((u) => ({ name: u.name, explorers: u.explorers }));
 
-    const tally = new Map<string, number>();
-    for (const r of explorers) {
-      if (r.university && r.university !== "—") {
-        tally.set(r.university, (tally.get(r.university) ?? 0) + 1);
-      }
-    }
-    const universities = [...tally.entries()]
-      .map(([name, explorersCount]) => ({ name, explorers: explorersCount }))
-      .sort((a, b) => b.explorers - a.explorers)
-      .slice(0, 6);
-
-    return NextResponse.json({
-      explorers,
-      universities: universities.length ? universities : STUB.universities,
-    });
+    return NextResponse.json({ explorers, universities });
   } catch (e) {
     console.error("GET /api/founders/leaderboard error:", e);
-    return NextResponse.json(STUB);
+    return NextResponse.json({ explorers: [], universities: [] });
   }
 }
