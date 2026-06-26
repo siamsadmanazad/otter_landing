@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { growthDb, growthConfigured } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
+import { sendWelcomeEmail } from "@/lib/email";
 
 /**
  * POST /api/founders/join — create a founder lead in the growth schema.
@@ -83,6 +84,16 @@ export async function POST(request: NextRequest) {
     const row = Array.isArray(data) ? data[0] : data;
     if (!row?.referral_code) {
       return NextResponse.json({ message: "Could not join." }, { status: 500 });
+    }
+    // Send the welcome + verify email to new (and unverified returning) leads. Never throws.
+    if (row.verify_token && !row.verified) {
+      await sendWelcomeEmail({
+        leadId: row.lead_id,
+        email: body.email.trim(),
+        fullName: body.fullName.trim(),
+        referralCode: row.referral_code,
+        verifyToken: row.verify_token,
+      });
     }
     return NextResponse.json({
       leadId: row.lead_id,

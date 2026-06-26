@@ -126,3 +126,9 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   configured, no-op otherwise) + `app/api/founders/join/route.ts` — honeypot drop (plausible fake
   success, no persist), Turnstile gate, consent+UTM passed to `founders_signup`, `RATE_LIMITED`→429.
   `tsc` clean.
+- 2026-06-26 — ✅ **Step 5 (email + verify)**: `20260626122000_growth_email_log.sql`
+  (`founders_log_email` wrapper, service_role only) + `lib/email.ts` (Resend welcome/verify mail,
+  no-op without `RESEND_API_KEY`, logs every attempt to `email_logs`) + `app/api/founders/verify/route.ts`
+  (token → `founders_verify` → redirect `/welcome?verified=1`). Join route now sends the welcome email
+  to new/unverified leads. **Re-validated full chain (7 migrations) on a fresh DB**: signup→log→verify
+  cycle passes (status `email_verified`, score 10). `tsc` clean.
