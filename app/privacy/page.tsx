@@ -48,12 +48,12 @@ export default function PrivacyPage() {
       <h2>Your choices</h2>
       <p>
         You can request access to, correction of, or deletion of your data, or unsubscribe entirely, by
-        emailing <a href="mailto:hello@tripotter.com">hello@tripotter.com</a>.
+        emailing <a href="mailto:hello@tripotter.net">hello@tripotter.net</a>.
       </p>
 
       <h2>Contact</h2>
       <p>
-        Questions? <a href="mailto:hello@tripotter.com">hello@tripotter.com</a>.
+        Questions? <a href="mailto:hello@tripotter.net">hello@tripotter.net</a>.
       </p>
     </LegalShell>
   );

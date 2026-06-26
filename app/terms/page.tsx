@@ -43,7 +43,7 @@ export default function TermsPage() {
 
       <h2>Contact</h2>
       <p>
-        <a href="mailto:hello@tripotter.com">hello@tripotter.com</a>.
+        <a href="mailto:hello@tripotter.net">hello@tripotter.net</a>.
       </p>
     </LegalShell>
   );

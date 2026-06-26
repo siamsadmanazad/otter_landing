@@ -11,7 +11,7 @@ export function SiteFooter() {
         <Link href="/terms" className="transition-colors hover:text-ink-soft">
           Terms
         </Link>
-        <a href="mailto:hello@tripotter.com" className="transition-colors hover:text-ink-soft">
+        <a href="mailto:hello@tripotter.net" className="transition-colors hover:text-ink-soft">
           Contact
         </a>
       </nav>

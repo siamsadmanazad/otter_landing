@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { growthDb, growthConfigured } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { sendWelcomeEmail } from "@/lib/email";
+import { referralUrl } from "@/lib/site";
 
 /**
  * POST /api/founders/join — create a founder lead in the growth schema.
@@ -18,7 +19,7 @@ function joinedPayload(code: string, position: number, duplicate = false) {
   return {
     leadId: crypto.randomUUID(),
     referralCode: code,
-    referralUrl: `https://tripotter.com/r/${code}`,
+    referralUrl: referralUrl(code),
     position,
     message: duplicate
       ? "Welcome back, explorer — you're already on the list."
@@ -99,7 +100,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       leadId: row.lead_id,
       referralCode: row.referral_code,
-      referralUrl: `https://tripotter.com/r/${row.referral_code}`,
+      referralUrl: referralUrl(row.referral_code),
       position: row.lead_position,
       message: row.duplicate
         ? "Welcome back, explorer — you're already on the list."

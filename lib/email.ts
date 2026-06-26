@@ -8,9 +8,9 @@ import { growthDb, growthConfigured } from "@/lib/supabase";
  * Provider-isolated: to swap providers later, only `sendTransactional` below changes.
  */
 const BREVO_KEY = process.env.BREVO_API_KEY;
-const FROM_EMAIL = process.env.MAIL_FROM ?? "otti@tripotter.com";
+const FROM_EMAIL = process.env.MAIL_FROM ?? "otti@tripotter.net";
 const FROM_NAME = process.env.MAIL_FROM_NAME ?? "TripOtter";
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://tripotter.com").replace(/\/$/, "");
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://tripotter.net").replace(/\/$/, "");
 const PROVIDER = "brevo";
 
 export const emailConfigured = Boolean(BREVO_KEY);

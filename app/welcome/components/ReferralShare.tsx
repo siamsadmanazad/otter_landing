@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 import { ScrambleNumber } from "../../components/motion/ScrambleNumber";
+import { referralUrl } from "@/lib/site";
 
 /**
  * ReferralShare — the gamified referral core: the personal link + copy, the
@@ -16,7 +17,7 @@ export function ReferralShare({
   code: string;
   basePosition: number;
 }) {
-  const url = `https://tripotter.com/r/${code}`;
+  const url = referralUrl(code);
   const [copied, setCopied] = useState(false);
   const [invites, setInvites] = useState(0);
 

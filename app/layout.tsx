@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "You found a clue. · Otti",
   description:
     "Otti isn't lost. He's searching — for hidden places, stories, and people who love adventures. Something is coming 08.05.2026.",
-  metadataBase: new URL("https://tripotter.com"),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "https://tripotter.net"),
   openGraph: {
     title: "You found a clue.",
     description: "Otti is searching. Become a Founding Explorer.",
