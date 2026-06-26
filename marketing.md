@@ -143,7 +143,15 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   through the running app against hosted:** signup (consent+UTM, 0-pt referral), email-verify route
   (307 → `/welcome?verified=1`, lead +10 / referrer +40), leaderboard, secret-gated CSV export (wrong
   key → 401), email_logs `skipped` no-op without Resend. Test rows cleaned up. RLS deny-all confirmed.
-- **DONE — backend is live.** Optional follow-ups (not blocking): add `RESEND_API_KEY`+`RESEND_FROM`
-  (turns on welcome/verify mail), Turnstile keys (turns on CAPTCHA), set the same env in Vercel for
-  deploy, rotate the DB password if it was shared in plaintext. Launch-bridge (leads→`auth.users`)
-  stays deferred to launch day.
+- **DONE — backend is live.**
+- 2026-06-26 — ✅ **Campaign-readiness pass:** (a) email provider switched to **Brevo** (300/day free;
+  provider isolated to `sendTransactional`), welcome mail now carries verify + unsubscribe links;
+  (b) **one-click unsubscribe** — `unsubscribe_token` migration (pushed to hosted) +
+  `/api/founders/unsubscribe` confirmation page, verified end-to-end; (c) **social-proof floor**
+  `FOUNDERS_BASELINE` env (default 0 = honest); (d) confirmed root `/` → `/findotti` redirect already
+  in `next.config.ts`. `tsc` + `npm run build` clean.
+- **Remaining to actually LAUNCH (mostly OStad):** ⛔ create a **Brevo** account → verify sender
+  domain/email → set `BREVO_API_KEY`+`MAIL_FROM` (turns on the whole verify/referral loop); optional
+  Turnstile keys; ⛔ **Vercel deploy LAST** (single shot to save build credits) + set all env there +
+  domain. Nice-to-have: privacy/terms pages (offered), set `FOUNDERS_BASELINE`, rotate DB password +
+  `sb_secret` key (shared in chat). Launch-bridge (leads→`auth.users`) deferred to launch day.
