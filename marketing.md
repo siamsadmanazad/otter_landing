@@ -150,8 +150,17 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   `/api/founders/unsubscribe` confirmation page, verified end-to-end; (c) **social-proof floor**
   `FOUNDERS_BASELINE` env (default 0 = honest); (d) confirmed root `/` → `/findotti` redirect already
   in `next.config.ts`. `tsc` + `npm run build` clean.
-- **Remaining to actually LAUNCH (mostly OStad):** ⛔ create a **Brevo** account → verify sender
-  domain/email → set `BREVO_API_KEY`+`MAIL_FROM` (turns on the whole verify/referral loop); optional
-  Turnstile keys; ⛔ **Vercel deploy LAST** (single shot to save build credits) + set all env there +
-  domain. Nice-to-have: privacy/terms pages (offered), set `FOUNDERS_BASELINE`, rotate DB password +
-  `sb_secret` key (shared in chat). Launch-bridge (leads→`auth.users`) deferred to launch day.
+- 2026-06-26 — ✅ **Functional-gap pass (all autonomous gaps closed):**
+  - **Live founder dashboard** — new `founders_me` RPC + `/api/founders/me` + `getMe()`; WelcomeDashboard
+    now shows REAL rank + invites (was hardcoded `invites=0`). Verified on hosted.
+  - **Real campus race** — `founders_university_race` RPC (total signups per uni, not a top-50 slice).
+  - **Honest leaderboard** — production returns real/empty data (no fabricated names); Leaderboard +
+    UniversityRace show "be the first" empty states. Demo STUB only in keyless dev.
+  - **Analytics scaffold** — `lib/analytics.ts` + `Analytics.tsx` (Meta Pixel + GA via `NEXT_PUBLIC_*`
+    ids, no-op when unset); `trackLead()` on signup, `trackVerified()` on email-verify.
+  - **Privacy + Terms pages** + global `SiteFooter` (placeholder legal copy — needs review).
+  - Migrations `20260626123000` (unsubscribe) + `20260626124000` (me/unirace) pushed to hosted.
+- **Remaining to LAUNCH (OStad):** ⛔ **Brevo** (waiting on domain) → verify sender → `BREVO_API_KEY`
+  +`MAIL_FROM` (lights up verify/referral loop); ⛔ **Vercel deploy LAST**, single shot (conserve Hobby
+  build credits) + all env in Vercel + domain. Optional: Turnstile keys, `FOUNDERS_BASELINE`, Pixel/GA
+  ids, review legal copy, rotate DB password + `sb_secret` key. Launch-bridge (leads→`auth.users`) deferred.
