@@ -93,6 +93,7 @@ export async function POST(request: NextRequest) {
         fullName: body.fullName.trim(),
         referralCode: row.referral_code,
         verifyToken: row.verify_token,
+        unsubscribeToken: row.unsubscribe_token,
       });
     }
     return NextResponse.json({
