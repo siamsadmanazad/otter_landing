@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import { PageCurtain } from "../../components/motion/PageCurtain";
-import { joinFounders, type JoinPayload } from "@/lib/founders";
+import { joinFounders, readUtm, type JoinPayload } from "@/lib/founders";
+import { TurnstileWidget, turnstileEnabled } from "./TurnstileWidget";
 
 type Errors = Partial<Record<keyof JoinPayload, string>>;
 
@@ -22,8 +23,11 @@ function readRefCookie(): string | undefined {
 
 export function FounderForm() {
   const router = useRouter();
+  const sp = useSearchParams();
   // Prefer the URL ?ref (fresh click); fall back to the cookie (returning visitor).
-  const ref = useSearchParams().get("ref") ?? readRefCookie();
+  const ref = sp.get("ref") ?? readRefCookie();
+  // Campaign attribution — captured silently from the landing URL.
+  const utm = useMemo(() => readUtm(sp), [sp]);
 
   const [v, setV] = useState<JoinPayload>({
     fullName: "",
@@ -34,6 +38,9 @@ export function FounderForm() {
     favoriteDestination: "",
     whyExplore: "",
   });
+  const [consent, setConsent] = useState(false);
+  const [hp, setHp] = useState(""); // honeypot — real users never touch it
+  const [tsToken, setTsToken] = useState("");
   const [errors, setErrors] = useState<Errors>({});
   const [busy, setBusy] = useState(false);
   const [curtain, setCurtain] = useState(false);
@@ -42,11 +49,14 @@ export function FounderForm() {
   const set = (k: keyof JoinPayload) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setV((s) => ({ ...s, [k]: e.target.value }));
 
+  const onTsToken = useCallback((t: string) => setTsToken(t), []);
+
   function validate(): boolean {
     const next: Errors = {};
     if (v.fullName.trim().length < 2) next.fullName = "Tell us your name";
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) next.email = "Enter a valid email";
     if (v.university.trim().length < 2) next.university = "Your university";
+    if (!consent) next.consent = "Please agree to hear from us";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -55,9 +65,13 @@ export function FounderForm() {
     e.preventDefault();
     setServerError(null);
     if (!validate()) return;
+    if (turnstileEnabled && !tsToken) {
+      setServerError("Please complete the human check.");
+      return;
+    }
     setBusy(true);
     try {
-      const result = await joinFounders({ ...v, ref });
+      const result = await joinFounders({ ...v, ref, consent, utm, hp, turnstileToken: tsToken });
       setCurtain(true);
       // Let the curtain sweep before routing.
       setTimeout(() => {
@@ -108,6 +122,36 @@ export function FounderForm() {
             <textarea className={`${inputCls} min-h-24 resize-none`} value={v.whyExplore} onChange={set("whyExplore")} placeholder="optional" />
           </Field>
         </div>
+
+        {/* Honeypot: off-screen, not focusable, ignored by humans. Bots that fill it are dropped. */}
+        <div aria-hidden className="absolute left-[-9999px] top-[-9999px] h-0 w-0 overflow-hidden">
+          <label>
+            Website
+            <input
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={hp}
+              onChange={(e) => setHp(e.target.value)}
+            />
+          </label>
+        </div>
+
+        {/* Marketing consent — required before submit, stored with a timestamp. */}
+        <label className="mt-5 flex cursor-pointer items-start gap-3 text-left">
+          <input
+            type="checkbox"
+            checked={consent}
+            onChange={(e) => setConsent(e.target.checked)}
+            className="mt-0.5 h-4 w-4 shrink-0 accent-treasure"
+          />
+          <span className="text-xs leading-relaxed text-ink-faint">
+            Yes — email me launch news, my founder spot, and early access. No spam; unsubscribe anytime.
+          </span>
+        </label>
+        {errors.consent && <p className="mt-1 text-left text-xs text-sunset">{errors.consent}</p>}
+
+        {turnstileEnabled && <TurnstileWidget onToken={onTsToken} />}
 
         {serverError && (
           <p className="mt-4 text-center text-sm text-sunset">{serverError}</p>

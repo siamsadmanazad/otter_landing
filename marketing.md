@@ -118,3 +118,7 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   extended `founders_export`). **Validated end-to-end** against an ephemeral Postgres 15: full chain
   applies clean; signup→verify scoring (referrer 0 at signup, +40/+10 on verify), idempotent re-verify,
   case-insensitive dedup, IP burst rate-limit (5/60s, NAT-friendly), and export columns all pass.
+- 2026-06-26 — ✅ **Step 3 (form)**: `lib/founders.ts` — `JoinPayload` gains `consent`/`utm`/`hp`/
+  `turnstileToken`, added `UtmParams` + `readUtm()`. `FounderForm.tsx` — UTM captured silently from the
+  URL, required **consent checkbox**, off-screen **honeypot**, optional **Turnstile** widget
+  (`TurnstileWidget.tsx`, no-op without `NEXT_PUBLIC_TURNSTILE_SITE_KEY`). `tsc --noEmit` clean.

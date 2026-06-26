@@ -12,6 +12,14 @@ export type FounderStats = {
   total: number;
 };
 
+export type UtmParams = {
+  source?: string;
+  medium?: string;
+  campaign?: string;
+  term?: string;
+  content?: string;
+};
+
 export type JoinPayload = {
   fullName: string;
   email: string;
@@ -21,6 +29,14 @@ export type JoinPayload = {
   favoriteDestination?: string;
   whyExplore?: string;
   ref?: string;
+  /** Marketing-permission consent (required by the form before submit). */
+  consent?: boolean;
+  /** Campaign attribution captured from the landing URL. */
+  utm?: UtmParams;
+  /** Honeypot — must stay empty; bots that fill it are silently rejected server-side. */
+  hp?: string;
+  /** Cloudflare Turnstile token (present only when the widget is configured). */
+  turnstileToken?: string;
 };
 
 export type JoinResult = {
@@ -30,6 +46,18 @@ export type JoinResult = {
   position: number;
   message: string;
 };
+
+/** Pull utm_* attribution out of the landing URL's query string. */
+export function readUtm(params: URLSearchParams): UtmParams {
+  const pick = (k: string) => params.get(`utm_${k}`)?.slice(0, 200) || undefined;
+  return {
+    source: pick("source"),
+    medium: pick("medium"),
+    campaign: pick("campaign"),
+    term: pick("term"),
+    content: pick("content"),
+  };
+}
 
 export async function getFounderStats(): Promise<FounderStats> {
   const res = await fetch("/api/founders/stats", { cache: "no-store" });
