@@ -122,3 +122,7 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   `turnstileToken`, added `UtmParams` + `readUtm()`. `FounderForm.tsx` — UTM captured silently from the
   URL, required **consent checkbox**, off-screen **honeypot**, optional **Turnstile** widget
   (`TurnstileWidget.tsx`, no-op without `NEXT_PUBLIC_TURNSTILE_SITE_KEY`). `tsc --noEmit` clean.
+- 2026-06-26 — ✅ **Step 4 (join hardening)**: `lib/turnstile.ts` (server verify, fail-closed when
+  configured, no-op otherwise) + `app/api/founders/join/route.ts` — honeypot drop (plausible fake
+  success, no persist), Turnstile gate, consent+UTM passed to `founders_signup`, `RATE_LIMITED`→429.
+  `tsc` clean.
