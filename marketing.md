@@ -112,3 +112,9 @@ blocklist · optionally collapse `growth` into the new project's `public`.
 
 ## Progress log
 - 2026-06-26 — Plan finalized (separate project + all 4 lead-quality additions). Tracker created.
+- 2026-06-26 — ✅ **Step 2 (migrations)**: `20260626120000_growth_lead_quality.sql` (consent/UTM/verify
+  cols, `email_logs`, rewritten `signup_lead` w/ rate-limit + verify token + 0-pt referrer-at-signup,
+  new `verify_lead`) + `20260626121000_growth_public_api_v2.sql` (proxy signature, `founders_verify`,
+  extended `founders_export`). **Validated end-to-end** against an ephemeral Postgres 15: full chain
+  applies clean; signup→verify scoring (referrer 0 at signup, +40/+10 on verify), idempotent re-verify,
+  case-insensitive dedup, IP burst rate-limit (5/60s, NAT-friendly), and export columns all pass.
