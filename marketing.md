@@ -135,6 +135,15 @@ blocklist · optionally collapse `growth` into the new project's `public`.
 - 2026-06-26 — ✅ **Step 6 (admin export)**: `/api/admin/leads` CSV now surfaces the new columns
   (`consent_marketing`, `consent_at`, `utm_source/medium/campaign`, `verified_at`). Full
   `npm run build` (Next 16) passes — `/api/founders/verify` registered, all routes compile.
-- **CODE COMPLETE (steps 2–6).** Remaining = 👤 OStad: ⛔ **Step 1** create the new Supabase project,
-  ⛔ **Step 7** point env at it + `RESEND_API_KEY` + Turnstile keys + `supabase db push`, then
-  🤖 **Step 8** end-to-end test against it.
+- **CODE COMPLETE (steps 2–6).**
+- 2026-06-26 — ✅ **Steps 1 + 7 + 8 — LIVE.** OStad created the dedicated marketing project
+  (ref `fekoshzdizjxgzteclwv`, Tokyo). All 7 migrations pushed via the session pooler
+  (`aws-1-ap-northeast-1`, direct host is IPv6-only). `.env.local` repointed to the new project +
+  its `sb_secret_…` key (main-app key removed; `.env.local` is gitignored). **End-to-end verified
+  through the running app against hosted:** signup (consent+UTM, 0-pt referral), email-verify route
+  (307 → `/welcome?verified=1`, lead +10 / referrer +40), leaderboard, secret-gated CSV export (wrong
+  key → 401), email_logs `skipped` no-op without Resend. Test rows cleaned up. RLS deny-all confirmed.
+- **DONE — backend is live.** Optional follow-ups (not blocking): add `RESEND_API_KEY`+`RESEND_FROM`
+  (turns on welcome/verify mail), Turnstile keys (turns on CAPTCHA), set the same env in Vercel for
+  deploy, rotate the DB password if it was shared in plaintext. Launch-bridge (leads→`auth.users`)
+  stays deferred to launch day.
