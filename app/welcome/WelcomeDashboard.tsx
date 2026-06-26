@@ -16,6 +16,7 @@ import { RewardTiers } from "./components/RewardTiers";
 import { Leaderboard } from "../components/leaderboard/Leaderboard";
 import { UniversityRace } from "../components/leaderboard/UniversityRace";
 import { FOUNDER_CAP, getMe, type MeStats } from "@/lib/founders";
+import { trackVerified } from "@/lib/analytics";
 
 /**
  * WelcomeDashboard — the full Act 3 experience. Warmest tone (gold celebration),
@@ -35,6 +36,11 @@ export function WelcomeDashboard() {
       on = false;
     };
   }, [code]);
+
+  // Fire the verify conversion once, when arriving from the email-verify redirect.
+  useEffect(() => {
+    if (params.get("verified") === "1") trackVerified();
+  }, [params]);
 
   const position = me?.position ?? urlPos;
   const rank = me?.rank ?? position;

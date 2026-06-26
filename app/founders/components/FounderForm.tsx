@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
 import { PageCurtain } from "../../components/motion/PageCurtain";
 import { joinFounders, readUtm, type JoinPayload } from "@/lib/founders";
+import { trackLead } from "@/lib/analytics";
 import { TurnstileWidget, turnstileEnabled } from "./TurnstileWidget";
 
 type Errors = Partial<Record<keyof JoinPayload, string>>;
@@ -72,6 +73,7 @@ export function FounderForm() {
     setBusy(true);
     try {
       const result = await joinFounders({ ...v, ref, consent, utm, hp, turnstileToken: tsToken });
+      trackLead();
       setCurtain(true);
       // Let the curtain sweep before routing.
       setTimeout(() => {
