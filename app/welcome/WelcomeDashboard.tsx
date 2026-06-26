@@ -46,6 +46,9 @@ export function WelcomeDashboard() {
   const rank = me?.rank ?? position;
   const invites = me?.invites ?? 0;
   const remaining = Math.max(0, FOUNDER_CAP - position);
+  // First 1000 are Founders; everyone past that is captured too, shown as a waitlist tier.
+  const isFounder = position <= FOUNDER_CAP;
+  const waitlistNo = Math.max(1, position - FOUNDER_CAP);
 
   return (
     <main className="relative">
@@ -61,27 +64,45 @@ export function WelcomeDashboard() {
           <OttiStage src={ASSETS.ottiCelebrate} alt="Otti celebrating" />
         </div>
         <div className="relative z-10 flex flex-col items-center">
-        <FounderStamp position={position} />
+        <FounderStamp position={position} waitlist={!isFounder} />
 
         <div className="mt-12 flex items-center gap-8 font-mono">
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">rank</p>
-            <p className="mt-1 text-2xl font-bold">
-              <CountUp value={rank} /> <span className="text-ink-faint">/ {FOUNDER_CAP.toLocaleString()}</span>
-            </p>
-          </div>
-          <div className="h-10 w-px bg-white/10" />
-          <div>
-            <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">spots left</p>
-            <p className="mt-1 text-2xl font-bold text-treasure">
-              <CountUp value={remaining} />
-            </p>
-          </div>
+          {isFounder ? (
+            <>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">rank</p>
+                <p className="mt-1 text-2xl font-bold">
+                  <CountUp value={rank} /> <span className="text-ink-faint">/ {FOUNDER_CAP.toLocaleString()}</span>
+                </p>
+              </div>
+              <div className="h-10 w-px bg-white/10" />
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">spots left</p>
+                <p className="mt-1 text-2xl font-bold text-treasure">
+                  <CountUp value={remaining} />
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">waitlist spot</p>
+                <p className="mt-1 text-2xl font-bold">
+                  #<CountUp value={waitlistNo} />
+                </p>
+              </div>
+              <div className="h-10 w-px bg-white/10" />
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">founder spots</p>
+                <p className="mt-1 text-2xl font-bold text-treasure">full</p>
+              </div>
+            </>
+          )}
         </div>
 
         <RevealOnScroll delay={0.4}>
           <p className="mt-14 font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
-            scroll — your climb begins
+            {isFounder ? "scroll — your climb begins" : "scroll — refer to move up the line"}
           </p>
         </RevealOnScroll>
         </div>

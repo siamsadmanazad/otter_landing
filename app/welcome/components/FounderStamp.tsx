@@ -2,14 +2,19 @@
 
 import { useEffect } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { FOUNDER_CAP } from "@/lib/founders";
 
 /**
- * FounderStamp — the climactic reveal of "FOUNDER #NNNN": the number stamps in
- * (scale-down settle + gold glow) and fires a celebratory confetti burst on
- * mount. Confetti + motion skipped under reduced motion.
+ * FounderStamp — the climactic reveal. For the first 1000 it stamps "FOUNDER #NNNN";
+ * past the cap it stamps "WAITLIST #NN" (still captured, still celebratory). The number
+ * stamps in (scale-down settle + gold glow) and fires confetti on mount.
  */
-export function FounderStamp({ position }: { position: number }) {
+export function FounderStamp({ position, waitlist = false }: { position: number; waitlist?: boolean }) {
   const reduce = useReducedMotion();
+  const number = waitlist ? Math.max(1, position - FOUNDER_CAP) : position;
+  const kicker = waitlist ? "founder spots claimed" : "welcome, explorer";
+  const heading = waitlist ? "WAITLIST" : "FOUNDER";
+  const pad = waitlist ? 3 : 4;
 
   useEffect(() => {
     if (reduce) return;
@@ -43,7 +48,7 @@ export function FounderStamp({ position }: { position: number }) {
         transition={{ duration: 0.6 }}
         className="font-mono text-xs uppercase tracking-[0.5em] text-treasure/80"
       >
-        welcome, explorer
+        {kicker}
       </motion.p>
 
       <motion.h1
@@ -52,10 +57,10 @@ export function FounderStamp({ position }: { position: number }) {
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
         className="mt-6 text-center text-4xl font-extrabold leading-none tracking-tight sm:text-7xl"
       >
-        FOUNDER
+        {heading}
         <br />
         <span className="text-treasure drop-shadow-[0_0_30px_rgba(255,179,71,0.5)]">
-          #{String(position).padStart(4, "0")}
+          #{String(number).padStart(pad, "0")}
         </span>
       </motion.h1>
     </div>

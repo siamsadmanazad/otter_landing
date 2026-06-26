@@ -67,7 +67,7 @@ export function FounderHud() {
         />
       </div>
       <p className="mt-2 font-mono text-[10px] uppercase tracking-[0.22em] text-treasure">
-        {remaining.toLocaleString()} spots left
+        {remaining > 0 ? `${remaining.toLocaleString()} spots left` : "spots full · waitlist open"}
       </p>
     </div>
   );
@@ -95,9 +95,19 @@ export function LiveTrio() {
           </p>
         </div>
         <p className="text-right text-xs uppercase tracking-[0.2em] text-treasure">
-          {remaining.toLocaleString()}
-          <br />
-          <span className="text-ink-faint">spots left</span>
+          {remaining > 0 ? (
+            <>
+              {remaining.toLocaleString()}
+              <br />
+              <span className="text-ink-faint">spots left</span>
+            </>
+          ) : (
+            <>
+              waitlist
+              <br />
+              <span className="text-ink-faint">open</span>
+            </>
+          )}
         </p>
       </div>
 
