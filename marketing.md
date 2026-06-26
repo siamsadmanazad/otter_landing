@@ -132,3 +132,9 @@ blocklist · optionally collapse `growth` into the new project's `public`.
   (token → `founders_verify` → redirect `/welcome?verified=1`). Join route now sends the welcome email
   to new/unverified leads. **Re-validated full chain (7 migrations) on a fresh DB**: signup→log→verify
   cycle passes (status `email_verified`, score 10). `tsc` clean.
+- 2026-06-26 — ✅ **Step 6 (admin export)**: `/api/admin/leads` CSV now surfaces the new columns
+  (`consent_marketing`, `consent_at`, `utm_source/medium/campaign`, `verified_at`). Full
+  `npm run build` (Next 16) passes — `/api/founders/verify` registered, all routes compile.
+- **CODE COMPLETE (steps 2–6).** Remaining = 👤 OStad: ⛔ **Step 1** create the new Supabase project,
+  ⛔ **Step 7** point env at it + `RESEND_API_KEY` + Turnstile keys + `supabase db push`, then
+  🤖 **Step 8** end-to-end test against it.

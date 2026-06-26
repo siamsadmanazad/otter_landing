@@ -52,6 +52,12 @@ export async function GET(req: NextRequest) {
       "lead_position",
       "score",
       "status",
+      "consent_marketing",
+      "consent_at",
+      "utm_source",
+      "utm_medium",
+      "utm_campaign",
+      "verified_at",
       "created_at",
     ];
     const header = cols.join(",");
