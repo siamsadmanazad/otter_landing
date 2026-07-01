@@ -93,13 +93,14 @@ export function FounderForm() {
     <>
       <PageCurtain show={curtain} />
       <motion.form
+        id="founder-form"
         onSubmit={onSubmit}
         noValidate
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-8%" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto w-full max-w-lg rounded-3xl border border-white/10 bg-noir-800/50 p-6 backdrop-blur-xl sm:p-8"
+        className="mx-auto w-full max-w-xl rounded-3xl border border-white/10 bg-noir-800/50 p-7 backdrop-blur-xl sm:p-10"
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label="Full name" required error={errors.fullName} className="sm:col-span-2">
@@ -147,30 +148,30 @@ export function FounderForm() {
             onChange={(e) => setConsent(e.target.checked)}
             className="mt-0.5 h-4 w-4 shrink-0 accent-treasure"
           />
-          <span className="text-xs leading-relaxed text-ink-faint">
+          <span className="text-sm leading-relaxed text-ink-faint">
             Yes — email me launch news, my founder spot, and early access. No spam; unsubscribe anytime.
           </span>
         </label>
-        {errors.consent && <p className="mt-1 text-left text-xs text-sunset">{errors.consent}</p>}
+        {errors.consent && <p className="mt-1 text-left text-sm text-sunset">{errors.consent}</p>}
 
         {turnstileEnabled && <TurnstileWidget onToken={onTsToken} />}
 
         {serverError && (
-          <p className="mt-4 text-center text-sm text-sunset">{serverError}</p>
+          <p className="mt-4 text-center text-base text-sunset">{serverError}</p>
         )}
 
         <button
           type="submit"
           disabled={busy}
-          className="bg-signal glow-signal group mt-6 flex w-full items-center justify-center gap-3 rounded-full px-8 py-4 text-sm font-bold uppercase tracking-[0.18em] text-noir-950 transition-transform active:scale-95 disabled:opacity-60"
+          className="bg-signal glow-signal group mt-6 flex w-full items-center justify-center gap-3 rounded-full px-9 py-5 text-base font-bold uppercase tracking-[0.18em] text-noir-950 transition-transform active:scale-95 disabled:opacity-60"
         >
           {busy ? "Joining…" : "Join the Founders"}
           <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
         </button>
-        <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+        <p className="mt-4 text-center font-mono text-xs uppercase tracking-[0.3em] text-ink-faint">
           free to join · takes less than 30 seconds
         </p>
-        <p className="mt-1.5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+        <p className="mt-1.5 text-center font-mono text-xs uppercase tracking-[0.3em] text-ink-faint">
           only 1000 spots · never again
         </p>
       </motion.form>
@@ -179,7 +180,7 @@ export function FounderForm() {
 }
 
 const inputCls =
-  "w-full rounded-xl border border-white/10 bg-noir-950/50 px-4 py-3 text-sm text-ink outline-none transition-all placeholder:text-ink-faint/60 focus:border-treasure/60 focus:shadow-[0_0_0_3px_rgba(255,179,71,0.12)]";
+  "w-full rounded-xl border border-white/10 bg-noir-950/50 px-5 py-3.5 text-base text-ink outline-none transition-all placeholder:text-ink-faint/60 focus:border-treasure/60 focus:shadow-[0_0_0_3px_rgba(255,179,71,0.12)] sm:py-4";
 
 function Field({
   label,
@@ -196,11 +197,11 @@ function Field({
 }) {
   return (
     <label className={`block ${className}`}>
-      <span className="mb-1.5 block font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+      <span className="mb-1.5 block font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
         {label} {required && <span className="text-treasure">*</span>}
       </span>
       {children}
-      {error && <span className="mt-1 block text-xs text-sunset">{error}</span>}
+      {error && <span className="mt-1 block text-sm text-sunset">{error}</span>}
     </label>
   );
 }

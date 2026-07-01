@@ -83,18 +83,18 @@ export function LiveTrio() {
   const stats = { joined, total };
 
   return (
-    <div className="mx-auto w-full max-w-sm rounded-2xl border border-white/15 bg-noir-900/70 px-5 py-3.5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-xl [text-shadow:none]">
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-noir-900/70 px-6 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-xl [text-shadow:none] sm:px-7 sm:py-5">
       <div className="flex items-end justify-between font-mono">
         <div>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+          <p className="text-xs uppercase tracking-[0.3em] text-ink-faint">
             explorers joined
           </p>
-          <p className="mt-1 text-4xl font-bold text-ink sm:text-5xl">
+          <p className="mt-1 text-5xl font-bold text-ink sm:text-6xl">
             <CountUp value={stats.joined} />
             <span className="text-ink-faint"> / {stats.total.toLocaleString()}</span>
           </p>
         </div>
-        <p className="text-right text-xs uppercase tracking-[0.2em] text-treasure">
+        <p className="text-right text-sm uppercase tracking-[0.2em] text-treasure">
           {remaining > 0 ? (
             <>
               {remaining.toLocaleString()}

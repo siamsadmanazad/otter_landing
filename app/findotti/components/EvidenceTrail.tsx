@@ -1,15 +1,17 @@
 "use client";
 
 import { useRef, type ReactNode } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
+import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "motion/react";
 
 /**
  * EvidenceTrail — the signature motif, elevated. A glowing serpentine neon spine
  * that *draws itself* as you scroll, threading four clues as illuminated
- * waypoints — Otti's expedition route assembling into a case file. A comet-head
- * travels the path (CSS offset-path bound to scroll); each node ignites as the
- * draw reaches it; the clue card beside it materializes. All motion is
- * scroll-driven or a one-shot reveal (no idle GPU cost).
+ * waypoints. The icon cell at each waypoint sits DIRECTLY on the spine — the
+ * neon line passes behind it through a translucent glass panel, so the light
+ * visibly runs through the icon rather than beside it. As the draw (and the
+ * comet head) reaches each cell, it "hops" — a quick energized bounce + glow
+ * burst, like current arcing through — before the case-file card beside it
+ * materializes. All motion is scroll-driven or a one-shot reveal (no idle cost).
  */
 
 type Clue = { tag: string; title: string; icon: ReactNode };
@@ -22,11 +24,19 @@ const CLUES: Clue[] = [
 ];
 
 // Fixed coordinate system shared by the SVG path AND the comet's offset-path, so
-// they trace exactly the same route. Gutter is 72px wide; rows are 168px tall.
+// they trace exactly the same route. CX=36 matches TrailGenesis's RAIL_X
+// exactly (same x, same centred max-w-2xl container) so the neon line hands
+// off with zero visual break — do not change CX without updating RAIL_X too.
 const GUTTER = 72;
 const ROW_H = 168;
 const TOP_PAD = 36;
-const CX = GUTTER / 2; // spine centre — nodes sit here, so they're always on the line
+const CX = GUTTER / 2; // spine centre — the line + spark sit here
+// Icon cells are ~76px wide, centred on CX — wider than GUTTER, but they're
+// plain absolutely-positioned divs (not SVG content), so they safely overflow
+// the gutter's nominal width without being clipped. Cards start right at the
+// desktop icon cell's edge (CX + half its ~76px width) so the connector stub
+// reads as flush against it, not floating in a gap.
+const CARD_LEFT = CX + 40;
 const BOW = 22; // how far the line bows out between waypoints
 const N = CLUES.length;
 const TOTAL_H = TOP_PAD * 2 + N * ROW_H;
@@ -73,22 +83,39 @@ export function EvidenceTrail() {
           bridges the genesis line above into the spine below, so the light never
           visually breaks across the heading). */}
       <div className="relative pb-12 text-center">
-        <span
+        {/* Bridges TrailGenesis's tapered line into the spine below — stays
+            cyan-tinted throughout (never fades to dark navy) so the route
+            reads as continuously connected, not broken across the heading. */}
+        <motion.span
           aria-hidden
           className="absolute w-px"
           style={{
             left: CX,
             top: 0,
             bottom: 0,
-            background: "linear-gradient(to bottom, rgba(52,245,228,0.45), rgba(27,53,82,0.55) 60%, rgba(27,53,82,0.85))",
+            background: "linear-gradient(to bottom, rgba(52,245,228,0.55), rgba(52,245,228,0.22) 65%, rgba(52,245,228,0.12))",
           }}
+          animate={
+            reduce
+              ? {}
+              : {
+                  x: [-1.5, 1.5, -1.5],
+                  opacity: [0.65, 1, 0.65],
+                  boxShadow: [
+                    "0 0 6px rgba(52,245,228,0.2)",
+                    "0 0 13px rgba(52,245,228,0.5)",
+                    "0 0 6px rgba(52,245,228,0.2)",
+                  ],
+                }
+          }
+          transition={{ duration: 3.4, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="font-mono text-[11px] uppercase tracking-[0.4em] text-signal-2/80"
+          className="font-mono text-xs uppercase tracking-[0.4em] text-signal-2/80"
         >
           // the evidence
         </motion.p>
@@ -97,7 +124,7 @@ export function EvidenceTrail() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-15%" }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.08 }}
-          className="mt-4 text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+          className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl"
         >
           What do we know about Otti?
         </motion.h2>
@@ -168,9 +195,10 @@ export function EvidenceTrail() {
               />
             </g>
 
-            {/* Waypoint nodes — ignite as the draw passes each one. */}
+            {/* A bright core spark at each waypoint, behind the glass icon cell —
+                this is what "shows through" the translucent panel above it. */}
             {CLUES.map((_, i) => (
-              <Node key={i} index={i} progress={scrollYProgress} reduce={!!reduce} />
+              <Spark key={i} index={i} progress={scrollYProgress} reduce={!!reduce} />
             ))}
           </svg>
 
@@ -191,21 +219,28 @@ export function EvidenceTrail() {
           )}
         </div>
 
-        {/* Clue cards — one per waypoint row, tethered to its node. */}
+        {/* Icon cells — sit ON the spine (z-index above the SVG, so the line and
+            spark paint behind their glass panel), enlarged, glowing, and each
+            "hops" — a quick energized bounce — as the draw reaches it. */}
+        {CLUES.map((clue, i) => (
+          <IconCell key={i} index={i} icon={clue.icon} progress={scrollYProgress} reduce={!!reduce} />
+        ))}
+
+        {/* Case-file cards — one per waypoint row, tethered to its icon cell. */}
         <div className="absolute inset-0" style={{ paddingTop: TOP_PAD, paddingBottom: TOP_PAD }}>
           {CLUES.map((clue, i) => (
             <div
               key={clue.title}
               className="absolute right-0 flex items-center"
-              style={{ top: nodeY(i) - 44, height: 88, left: GUTTER }}
+              style={{ top: nodeY(i) - 44, height: 88, left: CARD_LEFT }}
             >
-              {/* Connector stub from the spine to the card. */}
+              {/* Connector stub from the icon cell to the card. */}
               <span
                 aria-hidden
-                className="h-px w-5 shrink-0 sm:w-8"
+                className="h-px w-3 shrink-0 sm:w-4"
                 style={{ background: "linear-gradient(90deg, rgba(52,245,228,0.6), rgba(52,245,228,0))" }}
               />
-              <ClueCard clue={clue} index={i} />
+              <TextCard clue={clue} index={i} />
             </div>
           ))}
         </div>
@@ -214,51 +249,90 @@ export function EvidenceTrail() {
   );
 }
 
-function Node({
-  index,
-  progress,
-  reduce,
-}: {
-  index: number;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-  reduce: boolean;
-}) {
+/** A bright core spark at the waypoint, rendered in the SVG (behind the icon
+ *  cell's glass panel). Ignites as the draw reaches it. */
+function Spark({ index, progress, reduce }: { index: number; progress: MotionValue<number>; reduce: boolean }) {
   const cy = nodeY(index);
   const at = (index + 0.5) / N;
   const lit = useTransform(progress, [at - 0.06, at], [reduce ? 1 : 0, 1]);
   const scale = useTransform(lit, [0, 1], [0.5, 1]);
   return (
     <motion.g style={{ opacity: lit }}>
-      {/* halo */}
-      <motion.circle cx={CX} cy={cy} r={9} fill="rgba(52,245,228,0.16)" style={{ scale, transformOrigin: `${CX}px ${cy}px` }} />
-      {/* core */}
-      <circle cx={CX} cy={cy} r={3.5} fill="#34f5e4" filter="url(#evGlow)" />
-      <circle cx={CX} cy={cy} r={1.6} fill="#eafffd" />
+      <motion.circle cx={CX} cy={cy} r={16} fill="rgba(52,245,228,0.14)" style={{ scale, transformOrigin: `${CX}px ${cy}px` }} />
+      <circle cx={CX} cy={cy} r={4.5} fill="#34f5e4" filter="url(#evGlow)" />
+      <circle cx={CX} cy={cy} r={2} fill="#eafffd" />
     </motion.g>
   );
 }
 
-function ClueCard({ clue, index }: { clue: Clue; index: number }) {
+/** The waypoint's icon cell — a glass-panel frame sitting directly on the
+ *  spine, so the neon line + spark show through behind it (translucent
+ *  background, blurred). "Hops" — scale + glow burst — exactly as the draw
+ *  arrives, like current arcing through the logo. */
+function IconCell({
+  index,
+  icon,
+  progress,
+  reduce,
+}: {
+  index: number;
+  icon: ReactNode;
+  progress: MotionValue<number>;
+  reduce: boolean;
+}) {
+  const at = (index + 0.5) / N;
+  const lit = useTransform(progress, [at - 0.07, at], [reduce ? 1 : 0, 1]);
+  // The "hop" — a quick overshoot bounce right as the current arrives.
+  const scale = useTransform(progress, [at - 0.07, at - 0.01, at + 0.05], reduce ? [1, 1, 1] : [0.88, 1.16, 1]);
+  const glowOpacity = useTransform(progress, [at - 0.05, at, at + 0.3], reduce ? [0.5, 0.5, 0.5] : [0, 1, 0.55]);
+  const borderColor = useTransform(lit, (l) => `rgba(52,245,228,${0.16 + l * 0.55})`);
+  const iconColor = useTransform(lit, (l) => (l > 0.5 ? "#8ffbf1" : "#3b5568"));
+
+  return (
+    <motion.div
+      className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-1/2"
+      style={{ left: CX, top: nodeY(index), scale }}
+    >
+      {/* Energize burst — a soft glow blooming outward on arrival. */}
+      <motion.span
+        aria-hidden
+        className="absolute inset-[-10px] rounded-[22px]"
+        style={{ opacity: glowOpacity, boxShadow: "0 0 26px 6px rgba(52,245,228,0.4)" }}
+      />
+      {/* Glass panel — translucent + blurred, so the spine/spark behind it show through. */}
+      <motion.div
+        className="relative grid h-16 w-16 place-items-center rounded-2xl border backdrop-blur-md sm:h-[76px] sm:w-[76px]"
+        style={{
+          borderColor,
+          background: "rgba(8,16,26,0.38)",
+          boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 14px 34px rgba(0,0,0,0.4)",
+        }}
+      >
+        <motion.span
+          className="[&>svg]:h-6 [&>svg]:w-6 sm:[&>svg]:h-7 sm:[&>svg]:w-7"
+          style={{ color: iconColor }}
+        >
+          {icon}
+        </motion.span>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function TextCard({ clue, index }: { clue: Clue; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: 18, filter: "blur(8px)" }}
       whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-12%" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.05 + index * 0.05 }}
-      className="group flex w-full items-center gap-4 rounded-2xl border border-white/[0.08] bg-noir-800/50 px-4 py-3.5 backdrop-blur-md transition-colors duration-300 hover:border-signal-2/30 sm:px-5 sm:py-4"
+      className="group w-full rounded-2xl border border-white/[0.08] bg-noir-800/50 px-5 py-4 backdrop-blur-md transition-colors duration-300 hover:border-signal-2/30 sm:px-6 sm:py-5"
       style={{ boxShadow: "0 12px 40px rgba(0,0,0,0.35)" }}
     >
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-signal-2/20 bg-signal-1/10 text-signal-2 transition-colors duration-300 group-hover:bg-signal-1/20">
-        {clue.icon}
+      <span className="block font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint sm:text-xs">
+        {clue.tag}
       </span>
-      <span className="min-w-0">
-        <span className="block font-mono text-[9px] uppercase tracking-[0.3em] text-ink-faint">
-          {clue.tag}
-        </span>
-        <span className="mt-0.5 block text-sm font-medium text-ink sm:text-base">
-          {clue.title}
-        </span>
-      </span>
+      <span className="mt-0.5 block text-base font-medium text-ink sm:text-lg">{clue.title}</span>
     </motion.div>
   );
 }

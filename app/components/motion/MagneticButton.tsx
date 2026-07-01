@@ -37,13 +37,13 @@ export function MagneticButton({
 
   const inner = (
     <motion.span
-      className="relative inline-flex items-center justify-center gap-3 rounded-full bg-signal px-9 py-4 text-sm font-bold uppercase tracking-[0.18em] text-noir-950 glow-signal"
+      className="relative inline-flex items-center justify-center gap-3 rounded-full bg-signal px-10 py-5 text-base font-bold uppercase tracking-[0.18em] text-noir-950 glow-signal sm:px-12 sm:py-5"
       animate={{ x: pos.x, y: pos.y }}
       whileTap={{ scale: 0.95 }}
       transition={{ type: "spring", stiffness: 260, damping: 18, mass: 0.4 }}
     >
       {children}
-      <span aria-hidden className="text-base">
+      <span aria-hidden className="text-lg">
         →
       </span>
     </motion.span>

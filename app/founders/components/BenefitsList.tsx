@@ -16,7 +16,7 @@ const BENEFITS = [
  */
 export function BenefitsList() {
   return (
-    <ul className="mx-auto grid w-full max-w-xl gap-3 sm:grid-cols-2">
+    <ul className="mx-auto grid w-full max-w-2xl gap-4 sm:grid-cols-2">
       {BENEFITS.map((b, i) => {
         // The first perk is the headline reward — spans full width, warmer glow.
         const hero = i === 0;
@@ -27,14 +27,14 @@ export function BenefitsList() {
             whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }}
-            className={`flex items-center gap-4 rounded-2xl border px-5 py-3.5 backdrop-blur-sm ${
+            className={`flex items-center gap-5 rounded-2xl border px-6 py-4 backdrop-blur-sm sm:px-7 sm:py-5 ${
               hero
                 ? "border-treasure/30 bg-treasure/[0.08] shadow-[0_10px_40px_rgba(255,179,71,0.10)] sm:col-span-2"
                 : "border-treasure/15 bg-noir-800/40"
             }`}
           >
             <span
-              className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs text-treasure ${
+              className={`grid h-7 w-7 shrink-0 place-items-center rounded-full text-sm text-treasure sm:h-8 sm:w-8 ${
                 hero ? "bg-treasure/25" : "bg-treasure/15"
               }`}
             >
@@ -42,7 +42,7 @@ export function BenefitsList() {
             </span>
             <span
               className={`text-ink-soft ${
-                hero ? "text-base font-semibold text-ink sm:text-lg" : "text-sm sm:text-base"
+                hero ? "text-lg font-semibold text-ink sm:text-xl" : "text-base sm:text-lg"
               }`}
             >
               {b}

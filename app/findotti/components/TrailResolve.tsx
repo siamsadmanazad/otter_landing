@@ -18,14 +18,18 @@ export function TrailResolve({ children }: { children: ReactNode }) {
     offset: ["start 90%", "end 80%"],
   });
 
-  // The connector curve draws from the rail to the console's top-centre.
-  const pathLength = useTransform(scrollYProgress, [0, 0.7], [reduce ? 1 : 0, 1]);
+  // Whole sequence compressed into the first ~60% of the tracked range (was
+  // stretched to 0.96) — the countdown content itself has no reveal delay, so
+  // the frame needs to fully resolve well before a reader would naturally
+  // stop scrolling, or it reads as a broken/incomplete border, not "the
+  // console still forming." The remaining ~40% is a stable, fully-framed rest.
+  const pathLength = useTransform(scrollYProgress, [0, 0.4], [reduce ? 1 : 0, 1]);
   // The gather point blooms as the curve lands.
-  const gatherOpacity = useTransform(scrollYProgress, [0.5, 0.7, 0.95, 1], [0, 1, 1, 0]);
-  const gatherScale = useTransform(scrollYProgress, [0.55, 0.78], [0.4, 1]);
+  const gatherOpacity = useTransform(scrollYProgress, [0.28, 0.4, 0.58, 0.65], [0, 1, 1, 0]);
+  const gatherScale = useTransform(scrollYProgress, [0.32, 0.45], [0.4, 1]);
   // The console frame draws in.
-  const hairlineScaleX = useTransform(scrollYProgress, [0.62, 0.96], [reduce ? 1 : 0, 1]);
-  const borderOpacity = useTransform(scrollYProgress, [0.62, 0.96], [reduce ? 1 : 0, 1]);
+  const hairlineScaleX = useTransform(scrollYProgress, [0.35, 0.6], [reduce ? 1 : 0, 1]);
+  const borderOpacity = useTransform(scrollYProgress, [0.35, 0.6], [reduce ? 1 : 0, 1]);
 
   return (
     <div ref={ref} className="flex w-full flex-col items-center">
@@ -60,10 +64,14 @@ export function TrailResolve({ children }: { children: ReactNode }) {
         />
       </div>
 
-      {/* The console — bg/blur static for readability; the signal frame draws in. */}
-      <div className="relative w-full max-w-lg">
+      {/* The console — bg/blur static for readability; the signal frame draws in.
+          max-w-3xl (was max-w-xl/576px — too narrow: the countdown row needs
+          ~540-580px on its own at full size, so with side padding subtracted
+          the cells were overflowing past the edges and getting clipped by
+          this box's own overflow-hidden). */}
+      <div className="relative w-full max-w-3xl">
         <div
-          className="relative w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-noir-900/55 px-6 py-9 backdrop-blur-xl sm:px-10"
+          className="relative w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-noir-900/55 px-4 py-10 backdrop-blur-xl sm:px-12 sm:py-12"
           style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
         >
           {/* Signal top hairline — sweeps outward from centre as the light lands. */}

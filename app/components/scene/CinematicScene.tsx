@@ -4,6 +4,12 @@ import { useRef, useEffect, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+// Registered at module scope (not inside an effect): child components can mount
+// and run their own effects BEFORE an ancestor <GsapProvider>'s effect fires
+// (React runs effects bottom-up), so relying solely on that would race and
+// silently no-op this component's ScrollTrigger-based pin/scrub.
+gsap.registerPlugin(ScrollTrigger);
+
 /**
  * CinematicScene — a full-viewport chapter. When `pin` is set, it pins while the
  * content (`pinContent`) plays a scrubbed timeline: content fades + drifts up and

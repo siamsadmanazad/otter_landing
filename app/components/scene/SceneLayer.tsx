@@ -4,6 +4,10 @@ import { useRef, useEffect, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+// Registered at module scope — see CinematicScene.tsx for why this can't rely
+// on <GsapProvider>'s effect alone (React's bottom-up effect order races it).
+gsap.registerPlugin(ScrollTrigger);
+
 /**
  * SceneLayer — one parallax plane in a cinematic scene. `depth` (0 = far/static,
  * 1 = near/fast) drives a GSAP-scrubbed vertical drift + subtle scale as the

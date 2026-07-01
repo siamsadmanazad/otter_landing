@@ -41,19 +41,19 @@ export function Countdown() {
       ];
 
   return (
-    <div className="flex items-stretch gap-2.5 font-mono sm:gap-3">
+    <div className="flex w-full max-w-full items-stretch justify-center gap-[clamp(0.25rem,2.5vw,1rem)] font-mono">
       {cells.map(([label, val], i) => (
-        <div key={label} className="flex items-center gap-2.5 sm:gap-3">
+        <div key={label} className="flex items-center gap-[clamp(0.25rem,2.5vw,1rem)]">
           <div className="flex flex-col items-center">
-            <span className="grid min-w-[2.6ch] place-items-center rounded-xl border border-white/[0.08] bg-noir-800/60 px-2 py-2.5 text-3xl font-bold tabular-nums text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] sm:min-w-[2.4ch] sm:px-3 sm:py-3 sm:text-5xl">
+            <span className="grid min-w-[2.4ch] place-items-center rounded-xl border border-white/[0.08] bg-noir-800/60 px-[clamp(0.25rem,1.8vw,1rem)] py-[clamp(0.25rem,1.6vw,1rem)] text-[clamp(1.2rem,6.5vw,3.75rem)] font-bold tabular-nums text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
               {String(val).padStart(2, "0")}
             </span>
-            <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+            <span className="mt-2 text-[10px] uppercase tracking-[0.3em] text-ink-faint sm:text-sm">
               {label}
             </span>
           </div>
           {i < cells.length - 1 && (
-            <span className="-mt-6 text-2xl text-signal-2/40 sm:text-3xl" aria-hidden>
+            <span className="-mt-6 text-[clamp(0.8125rem,4vw,2.25rem)] text-signal-2/40" aria-hidden>
               :
             </span>
           )}

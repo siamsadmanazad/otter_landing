@@ -16,13 +16,14 @@ import { Fern, Reeds, Mushrooms, Grass, Pebbles } from "./NatureElements";
  */
 
 // Paw-prints: descending the centre with a walking gait, weaving between the
-// flanking nature. `at` = scroll fraction it ignites.
+// flanking nature. `at` = scroll fraction it ignites. Sized smallest → largest
+// in the direction of travel (top to bottom), as if each stride grows bolder.
 const PAWS = [
-  { x: -30, top: 9, s: 1.0, rot: -10, at: 0.16 },
-  { x: 26, top: 25, s: 0.92, rot: 9, at: 0.3 },
-  { x: -20, top: 42, s: 0.8, rot: -8, at: 0.44 },
-  { x: 18, top: 59, s: 0.66, rot: 7, at: 0.58 },
-  { x: -10, top: 76, s: 0.54, rot: -6, at: 0.72 },
+  { x: -30, top: 9, s: 0.62, rot: -10, at: 0.16 },
+  { x: 26, top: 25, s: 0.8, rot: 9, at: 0.3 },
+  { x: -20, top: 42, s: 0.98, rot: -8, at: 0.44 },
+  { x: 18, top: 59, s: 1.16, rot: 7, at: 0.58 },
+  { x: -10, top: 76, s: 1.34, rot: -6, at: 0.72 },
 ];
 
 // Drifting glowing spores (forest motes) — gentle scroll-driven rise + fade.

@@ -11,8 +11,10 @@ import { ClueReveal } from "../components/motion/ClueReveal";
 import { PrimaryCta } from "../components/PrimaryCta";
 import { RevealOnScroll } from "../components/motion/RevealOnScroll";
 import { Countdown } from "./components/Countdown";
+import { HeroParagraph } from "./components/HeroParagraph";
 import { EvidenceTrail } from "./components/EvidenceTrail";
 import { TrailGenesis } from "./components/TrailGenesis";
+import { WaterSplashConnector } from "./components/WaterSplashConnector";
 import { TrailResolve } from "./components/TrailResolve";
 import { FoliageFrame } from "./components/FoliageFrame";
 import { TrailInterlude } from "./components/TrailInterlude";
@@ -32,36 +34,35 @@ export default function FindOttiPage() {
       <CinematicScene
         pinContent={
           <div className="relative min-h-dvh w-full px-6">
-            {/* Headline up in the open sky. */}
-            <div className="flex flex-col items-center pt-[14vh] text-center">
-              <p className="mb-6 font-mono text-xs uppercase tracking-[0.4em] text-signal-2/90">
+            {/* Headline up in the open sky. z-20 + tighter spacing so this block
+                never collides with Otti or the scroll cue below, even on short
+                desktop viewports. */}
+            <div className="relative z-20 flex flex-col items-center pt-[8vh] text-center sm:pt-[10vh]">
+              <p className="mb-6 font-mono text-sm uppercase tracking-[0.4em] text-signal-2/90">
                 // signal detected
               </p>
               <ClueReveal
                 text={"YOU FOUND\nA CLUE."}
-                className="text-balance text-5xl font-extrabold leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.7)] sm:text-7xl [&>span:last-child]:text-signal"
+                className="text-balance text-6xl font-extrabold leading-[0.95] tracking-tight drop-shadow-[0_2px_20px_rgba(0,0,0,0.7)] sm:text-8xl [&>span:last-child]:text-signal"
               />
               <RevealOnScroll delay={0.9}>
-                <p className="mx-auto mt-7 max-w-md font-mono text-sm leading-relaxed text-ink-soft drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                  Otti wasn&apos;t searching alone. He was searching for the
-                  first explorers who would help build a global home for
-                  explorers.{" "}
-                  <span className="text-ink font-semibold">
-                    Today, you found him.
-                  </span>
-                </p>
+                <HeroParagraph />
               </RevealOnScroll>
             </div>
 
             {/* Otti standing on the rock — absolutely placed so his feet land on
-                the painted stage regardless of the headline height. */}
-            <div className="absolute inset-x-0 bottom-[16%] flex justify-center sm:bottom-[23%]">
+                the painted stage regardless of the headline height. Pulled
+                closer to the true bottom so the (now bigger) headline above has
+                guaranteed clearance. */}
+            <div className="absolute inset-x-0 z-10 bottom-[12%] flex justify-center sm:bottom-[14%]">
               <OttiHero />
             </div>
 
+            {/* Tucked in a corner (not centred) so it never contests the same
+                space as the paragraph above, regardless of viewport height. */}
             <RevealOnScroll delay={1.2}>
-              <p className="absolute inset-x-0 bottom-6 text-center font-mono text-[10px] uppercase tracking-[0.4em] text-ink-faint">
-                scroll to follow the trail
+              <p className="absolute bottom-6 right-6 z-20 text-right font-mono text-xs uppercase tracking-[0.4em] text-ink-faint">
+                scroll to follow<br />the trail
               </p>
             </RevealOnScroll>
           </div>
@@ -78,8 +79,10 @@ export default function FindOttiPage() {
       {/* ── Scene 2: The Evidence Trail (dusk; the neon route threads the clues) */}
       <section className="relative px-6 pb-4">
         {/* Genesis: embers coalesce into the neon line, overlapping the hero's
-            bottom (negative margin) so the trail is born out of the valley. */}
+            bottom (negative margin) so the trail is born out of the valley. A
+            splash connector bridges the painted river into the pond below. */}
         <div className="relative z-10 -mt-[26vh]">
+          <WaterSplashConnector />
           <TrailGenesis />
         </div>
         {/* The dossier backdrop sits behind the trail only (not the genesis melt). */}
@@ -104,13 +107,13 @@ export default function FindOttiPage() {
         <div className="relative z-10 flex w-full flex-col items-center">
           {/* Resolve: the line gathers to a point and the console frame draws in. */}
           <TrailResolve>
-            <p className="font-mono text-xs uppercase tracking-[0.4em] text-signal-2/80">
+            <p className="font-mono text-sm uppercase tracking-[0.4em] text-signal-2/80">
               something is coming
             </p>
             <div className="mt-7 flex justify-center">
               <Countdown />
             </div>
-            <p className="mt-6 font-mono text-[11px] uppercase tracking-[0.3em] text-ink-faint">
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.3em] text-ink-faint">
               08.05.2026
             </p>
           </TrailResolve>

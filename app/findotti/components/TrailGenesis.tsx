@@ -20,11 +20,17 @@ const RAIL_X = 36; // matches EvidenceTrail CX
 
 // Embers: scattered start offsets (px) relative to the convergence point.
 const EMBERS = [
-  { dx: -150, dy: -210, r: 11, warm: true, in: 0.0, gone: 0.5 },
-  { dx: 124, dy: -176, r: 9, warm: false, in: 0.03, gone: 0.52 },
-  { dx: -58, dy: -128, r: 8, warm: false, in: 0.07, gone: 0.5 },
-  { dx: 64, dy: -76, r: 7, warm: true, in: 0.11, gone: 0.52 },
+  { dx: -150, dy: -210, r: 14, warm: true, in: 0.0, gone: 0.5 },
+  { dx: 124, dy: -176, r: 12, warm: false, in: 0.03, gone: 0.52 },
+  { dx: -58, dy: -128, r: 10, warm: false, in: 0.07, gone: 0.5 },
+  { dx: 64, dy: -76, r: 9, warm: true, in: 0.11, gone: 0.52 },
+  { dx: -110, dy: -60, r: 8, warm: false, in: 0.15, gone: 0.5 },
+  { dx: 90, dy: -240, r: 10, warm: true, in: 0.02, gone: 0.52 },
 ];
+
+// Droplets fling outward from the landing point at this spread of angles
+// (degrees from straight up) — the "splash" moment.
+const DROPLET_ANGLES = [-80, -58, -34, -12, 12, 34, 58, 80];
 
 export function TrailGenesis() {
   const ref = useRef<HTMLDivElement>(null);
@@ -49,7 +55,7 @@ export function TrailGenesis() {
   const coreOpacity = useTransform(scrollYProgress, [0.48, 0.58, 0.94, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} aria-hidden className="pointer-events-none relative h-[58vh] min-h-[320px] w-full overflow-hidden sm:min-h-[440px]">
+    <div ref={ref} aria-hidden className="pointer-events-none relative h-[64vh] min-h-[380px] w-full overflow-hidden sm:min-h-[500px]">
       {/* Tonal melt — extends up over the hero's bottom edge to kill the hard cut. */}
       <div
         className="absolute inset-0"
@@ -63,7 +69,11 @@ export function TrailGenesis() {
           river continuing from the hero). Static caustics/sheen; ripples below. */}
       <WaterPool />
 
-      <div className="absolute inset-0 px-6">
+      {/* No px-6 here — the outer <section> in page.tsx already provides it, and
+          EvidenceTrail's container doesn't add its own either. An extra layer of
+          padding here would shift RAIL_X out of alignment with EvidenceTrail's
+          CX (both are x=36 in a centred max-w-2xl, meant to line up exactly). */}
+      <div className="absolute inset-0">
         <div className="relative mx-auto h-full w-full max-w-2xl">
           {/* Dim base rail from the convergence point down — continuity under the
               bright line, so the route never visually breaks. */}
@@ -81,7 +91,9 @@ export function TrailGenesis() {
               bottom: 0,
               opacity: lineOpacity,
               scaleY: lineScaleY,
-              background: "linear-gradient(to bottom, #34f5e4, #0099db)",
+              // Tapers at the tail instead of a hard stop — it hands off into
+              // EvidenceTrail's spine rather than visibly cutting.
+              background: "linear-gradient(to bottom, #34f5e4 0%, #0099db 78%, rgba(0,153,219,0.35) 100%)",
               boxShadow: "0 0 8px 1px rgba(52,245,228,0.55)",
             }}
           />
@@ -95,17 +107,23 @@ export function TrailGenesis() {
           {/* The merged orb — blooms, sharpens, stretches into the line. */}
           {!reduce && (
             <motion.span
-              className="absolute h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full"
+              className="absolute h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full"
               style={{
                 left: RAIL_X,
                 top: CONVERGE_TOP,
                 opacity: orbOpacity,
                 filter: orbBlurFilter,
                 scaleY: orbScaleY,
-                background: "radial-gradient(circle at 50% 45%, rgba(234,255,253,0.95), rgba(52,245,228,0.7) 40%, rgba(0,153,219,0) 72%)",
+                background: "radial-gradient(circle at 50% 45%, rgba(234,255,253,0.98), rgba(52,245,228,0.75) 40%, rgba(0,153,219,0) 72%)",
+                boxShadow: "0 0 28px 10px rgba(52,245,228,0.35)",
               }}
             />
           )}
+
+          {/* The splash — the orb's impact on the water, a flash + flinging droplets,
+              plus a smaller secondary echo splash right after for a fuller moment. */}
+          <SplashBurst progress={scrollYProgress} at={0.46} reduce={!!reduce} />
+          <SplashBurst progress={scrollYProgress} at={0.53} reduce={!!reduce} scale={0.6} />
 
           {/* Neon reflection on the water where the line enters: a soft surface
               bloom + a shimmering mirrored streak running down into the pond. */}
@@ -135,8 +153,10 @@ export function TrailGenesis() {
           />
 
           {/* Ripple rings spreading where the orb lands on the water. */}
-          <RippleRing progress={scrollYProgress} at={0.48} reduce={!!reduce} />
+          <RippleRing progress={scrollYProgress} at={0.46} reduce={!!reduce} />
+          <RippleRing progress={scrollYProgress} at={0.53} reduce={!!reduce} />
           <RippleRing progress={scrollYProgress} at={0.6} reduce={!!reduce} />
+          <RippleRing progress={scrollYProgress} at={0.66} reduce={!!reduce} />
           <RippleRing progress={scrollYProgress} at={0.72} reduce={!!reduce} />
 
           {/* Bright core node at the seam (orb → line). */}
@@ -150,19 +170,51 @@ export function TrailGenesis() {
             }}
           />
 
-          <motion.p
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-20%" }}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-            className="absolute font-mono text-[10px] uppercase tracking-[0.4em] text-signal-2/70"
-            style={{ left: 60, top: `calc(${CONVERGE_TOP} - 10px)` }}
-          >
-            // following the trail
-          </motion.p>
+          <TrailLabel progress={scrollYProgress} reduce={!!reduce} />
         </div>
       </div>
     </div>
+  );
+}
+
+/** The trail's caption — reveals as the embers converge, then "vibes" with the
+ *  water: it pulses brighter/bigger in sync with each splash burst (0.46 and
+ *  0.53), so the label reads as a consequence of the impact, not a static
+ *  overlay. A thin shimmering waterline echoes beneath it, tying it visually
+ *  to the pond. Bigger + more prominent than the old fixed-tiny caption. */
+function TrailLabel({ progress, reduce }: { progress: MotionValue<number>; reduce: boolean }) {
+  const opacity = useTransform(progress, [0.36, 0.46], [0, 1]);
+  const y = useTransform(progress, [0.36, 0.46], [16, 0]);
+
+  // Two brightness/scale pulses, timed exactly to the main + echo splash.
+  const pulse1 = useTransform(progress, [0.46, 0.5, 0.58], reduce ? [1, 1, 1] : [1, 1.1, 1]);
+  const pulse2 = useTransform(progress, [0.53, 0.57, 0.65], reduce ? [1, 1, 1] : [1, 1.06, 1]);
+  const scale = useTransform(() => pulse1.get() * pulse2.get());
+  const glow1 = useTransform(progress, [0.46, 0.5, 0.6], reduce ? [0.5, 0.5, 0.5] : [0.5, 1, 0.5]);
+  const glow2 = useTransform(progress, [0.53, 0.57, 0.66], reduce ? [0.5, 0.5, 0.5] : [0.5, 0.85, 0.5]);
+  const glow = useTransform(() => Math.max(glow1.get(), glow2.get()));
+  const textShadow = useTransform(glow, (g) => `0 0 ${14 + g * 18}px rgba(52,245,228,${0.35 + g * 0.35})`);
+
+  return (
+    <motion.div
+      className="absolute max-w-[72%]"
+      style={{ left: RAIL_X + 26, top: `calc(${CONVERGE_TOP} + 30px)`, opacity, y, scale }}
+    >
+      <motion.p
+        className="font-mono text-base font-semibold uppercase leading-snug tracking-[0.25em] text-signal-2 sm:text-2xl sm:tracking-[0.35em]"
+        style={{ textShadow }}
+      >
+        // following the trail
+      </motion.p>
+      {/* A shimmering waterline echo beneath the label — ties it to the pond. */}
+      <motion.span
+        aria-hidden
+        className="mt-2 block h-px w-full max-w-[220px]"
+        style={{ background: "linear-gradient(90deg, rgba(52,245,228,0.6), transparent 80%)" }}
+        animate={reduce ? {} : { opacity: [0.4, 0.9, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </motion.div>
   );
 }
 
@@ -198,11 +250,17 @@ function WaterPool() {
 
       {/* horizontal ripple highlights — always-present surface texture */}
       {[
+        { x: "8%", t: "14%", o: 0.32 },
         { x: "10%", t: "24%", o: 0.4 },
+        { x: "16%", t: "33%", o: 0.28 },
         { x: "18%", t: "40%", o: 0.3 },
+        { x: "22%", t: "48%", o: 0.24 },
         { x: "24%", t: "56%", o: 0.26 },
+        { x: "27%", t: "64%", o: 0.22 },
         { x: "30%", t: "72%", o: 0.2 },
+        { x: "24%", t: "80%", o: 0.18 },
         { x: "20%", t: "86%", o: 0.16 },
+        { x: "16%", t: "92%", o: 0.14 },
       ].map((r, i) => (
         <div key={i} className="absolute h-px" style={{ left: r.x, right: r.x, top: r.t, opacity: r.o, background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.6) 50%, transparent)" }} />
       ))}
@@ -243,21 +301,93 @@ function WaterPool() {
 
 /** An elliptical ripple spreading from the orb's landing point (scroll-driven). */
 function RippleRing({ progress, at, reduce }: { progress: MotionValue<number>; at: number; reduce: boolean }) {
-  const scale = useTransform(progress, [at, at + 0.42], [0.22, 1.15]);
-  const opacity = useTransform(progress, [at, at + 0.07, at + 0.42], [0, reduce ? 0 : 0.45, 0]);
+  const scale = useTransform(progress, [at, at + 0.42], [0.2, 1.35]);
+  const opacity = useTransform(progress, [at, at + 0.06, at + 0.42], [0, reduce ? 0 : 0.6, 0]);
   return (
     <motion.span
-      className="absolute rounded-[50%] border"
+      className="absolute rounded-[50%] border-2"
       style={{
         left: RAIL_X,
         top: CONVERGE_TOP,
-        width: 200,
-        height: 54,
-        marginLeft: -100,
-        marginTop: -27,
-        borderColor: "rgba(52,245,228,0.5)",
+        width: 260,
+        height: 68,
+        marginLeft: -130,
+        marginTop: -34,
+        borderColor: "rgba(52,245,228,0.6)",
+        boxShadow: "0 0 18px 2px rgba(52,245,228,0.25)",
         scale,
         opacity,
+      }}
+    />
+  );
+}
+
+/** The splash: a bright impact flash + droplets flinging outward and falling
+ *  back, timed to the orb landing on the water — the "cinematic beat" of the
+ *  scene. One-shot per scroll-through (not looping), pure CSS transforms. */
+function SplashBurst({
+  progress,
+  at,
+  reduce,
+  scale = 1,
+}: {
+  progress: MotionValue<number>;
+  at: number;
+  reduce: boolean;
+  scale?: number;
+}) {
+  const flashOpacity = useTransform(progress, [at, at + 0.035, at + 0.16], [0, reduce ? 0.35 : 1, 0]);
+  const flashScale = useTransform(progress, [at, at + 0.2], [0.25, 1.8 * scale]);
+  return (
+    <>
+      <motion.span
+        className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{
+          left: RAIL_X,
+          top: CONVERGE_TOP,
+          width: 90,
+          height: 90,
+          opacity: flashOpacity,
+          scale: flashScale,
+          filter: "blur(2px)",
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.95), rgba(150,235,240,0.45) 45%, transparent 75%)",
+        }}
+      />
+      {!reduce &&
+        DROPLET_ANGLES.map((deg, i) => (
+          <Droplet key={i} progress={progress} at={at} angleDeg={deg} scale={scale} />
+        ))}
+    </>
+  );
+}
+
+function Droplet({
+  progress,
+  at,
+  angleDeg,
+  scale = 1,
+}: {
+  progress: MotionValue<number>;
+  at: number;
+  angleDeg: number;
+  scale?: number;
+}) {
+  const rad = (angleDeg * Math.PI) / 180;
+  const dist = (36 + Math.abs(angleDeg) * 0.35) * scale;
+  const x = useTransform(progress, [at, at + 0.16], [0, Math.sin(rad) * dist]);
+  const y = useTransform(progress, [at, at + 0.1, at + 0.22], [0, -Math.cos(rad) * dist * 0.85, 8]);
+  const opacity = useTransform(progress, [at, at + 0.03, at + 0.2], [0, 0.95, 0]);
+  return (
+    <motion.span
+      className="absolute h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#d8fbf7]"
+      style={{
+        left: RAIL_X,
+        top: CONVERGE_TOP,
+        x,
+        y,
+        opacity,
+        boxShadow: "0 0 6px 1px rgba(150,235,240,0.75)",
       }}
     />
   );
