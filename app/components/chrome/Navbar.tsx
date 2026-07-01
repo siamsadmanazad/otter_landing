@@ -38,7 +38,7 @@ export function Navbar() {
           }`}
         >
           <Link href="/findotti" className="flex items-center gap-2">
-            <Image src="/otti/otter_3d.png" alt="Otti" width={28} height={28} className="drop-shadow" />
+            <Image src="/otti/otter_logo.png" alt="Otti" width={28} height={28} className="drop-shadow" />
             <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-ink-soft">
               otti
             </span>
