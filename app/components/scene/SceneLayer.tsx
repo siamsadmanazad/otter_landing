@@ -8,19 +8,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
  * SceneLayer — one parallax plane in a cinematic scene. `depth` (0 = far/static,
  * 1 = near/fast) drives a GSAP-scrubbed vertical drift + subtle scale as the
  * scene scrolls past. The child is a DROP-IN ART SLOT: a procedural node now, an
- * <Image>/Lottie later — no refactor. On mobile (or `hideOnMobile`) the layer can
- * opt out to keep the scene light. Reduced motion = no transform.
+ * <Image>/Lottie later — no refactor. On mobile the layer can opt out of the
+ * scrub tween (`disableScrubOnMobile`, stays visible) or out entirely
+ * (`hideOnMobile`, decorative-only layers) to keep the scene light. Reduced
+ * motion = no transform.
  */
 export function SceneLayer({
   children,
   depth = 0.5,
   className = "",
   hideOnMobile = false,
+  disableScrubOnMobile = false,
 }: {
   children: ReactNode;
   depth?: number;
   className?: string;
   hideOnMobile?: boolean;
+  /** Keep the layer visible on mobile, but skip the scroll-scrubbed parallax tween there. */
+  disableScrubOnMobile?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -28,7 +33,7 @@ export function SceneLayer({
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    if (hideOnMobile && window.matchMedia("(max-width: 640px)").matches) return;
+    if ((hideOnMobile || disableScrubOnMobile) && window.matchMedia("(max-width: 640px)").matches) return;
 
     // Nearer layers travel further; far layers barely move (depth → range).
     const range = -120 * depth;
@@ -52,7 +57,7 @@ export function SceneLayer({
       );
     }, ref);
     return () => ctx.revert();
-  }, [depth, hideOnMobile]);
+  }, [depth, hideOnMobile, disableScrubOnMobile]);
 
   return (
     <div

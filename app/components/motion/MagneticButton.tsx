@@ -25,6 +25,7 @@ export function MagneticButton({
 
   function onMove(e: React.MouseEvent) {
     if (reduce || !ref.current) return;
+    if (window.matchMedia("(pointer: coarse)").matches) return;
     const r = ref.current.getBoundingClientRect();
     const x = e.clientX - (r.left + r.width / 2);
     const y = e.clientY - (r.top + r.height / 2);

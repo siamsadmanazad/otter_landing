@@ -168,6 +168,9 @@ export function FounderForm() {
           <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
         </button>
         <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
+          free to join · takes less than 30 seconds
+        </p>
+        <p className="mt-1.5 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
           only 1000 spots · never again
         </p>
       </motion.form>

@@ -49,7 +49,7 @@ export function TrailGenesis() {
   const coreOpacity = useTransform(scrollYProgress, [0.48, 0.58, 0.94, 1], [0, 1, 1, 0]);
 
   return (
-    <div ref={ref} aria-hidden className="pointer-events-none relative h-[58vh] min-h-[440px] w-full overflow-hidden">
+    <div ref={ref} aria-hidden className="pointer-events-none relative h-[58vh] min-h-[320px] w-full overflow-hidden sm:min-h-[440px]">
       {/* Tonal melt — extends up over the hero's bottom edge to kill the hard cut. */}
       <div
         className="absolute inset-0"
@@ -182,17 +182,19 @@ function WaterPool() {
       <div className="absolute inset-x-0 top-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent 4%, rgba(150,235,240,0.75) 50%, transparent 96%)" }} />
       <div className="absolute inset-x-0 top-0 h-14" style={{ background: "linear-gradient(to bottom, rgba(120,210,218,0.14), transparent)" }} />
 
-      {/* MOON REFLECTION — a soft vertical column of light shimmering on the
-          surface, broken into a few horizontal glints (the premium centrepiece) */}
-      <div className="absolute left-1/2 top-0 h-2/3 w-28 -translate-x-1/2" style={{ background: "linear-gradient(to bottom, rgba(150,235,240,0.16), rgba(52,245,228,0.05) 45%, transparent)", filter: "blur(6px)" }} />
-      {[8, 20, 34, 50].map((t, i) => (
-        <div key={i} className="absolute left-1/2 -translate-x-1/2" style={{ top: `${t}%`, width: `${120 - i * 18}px`, height: "2px", opacity: 0.5 - i * 0.08, background: "linear-gradient(90deg, transparent, rgba(180,245,248,0.8), transparent)", filter: "blur(0.5px)" }} />
-      ))}
+      {/* MOON REFLECTION + caustics — desktop-only flourish (decorative, not core). */}
+      <div className="hidden sm:block">
+        {/* a soft vertical column of light shimmering on the surface, broken into a few horizontal glints (the premium centrepiece) */}
+        <div className="absolute left-1/2 top-0 h-2/3 w-28 -translate-x-1/2" style={{ background: "linear-gradient(to bottom, rgba(150,235,240,0.16), rgba(52,245,228,0.05) 45%, transparent)", filter: "blur(6px)" }} />
+        {[8, 20, 34, 50].map((t, i) => (
+          <div key={i} className="absolute left-1/2 -translate-x-1/2" style={{ top: `${t}%`, width: `${120 - i * 18}px`, height: "2px", opacity: 0.5 - i * 0.08, background: "linear-gradient(90deg, transparent, rgba(180,245,248,0.8), transparent)", filter: "blur(0.5px)" }} />
+        ))}
 
-      {/* drifting caustic light pools (brighter, varied) */}
-      <div className="absolute left-[14%] top-[16%] h-24 w-72 rounded-full opacity-[0.16] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
-      <div className="absolute right-[10%] top-[40%] h-28 w-80 rounded-full opacity-[0.14] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
-      <div className="absolute left-[40%] bottom-[12%] h-20 w-64 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+        {/* drifting caustic light pools (brighter, varied) */}
+        <div className="absolute left-[14%] top-[16%] h-24 w-72 rounded-full opacity-[0.16] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+        <div className="absolute right-[10%] top-[40%] h-28 w-80 rounded-full opacity-[0.14] blur-2xl" style={{ background: "radial-gradient(circle, #0099db, transparent 70%)" }} />
+        <div className="absolute left-[40%] bottom-[12%] h-20 w-64 rounded-full opacity-[0.12] blur-2xl" style={{ background: "radial-gradient(circle, #34f5e4, transparent 70%)" }} />
+      </div>
 
       {/* horizontal ripple highlights — always-present surface texture */}
       {[
@@ -205,21 +207,22 @@ function WaterPool() {
         <div key={i} className="absolute h-px" style={{ left: r.x, right: r.x, top: r.t, opacity: r.o, background: "linear-gradient(90deg, transparent, rgba(150,215,222,0.6) 50%, transparent)" }} />
       ))}
 
-      {/* lily pads floating on the surface (silhouettes with teal rim) */}
-      <LilyPad className="absolute left-[12%] top-[30%] h-7 w-16 opacity-70" />
-      <LilyPad className="absolute right-[16%] top-[52%] h-6 w-12 opacity-60" style={{ transform: "scaleX(-1)" }} />
-      <LilyPad className="absolute left-[24%] top-[66%] h-5 w-10 opacity-50" />
+      {/* lily pads + edge reeds — desktop-only flourish (decorative, not core). */}
+      <div className="hidden sm:block">
+        <LilyPad className="absolute left-[12%] top-[30%] h-7 w-16 opacity-70" />
+        <LilyPad className="absolute right-[16%] top-[52%] h-6 w-12 opacity-60" style={{ transform: "scaleX(-1)" }} />
+        <LilyPad className="absolute left-[24%] top-[66%] h-5 w-10 opacity-50" />
 
-      {/* edge reeds rising from the far/near banks */}
-      <div className="absolute -left-2 bottom-0 h-[42%] w-[10vw] max-w-[140px] opacity-75"><Reeds /></div>
-      <div className="absolute -right-3 bottom-0 h-[46%] w-[11vw] max-w-[150px] -scale-x-100 opacity-75"><Reeds /></div>
+        <div className="absolute -left-2 bottom-0 h-[42%] w-[10vw] max-w-[140px] opacity-75"><Reeds /></div>
+        <div className="absolute -right-3 bottom-0 h-[46%] w-[11vw] max-w-[150px] -scale-x-100 opacity-75"><Reeds /></div>
+      </div>
 
       {/* edge vignette so the pond reads as deep, framed still water */}
       <div className="absolute inset-0" style={{ background: "radial-gradient(120% 80% at 50% 40%, transparent 55%, rgba(3,8,14,0.7) 100%)" }} />
 
-      {/* two slow idle shimmers (transform-only; paused under reduced motion) */}
+      {/* two slow idle shimmers — desktop-only (idle rAF cost, skip on mobile + reduced motion) */}
       {!reduce && (
-        <>
+        <div className="hidden sm:block">
           <motion.div
             className="absolute inset-x-0 top-0 h-full"
             style={{ background: "linear-gradient(100deg, transparent 32%, rgba(120,210,220,0.05) 48%, rgba(150,235,240,0.10) 50%, rgba(120,210,220,0.05) 52%, transparent 68%)" }}
@@ -232,7 +235,7 @@ function WaterPool() {
             animate={{ x: ["10%", "-10%", "10%"] }}
             transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
           />
-        </>
+        </div>
       )}
     </div>
   );

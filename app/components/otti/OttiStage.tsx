@@ -13,7 +13,7 @@ import { useMouseParallax } from "../motion/useMouseParallax";
 export function OttiStage({
   src,
   alt = "Otti",
-  heightClass = "h-[30vh] max-h-[320px] min-h-[200px]",
+  heightClass = "h-[30vh] max-h-[320px] min-h-[150px] sm:min-h-[200px]",
   width = 847,
   height = 1213,
   priority = false,

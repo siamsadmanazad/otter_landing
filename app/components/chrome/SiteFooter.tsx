@@ -16,6 +16,9 @@ export function SiteFooter() {
         </a>
       </nav>
       <p className="mt-4 font-mono text-[10px] text-ink-faint/70">
+        Built with ❤️ in Bangladesh
+      </p>
+      <p className="mt-1 font-mono text-[10px] text-ink-faint/70">
         © {new Date().getFullYear()} TripOtter · Launching 08.05.2026
       </p>
     </footer>

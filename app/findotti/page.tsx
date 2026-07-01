@@ -43,15 +43,19 @@ export default function FindOttiPage() {
               />
               <RevealOnScroll delay={0.9}>
                 <p className="mx-auto mt-7 max-w-md font-mono text-sm leading-relaxed text-ink-soft drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
-                  Otti isn&apos;t lost. He&apos;s searching — for hidden places,
-                  stories, and people who love adventures.
+                  Otti wasn&apos;t searching alone. He was searching for the
+                  first explorers who would help build a global home for
+                  explorers.{" "}
+                  <span className="text-ink font-semibold">
+                    Today, you found him.
+                  </span>
                 </p>
               </RevealOnScroll>
             </div>
 
             {/* Otti standing on the rock — absolutely placed so his feet land on
                 the painted stage regardless of the headline height. */}
-            <div className="absolute inset-x-0 bottom-[23%] flex justify-center">
+            <div className="absolute inset-x-0 bottom-[16%] flex justify-center sm:bottom-[23%]">
               <OttiHero />
             </div>
 
@@ -64,7 +68,7 @@ export default function FindOttiPage() {
         }
       >
         {/* Bespoke painterly valley backdrop + atmosphere (parallax). */}
-        <SceneLayer depth={0.08}>
+        <SceneLayer depth={0.08} disableScrubOnMobile>
           <HeroBackdrop />
         </SceneLayer>
         <LightRays />

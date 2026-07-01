@@ -3,11 +3,11 @@
 import { motion } from "motion/react";
 
 const BENEFITS = [
-  "Permanent Founder Badge",
-  "Lifetime Early Supporter",
-  "Exclusive Community Access",
-  "Priority New Features",
-  "Special Founder Events",
+  "Permanent Founding Explorer Badge",
+  "Lifetime Early Supporter Status",
+  "Private Founders Community",
+  "Help Shape Future Features",
+  "Founder-only Experiences & Events",
 ];
 
 /**

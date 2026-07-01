@@ -40,7 +40,7 @@ export function TrailInterlude() {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 82%", "end 50%"] });
 
   return (
-    <div ref={ref} className="relative mx-auto h-[72vh] min-h-[560px] w-full max-w-5xl overflow-hidden">
+    <div ref={ref} className="relative mx-auto h-[72vh] min-h-[360px] w-full max-w-5xl overflow-hidden sm:min-h-[560px]">
       {/* ── Forest-floor nature, layered down the whole column ────────────── */}
       <div aria-hidden className="pointer-events-none absolute inset-0 hidden sm:block">
         {/* FAR tier — tall silhouettes flanking high up (depth, still readable) */}
@@ -93,8 +93,8 @@ export function TrailInterlude() {
         // the trail goes quiet — the tracks lead on
       </motion.p>
 
-      {/* Otti's paw-prints descending through the forest. */}
-      <div aria-hidden className="absolute inset-0 z-10 hidden sm:block">
+      {/* Otti's paw-prints descending through the forest — visible on mobile too. */}
+      <div aria-hidden className="absolute inset-0 z-10">
         {PAWS.map((p, i) => (
           <Paw key={i} paw={p} progress={scrollYProgress} reduce={!!reduce} />
         ))}

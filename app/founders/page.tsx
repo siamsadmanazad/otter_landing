@@ -13,6 +13,7 @@ import { CampBackdrop } from "./components/CampBackdrop";
 import { InviteOtti } from "./components/InviteOtti";
 import { LiveTrio, FounderHud } from "./components/LiveTrio";
 import { BenefitsList } from "./components/BenefitsList";
+import { WhyTripotter } from "./components/WhyTripotter";
 import { FounderForm } from "./components/FounderForm";
 import { ASSETS } from "@/lib/assets";
 
@@ -60,7 +61,7 @@ export default function FoundersPage() {
 
             {/* Otti — lantern raised — grounded on the camp stage. Absolutely
                 placed so he sits in the scene regardless of headline height. */}
-            <div className="pointer-events-none absolute inset-x-0 bottom-[22%] flex justify-center">
+            <div className="pointer-events-none absolute inset-x-0 bottom-[16%] flex justify-center sm:bottom-[22%]">
               <InviteOtti />
             </div>
 
@@ -88,7 +89,7 @@ export default function FoundersPage() {
         }
       >
         {/* The painterly camp as the deep, slow-parallax backdrop + companions. */}
-        <SceneLayer depth={0.08}>
+        <SceneLayer depth={0.08} disableScrubOnMobile>
           <CampBackdrop />
         </SceneLayer>
         <FloatingCharms />
@@ -101,6 +102,7 @@ export default function FoundersPage() {
           <SceneBackdrop tone="twilight" blendTop blendBottom={false} />
           <FoliageFrame />
           <div className="relative z-10 pt-[18vh]">
+            <WhyTripotter />
             <RevealOnScroll className="mb-10 text-center">
               <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.28em] text-treasure sm:text-xs sm:tracking-[0.4em]">
                 // the founder&apos;s charter
@@ -124,7 +126,7 @@ export default function FoundersPage() {
             <OttiStage
               src={ASSETS.ottiInvite}
               alt="Otti waiting at the camp"
-              heightClass="h-[18vh] max-h-[200px] min-h-[130px]"
+              heightClass="h-[18vh] max-h-[200px] min-h-[100px] sm:min-h-[130px]"
               width={1060}
               height={1484}
             />
@@ -138,12 +140,36 @@ export default function FoundersPage() {
             </h2>
           </RevealOnScroll>
 
+          {/* Meaning behind the number — before the counter, so the stakes land first. */}
+          <RevealOnScroll delay={0.05} className="mt-4 max-w-sm">
+            <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.15em] text-ink-faint">
+              Only the first 1,000 explorers will ever receive a Founder Number.
+              <br />
+              It can never be claimed again.
+            </p>
+          </RevealOnScroll>
+
           {/* Full live counter at the moment of decision. */}
           <RevealOnScroll delay={0.1} className="mt-7 w-full">
             <LiveTrio />
           </RevealOnScroll>
 
-          <div className="mt-8 w-full [text-shadow:none]">
+          {/* Trust block — why we ask for an email, right before the form. */}
+          <RevealOnScroll delay={0.15} className="mt-8 w-full max-w-md rounded-2xl border border-white/10 bg-noir-800/40 px-5 py-4 text-left backdrop-blur-sm [text-shadow:none]">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-treasure">
+              Why do we need your email?
+            </p>
+            <ul className="mt-3 space-y-1.5 text-sm text-ink-soft">
+              <li>✓ Reserve your Founder Number</li>
+              <li>✓ Notify you when Tripotter launches</li>
+              <li>✓ Send updates about Otti&apos;s journey</li>
+            </ul>
+            <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-faint">
+              No spam. Unsubscribe anytime.
+            </p>
+          </RevealOnScroll>
+
+          <div className="mt-6 w-full [text-shadow:none]">
             <Suspense fallback={<div className="h-96" />}>
               <FounderForm />
             </Suspense>
