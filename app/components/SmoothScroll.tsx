@@ -21,6 +21,16 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
     });
 
+    // Landing directly on a hash URL (e.g. /founders#join from a cross-page
+    // link): the browser's native jump happens before Lenis takes over, and
+    // Lenis's own scroll-position tracking would otherwise snap back to
+    // wherever it thinks scroll is (usually the top) on its next tick. Sync
+    // it to the hash target immediately once it exists.
+    if (window.location.hash) {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target) lenis.scrollTo(target, { immediate: true });
+    }
+
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);

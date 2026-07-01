@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { scrollToHash } from "../motion/scrollToHash";
 
 /**
  * Navbar — minimal cinematic nav. Transparent at the top; gains a subtle
@@ -13,6 +15,7 @@ import { motion, useReducedMotion } from "motion/react";
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -78,6 +81,15 @@ export function Navbar() {
 
           <Link
             href="/founders#join"
+            onClick={(e) => {
+              // Same page already: a native hash jump gets fought/reverted by
+              // Lenis's own scroll tracking, so drive it through Lenis instead.
+              // Cross-page: let Next.js navigate normally (SmoothScroll handles
+              // the hash once Lenis mounts on the new page).
+              if (pathname === "/founders" && scrollToHash("#join")) {
+                e.preventDefault();
+              }
+            }}
             className="relative rounded-full border border-signal-2/40 px-5 py-2 font-mono text-xs uppercase tracking-[0.2em] text-signal-2 transition-colors hover:bg-signal-2/10 sm:px-6 sm:py-2.5 sm:text-sm"
           >
             {/* Tempting pulse — a soft expanding ring, elegant not obnoxious. */}

@@ -17,6 +17,7 @@ import { FounderForm } from "./components/FounderForm";
 import { JoinCause } from "./components/JoinCause";
 import { CampHeadline } from "./components/CampHeadline";
 import { CampFlankRow } from "./components/CampFlankRow";
+import { ClaimFounderButton } from "./components/ClaimFounderButton";
 import { ASSETS } from "@/lib/assets";
 
 /**
@@ -105,11 +106,19 @@ export default function FoundersPage() {
       <CinematicScene
         pin
         pinContent={
-          <div className="relative min-h-dvh w-full px-6">
+          // Mobile: a genuine flex column (headline → flank row → CTA), which
+          // flexbox mathematically cannot let overlap regardless of viewport
+          // aspect ratio — the previous approach mixed normal-flow (headline)
+          // with two independently absolute-positioned, fixed-% blocks, which
+          // could only ever be tuned for specific aspect ratios and kept
+          // recurring on anything unusual. Desktop (md:) reverts to the
+          // existing absolute layout via md: overrides, since that already
+          // has more room to spare and was already confirmed working.
+          <div className="relative flex min-h-dvh w-full flex-col px-6 pb-6 md:block">
             {/* Headline up in the dusk sky: kicker + "Become one of the first
                 / 1000". "Founding Explorers" now flanks Otti below instead of
                 overlapping this block. */}
-            <div className="relative z-20 mx-auto flex max-w-2xl flex-col items-center pt-[13vh] text-center [text-shadow:0_2px_28px_rgba(0,0,0,0.75)]">
+            <div className="relative z-20 mx-auto flex max-w-2xl flex-col items-center pt-[6vh] text-center [text-shadow:0_2px_28px_rgba(0,0,0,0.75)] md:pt-[13vh]">
               <RevealOnScroll immediate>
                 <p className="mb-5 font-mono text-xs uppercase tracking-[0.28em] text-treasure sm:text-sm sm:tracking-[0.4em]">
                   // the expedition is forming
@@ -122,30 +131,21 @@ export default function FoundersPage() {
 
             {/* Otti stands fully visible, undimmed, dead centre — "Founding" and
                 "Explorers" flank him left/right (reads as "Founding [Otti]
-                Explorers"), each with its own scroll-drift. Nothing overlaps him. */}
-            {/* bottom-% matches the CampFlankRow breakpoint (md:), not sm: —
-                below md: the stack is tall (word + Otti + word), so it needs
-                much more clearance from the CTA below than the short
-                side-by-side row does once it switches at md:. */}
-            <div className="pointer-events-none absolute inset-x-0 z-10 bottom-[18%] px-6 md:bottom-[10%]">
+                Explorers"), each with its own scroll-drift. Nothing overlaps
+                him. Mobile: flex-1 fills the remaining space and centres Otti
+                in it. Desktop: reverts to absolute + fixed bottom-%. */}
+            <div className="pointer-events-none relative z-10 flex flex-1 items-center justify-center py-4 md:absolute md:inset-x-0 md:bottom-[10%] md:flex-none md:px-6 md:py-0">
               <RevealOnScroll immediate delay={0.15} className="mx-auto w-full max-w-2xl md:max-w-4xl lg:max-w-5xl">
                 <CampFlankRow />
               </RevealOnScroll>
             </div>
 
-            {/* Grounded action — CTA + scroll cue pinned low so Otti never covers
-                them (he stands above, on the rock). */}
-            <div className="absolute inset-x-0 bottom-7 z-20 flex flex-col items-center gap-5 px-6">
+            {/* Grounded action — CTA + scroll cue. Mobile: last flex child, so
+                it's always after the flank row, never fought over the same
+                space. Desktop: reverts to absolute-pinned-low as before. */}
+            <div className="relative z-20 flex flex-col items-center gap-5 md:absolute md:inset-x-0 md:bottom-7 md:px-6">
               <RevealOnScroll immediate delay={0.3} className="[text-shadow:none]">
-                <a
-                  href="#join"
-                  className="bg-signal glow-signal group inline-flex items-center justify-center gap-3 rounded-full px-9 py-5 text-base font-bold uppercase tracking-[0.18em] text-noir-950 transition-transform active:scale-95"
-                >
-                  Claim your founder number
-                  <span aria-hidden className="transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </a>
+                <ClaimFounderButton />
               </RevealOnScroll>
               <RevealOnScroll immediate delay={0.6}>
                 <p className="text-center font-mono text-xs uppercase tracking-[0.4em] text-ink-faint [text-shadow:0_1px_10px_rgba(0,0,0,0.85)]">
