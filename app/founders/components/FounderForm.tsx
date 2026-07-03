@@ -8,6 +8,7 @@ import { PageCurtain } from "../../components/motion/PageCurtain";
 import { joinFounders, readUtm, type JoinPayload } from "@/lib/founders";
 import { trackLead } from "@/lib/analytics";
 import { TurnstileWidget, turnstileEnabled } from "./TurnstileWidget";
+import { UniversityField } from "./UniversityField";
 
 type Errors = Partial<Record<keyof JoinPayload, string>>;
 
@@ -100,9 +101,20 @@ export function FounderForm() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-8%" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto w-full max-w-xl rounded-3xl border border-white/10 bg-noir-800/50 p-7 backdrop-blur-xl sm:p-10"
+        className="relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-noir-800/50 p-7 backdrop-blur-xl sm:p-10"
       >
-        <div className="grid gap-4 sm:grid-cols-2">
+        {/* Decorative honesty watermark — Otti checks the campus race, so fake
+            entries don't help your real rank. Purely aesthetic, non-interactive. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 z-0 flex select-none items-center justify-center"
+        >
+          <p className="whitespace-nowrap rotate-[-9deg] font-mono text-3xl font-black uppercase tracking-[0.35em] text-white/[0.045] sm:text-4xl">
+            Honest explorers climb further
+          </p>
+        </div>
+
+        <div className="relative z-10 grid gap-4 sm:grid-cols-2">
           <Field label="Full name" required error={errors.fullName} className="sm:col-span-2">
             <input className={inputCls} value={v.fullName} onChange={set("fullName")} autoComplete="name" />
           </Field>
@@ -110,7 +122,7 @@ export function FounderForm() {
             <input className={inputCls} type="email" value={v.email} onChange={set("email")} autoComplete="email" />
           </Field>
           <Field label="University" required error={errors.university}>
-            <input className={inputCls} value={v.university} onChange={set("university")} />
+            <UniversityField value={v.university} onChange={(val) => setV((s) => ({ ...s, university: val }))} />
           </Field>
           <Field label="Facebook profile">
             <input className={inputCls} value={v.facebook} onChange={set("facebook")} placeholder="optional" />
@@ -179,7 +191,7 @@ export function FounderForm() {
   );
 }
 
-const inputCls =
+export const inputCls =
   "w-full rounded-xl border border-white/10 bg-noir-950/50 px-5 py-3.5 text-base text-ink outline-none transition-all placeholder:text-ink-faint/60 focus:border-treasure/60 focus:shadow-[0_0_0_3px_rgba(255,179,71,0.12)] sm:py-4";
 
 function Field({
