@@ -36,7 +36,7 @@ export function CloudLayer() {
             opacity: c.opacity,
             transform: `translateX(calc(-50% + ${c.shift}))`,
             background: `radial-gradient(50% 50% at 50% 50%, rgba(${c.hue},1), transparent 70%)`,
-            filter: "blur(60px)",
+            filter: "blur(var(--fx-blur-aurora))",
           }}
         />
       ))}

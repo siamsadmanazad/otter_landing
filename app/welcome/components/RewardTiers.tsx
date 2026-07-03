@@ -25,7 +25,7 @@ export function RewardTiers({ invites = 0 }: { invites?: number }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.5, delay: i * 0.08 }}
-            className={`relative flex items-center gap-4 overflow-hidden rounded-2xl border px-5 py-4 backdrop-blur-sm ${
+            className={`relative flex items-center gap-4 overflow-hidden rounded-2xl border px-5 py-4 backdrop-blur-[var(--fx-glass-sm)] ${
               unlocked
                 ? "border-treasure/50 bg-treasure/10"
                 : "border-white/10 bg-noir-800/40"

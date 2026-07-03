@@ -34,6 +34,23 @@
   --ink-soft: #b2bacb; /* secondary text */
   --ink-faint: #717a90;
   --hairline: rgba(255, 255, 255, 0.08);
+
+  /* Blur radii — full strength by default. See lib/perfTier.ts: a
+     `data-perf="lite"` on <html> (set for devices that can't sustain
+     GPU-heavy blur) overrides these to a fraction of the cost below. */
+  --fx-blur-aurora: 140px; /* AuroraBackground/CloudLayer full-screen blooms */
+  --fx-blur-glow: 70px; /* Otti character glow blooms */
+  --fx-glass-sm: 4px; /* backdrop-blur-sm cards */
+  --fx-glass-md: 12px; /* backdrop-blur-md cards */
+  --fx-glass-xl: 24px; /* backdrop-blur-xl cards */
+}
+
+html[data-perf="lite"] {
+  --fx-blur-aurora: 26px;
+  --fx-blur-glow: 20px;
+  --fx-glass-sm: 2px;
+  --fx-glass-md: 4px;
+  --fx-glass-xl: 8px;
 }
 
 @theme inline {

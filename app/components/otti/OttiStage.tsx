@@ -39,7 +39,7 @@ export function OttiStage({
     >
       <span
         aria-hidden
-        className="absolute bottom-[14%] h-[52%] w-[46%] rounded-full opacity-55 blur-[64px]"
+        className="absolute bottom-[14%] h-[52%] w-[46%] rounded-full opacity-55 blur-[var(--fx-blur-glow)]"
         style={{
           background:
             "radial-gradient(circle at 45% 55%, rgba(255,140,70,0.40), rgba(13,185,200,0.26) 50%, transparent 72%)",

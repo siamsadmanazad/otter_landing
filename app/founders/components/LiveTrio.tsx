@@ -48,7 +48,7 @@ export function FounderHud() {
   const { joined, total, pct, remaining } = useFounderStats();
 
   return (
-    <div className="pointer-events-auto w-[180px] rounded-2xl border border-white/15 bg-noir-900/70 px-4 py-3 shadow-[0_14px_44px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-xl [text-shadow:none] sm:w-[200px]">
+    <div className="pointer-events-auto w-[180px] rounded-2xl border border-white/15 bg-noir-900/70 px-4 py-3 shadow-[0_14px_44px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-[var(--fx-glass-xl)] [text-shadow:none] sm:w-[200px]">
       <p className="font-mono text-[9px] uppercase tracking-[0.28em] text-ink-faint">
         explorers joined
       </p>
@@ -83,7 +83,7 @@ export function LiveTrio() {
   const stats = { joined, total };
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-noir-900/70 px-6 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-xl [text-shadow:none] sm:px-7 sm:py-5">
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-white/15 bg-noir-900/70 px-6 py-4 shadow-[0_18px_50px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/5 backdrop-blur-[var(--fx-glass-xl)] [text-shadow:none] sm:px-7 sm:py-5">
       <div className="flex items-end justify-between font-mono">
         <div>
           <p className="text-xs uppercase tracking-[0.3em] text-ink-faint">

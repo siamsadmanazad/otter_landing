@@ -2,18 +2,22 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { isLitePerf } from "@/lib/perfTier";
 
 /**
  * SmoothScroll — wraps the app in Lenis inertia smooth-scroll (the biggest single
  * "premium feel" upgrade). Disabled automatically when the user prefers reduced
- * motion. GSAP ScrollTrigger (added later) will hook into Lenis' raf loop.
+ * motion, and on devices flagged `lite` (see lib/perfTier.ts) — JS-driven scroll
+ * is one of the more failure-prone effects on weak/old hardware, and native
+ * scroll is a completely safe fallback. GSAP ScrollTrigger (added later) will
+ * hook into Lenis' raf loop.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReduced) return;
+    if (prefersReduced || isLitePerf()) return;
 
     const lenis = new Lenis({
       duration: 1.1,

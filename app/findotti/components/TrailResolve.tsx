@@ -71,7 +71,7 @@ export function TrailResolve({ children }: { children: ReactNode }) {
           this box's own overflow-hidden). */}
       <div className="relative w-full max-w-3xl">
         <div
-          className="relative w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-noir-900/55 px-4 py-10 backdrop-blur-xl sm:px-12 sm:py-12"
+          className="relative w-full overflow-hidden rounded-3xl border border-white/[0.08] bg-noir-900/55 px-4 py-10 backdrop-blur-[var(--fx-glass-xl)] sm:px-12 sm:py-12"
           style={{ boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
         >
           {/* Signal top hairline — sweeps outward from centre as the light lands. */}

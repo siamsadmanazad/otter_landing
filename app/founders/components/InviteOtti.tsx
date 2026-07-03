@@ -39,7 +39,7 @@ export function InviteOtti() {
       {/* Warm subject bloom behind Otti — soft; the camp already carries the light. */}
       <span
         aria-hidden
-        className="absolute bottom-[14%] h-[56%] w-[50%] rounded-full opacity-55 blur-[72px]"
+        className="absolute bottom-[14%] h-[56%] w-[50%] rounded-full opacity-55 blur-[var(--fx-blur-glow)]"
         style={{
           background:
             "radial-gradient(circle at 45% 55%, rgba(255,150,80,0.42), rgba(13,185,200,0.22) 52%, transparent 72%)",

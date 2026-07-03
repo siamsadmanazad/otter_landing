@@ -90,7 +90,7 @@ export function UniversityField({
         <ul
           id={listId}
           role="listbox"
-          className="absolute inset-x-0 top-[calc(100%+6px)] z-20 max-h-64 overflow-y-auto rounded-xl border border-white/10 bg-noir-950/95 py-1.5 shadow-2xl backdrop-blur-xl"
+          className="absolute inset-x-0 top-[calc(100%+6px)] z-20 max-h-64 overflow-y-auto rounded-xl border border-white/10 bg-noir-950/95 py-1.5 shadow-2xl backdrop-blur-[var(--fx-glass-xl)]"
         >
           {suggestions.map((name, i) => (
             <li key={name} role="option" aria-selected={i === highlight}>

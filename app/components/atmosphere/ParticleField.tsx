@@ -1,18 +1,22 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { isLitePerf } from "@/lib/perfTier";
 
 /**
  * ParticleField — ambient drifting dust/fireflies on a lightweight canvas with
  * DEPTH: each particle has a z-tier (0..1) that scales its size, brightness,
  * drift speed, and how far it shifts with the cursor + scroll (parallax).
- * Custom (not tsParticles) for mobile perf. Skipped under reduced motion.
+ * Custom (not tsParticles) for mobile perf. Skipped under reduced motion, and
+ * entirely on `lite` devices (see lib/perfTier.ts) — purely decorative, so
+ * it's the cheapest thing to drop first on weak/old hardware.
  */
 export function ParticleField({ count = 48 }: { count?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (isLitePerf()) return;
     const canvas = ref.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");

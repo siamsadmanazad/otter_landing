@@ -77,7 +77,7 @@ export default function FoundersPage() {
           </RevealOnScroll>
 
           {/* Trust block — why we ask for an email, right before the form. */}
-          <RevealOnScroll delay={0.15} className="mt-8 w-full max-w-lg rounded-2xl border border-white/10 bg-noir-800/40 px-6 py-5 text-left backdrop-blur-sm [text-shadow:none]">
+          <RevealOnScroll delay={0.15} className="mt-8 w-full max-w-lg rounded-2xl border border-white/10 bg-noir-800/40 px-6 py-5 text-left backdrop-blur-[var(--fx-glass-sm)] [text-shadow:none]">
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-treasure sm:text-sm">
               Why do we need your email?
             </p>

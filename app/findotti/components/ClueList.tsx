@@ -35,7 +35,7 @@ export function ClueList() {
             whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: 0.55, ease: "easeOut", delay: i * 0.12 }}
-            className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-noir-800/40 px-5 py-4 backdrop-blur-sm"
+            className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-noir-800/40 px-5 py-4 backdrop-blur-[var(--fx-glass-sm)]"
           >
             <span className="text-signal-2" aria-hidden>
               ✓

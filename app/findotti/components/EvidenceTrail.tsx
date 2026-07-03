@@ -301,7 +301,7 @@ function IconCell({
       />
       {/* Glass panel — translucent + blurred, so the spine/spark behind it show through. */}
       <motion.div
-        className="relative grid h-16 w-16 place-items-center rounded-2xl border backdrop-blur-md sm:h-[76px] sm:w-[76px]"
+        className="relative grid h-16 w-16 place-items-center rounded-2xl border backdrop-blur-[var(--fx-glass-md)] sm:h-[76px] sm:w-[76px]"
         style={{
           borderColor,
           background: "rgba(8,16,26,0.38)",
@@ -326,7 +326,7 @@ function TextCard({ clue, index }: { clue: Clue; index: number }) {
       whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-12%" }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.05 + index * 0.05 }}
-      className="group w-full rounded-2xl border border-white/[0.08] bg-noir-800/50 px-5 py-4 backdrop-blur-md transition-colors duration-300 hover:border-signal-2/30 sm:px-6 sm:py-5"
+      className="group w-full rounded-2xl border border-white/[0.08] bg-noir-800/50 px-5 py-4 backdrop-blur-[var(--fx-glass-md)] transition-colors duration-300 hover:border-signal-2/30 sm:px-6 sm:py-5"
       style={{ boxShadow: "0 12px 40px rgba(0,0,0,0.35)" }}
     >
       <span className="block font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint sm:text-xs">

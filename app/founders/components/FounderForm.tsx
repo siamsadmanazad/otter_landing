@@ -101,7 +101,7 @@ export function FounderForm() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-8%" }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        className="relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-noir-800/50 p-7 backdrop-blur-xl sm:p-10"
+        className="relative mx-auto w-full max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-noir-800/50 p-7 backdrop-blur-[var(--fx-glass-xl)] sm:p-10"
       >
         {/* Decorative honesty watermark — Otti checks the campus race, so fake
             entries don't help your real rank. Purely aesthetic, non-interactive. */}

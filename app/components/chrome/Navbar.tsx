@@ -37,7 +37,7 @@ export function Navbar() {
         <div
           className={`flex items-center justify-between rounded-full border px-5 py-3.5 transition-colors duration-500 sm:px-6 sm:py-4 ${
             scrolled
-              ? "border-white/10 bg-noir-900/50 backdrop-blur-xl"
+              ? "border-white/10 bg-noir-900/50 backdrop-blur-[var(--fx-glass-xl)]"
               : "border-transparent"
           }`}
         >
@@ -63,7 +63,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Otti on Instagram"
-                className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-ink-faint backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/10 hover:text-ink-soft sm:h-9 sm:w-9"
+                className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-ink-faint backdrop-blur-[var(--fx-glass-sm)] transition-colors hover:border-white/20 hover:bg-white/10 hover:text-ink-soft sm:h-9 sm:w-9"
               >
                 <InstagramIcon />
               </a>
@@ -72,7 +72,7 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Otti on Facebook"
-                className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-ink-faint backdrop-blur-sm transition-colors hover:border-white/20 hover:bg-white/10 hover:text-ink-soft sm:h-9 sm:w-9"
+                className="grid h-8 w-8 place-items-center rounded-full border border-white/10 bg-white/[0.04] text-ink-faint backdrop-blur-[var(--fx-glass-sm)] transition-colors hover:border-white/20 hover:bg-white/10 hover:text-ink-soft sm:h-9 sm:w-9"
               >
                 <FacebookIcon />
               </a>

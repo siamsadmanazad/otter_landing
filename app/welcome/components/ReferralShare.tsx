@@ -49,7 +49,7 @@ export function ReferralShare({
       <h3 className="mt-2 text-center text-xl font-bold">Invite friends, climb the expedition</h3>
 
       {/* Link + copy */}
-      <div className="mt-6 flex items-center gap-2 rounded-full border border-white/10 bg-noir-800/50 p-1.5 pl-4 backdrop-blur-sm">
+      <div className="mt-6 flex items-center gap-2 rounded-full border border-white/10 bg-noir-800/50 p-1.5 pl-4 backdrop-blur-[var(--fx-glass-sm)]">
         <span className="flex-1 truncate font-mono text-sm text-signal-2">{url}</span>
         <button
           onClick={copy}
@@ -75,7 +75,7 @@ export function ReferralShare({
       </div>
 
       {/* +5 per invite demo */}
-      <div className="mt-8 rounded-2xl border border-treasure/15 bg-noir-800/40 p-5 text-center backdrop-blur-sm">
+      <div className="mt-8 rounded-2xl border border-treasure/15 bg-noir-800/40 p-5 text-center backdrop-blur-[var(--fx-glass-sm)]">
         <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-ink-faint">
           every invite moves you up 5 places
         </p>

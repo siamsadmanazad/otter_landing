@@ -3,6 +3,7 @@
 import { useRef, useEffect, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isLitePerf } from "@/lib/perfTier";
 
 // Registered at module scope — see CinematicScene.tsx for why this can't rely
 // on <GsapProvider>'s effect alone (React's bottom-up effect order races it).
@@ -37,6 +38,7 @@ export function SceneLayer({
     const el = ref.current;
     if (!el) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (isLitePerf()) return; // weak/old device: skip the scroll-scrubbed tween everywhere
     if ((hideOnMobile || disableScrubOnMobile) && window.matchMedia("(max-width: 640px)").matches) return;
 
     // Nearer layers travel further; far layers barely move (depth → range).

@@ -3,6 +3,7 @@
 import { useRef, useEffect, type ReactNode } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { isLitePerf } from "@/lib/perfTier";
 
 // Registered at module scope (not inside an effect): child components can mount
 // and run their own effects BEFORE an ancestor <GsapProvider>'s effect fires
@@ -37,7 +38,7 @@ export function CinematicScene({
     if (!el || !inner || !pin) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const mobile = window.matchMedia("(max-width: 640px)").matches;
-    if (reduce || mobile) return;
+    if (reduce || mobile || isLitePerf()) return;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({

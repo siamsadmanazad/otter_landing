@@ -9,6 +9,8 @@ import { GsapProvider } from "./components/motion/GsapProvider";
 import { Navbar } from "./components/chrome/Navbar";
 import { Analytics } from "./components/Analytics";
 import { SiteFooter } from "./components/chrome/SiteFooter";
+import { PerfBenchmark } from "./components/PerfBenchmark";
+import { PERF_GUESS_SCRIPT } from "@/lib/perfTier";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -33,7 +35,15 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Pre-paint device-capability guess (see lib/perfTier.ts) — sets
+            data-perf="lite" on <html> before hydration for phones that can't
+            sustain the full blur/parallax/smooth-scroll stack, so there's no
+            flash of the heavy version before it downgrades. */}
+        <script dangerouslySetInnerHTML={{ __html: PERF_GUESS_SCRIPT }} />
+      </head>
       <body className="min-h-full bg-noir-950 text-ink">
+        <PerfBenchmark />
         <Analytics />
         <AuroraBackground />
         <CloudLayer />

@@ -25,7 +25,7 @@ export function OttiHero() {
           painterly scene already carries the light. */}
       <span
         aria-hidden
-        className="absolute bottom-[14%] h-[55%] w-[48%] rounded-full opacity-55 blur-[70px]"
+        className="absolute bottom-[14%] h-[55%] w-[48%] rounded-full opacity-55 blur-[var(--fx-blur-glow)]"
         style={{
           background:
             "radial-gradient(circle at 45% 55%, rgba(255,140,70,0.40), rgba(13,185,200,0.28) 50%, transparent 72%)",
